@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  * Add your docs here.
  */
 public class Drive {
+
     private Gearbox leftGearbox;
     private Gearbox rightGearbox;
     //left gear box CAN ids
