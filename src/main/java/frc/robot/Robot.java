@@ -7,7 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,6 +26,15 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private Drive drive;
+  private Controls controls;
+
+  //Constants
+  private final int JOYSTICK_PORT = 0;
+
+  private final double DEADZONE = 0.05;
+
+    
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -45,6 +56,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    this.drive = new Drive();
+    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+
+
   }
 
   /**
@@ -70,6 +85,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    Scheduler.getInstance().run();
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -86,6 +102,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    Scheduler.getInstance().run();
+    manualControl();
+    
   }
 
   /**
@@ -93,5 +112,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  private void manualControl() {
+    drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) *0.75);
   }
 }
