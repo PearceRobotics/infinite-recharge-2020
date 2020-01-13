@@ -23,7 +23,7 @@ public class Drive {
     //right gear box CAN ids
     private final int RIGHT_BACK_CAN_ID = 7;
     private final int RIGHT_MIDDLE_CAN_ID = 8;
-    private final int RIGHT_FRONT_CAN_ID = 9;
+    private final int RIGHT_FRONT_CAN_ID = 10;
 
     private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
     public Drive() {
