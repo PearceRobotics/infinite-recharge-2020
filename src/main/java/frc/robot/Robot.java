@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -84,8 +87,13 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
+  CANSparkMax left = new CANSparkMax(10, MotorType.kBrushless);
+  CANSparkMax right = new CANSparkMax(12, MotorType.kBrushless);
   @Override
   public void teleopPeriodic() {
+
+    left.set(-1);
+    right.set(1);
   }
 
   /**
