@@ -87,8 +87,8 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
-  CANSparkMax left = new CANSparkMax(10, MotorType.kBrushless);
-  CANSparkMax right = new CANSparkMax(12, MotorType.kBrushless);
+  CANSparkMax left = new CANSparkMax(4, MotorType.kBrushless);
+  CANSparkMax right = new CANSparkMax(5, MotorType.kBrushless);
   @Override
   public void teleopPeriodic() {
 
