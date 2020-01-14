@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Encoder;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,15 +29,24 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  CANSparkMax left = new CANSparkMax(4, MotorType.kBrushless);
+  CANSparkMax right = new CANSparkMax(5, MotorType.kBrushless);
+  Encoder shaftEncoder = new Encoder(0, 1);
+  double wheelVelocity = 0.0;
+  final double pi = 3.141592;
+
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    
+  shaftEncoder.setDistancePerPulse((4*pi)/2048);
+  shaftEncoder.setReverseDirection(true);
   }
 
   /**
@@ -87,13 +98,23 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
-  CANSparkMax left = new CANSparkMax(4, MotorType.kBrushless);
-  CANSparkMax right = new CANSparkMax(5, MotorType.kBrushless);
   @Override
   public void teleopPeriodic() {
 
-    left.set(-1);
-    right.set(1);
+
+    double motorSpeed = 1.0;
+    left.set(-motorSpeed);
+    right.set(motorSpeed);
+    
+    wheelVelocity = shaftEncoder.getRate();
+
+     double rps = wheelVelocity / (4 * pi);
+     double rpm = rps * 60;
+     System.out.println("Wheel Velocity (in/s): " + wheelVelocity);
+     System.out.println("rpm: " + rpm);
+     System.out.println("left motor rpm: " + left.getEncoder().getVelocity());
+     System.out.println("right motor rpm: " + right.getEncoder().getVelocity());
+
   }
 
   /**
