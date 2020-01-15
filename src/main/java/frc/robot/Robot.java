@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Encoder;
@@ -39,7 +38,8 @@ public class Robot extends TimedRobot {
   private Controls controls;
   private final int JOYSTICK_PORT = 1;
   private boolean isRecording = false;
-  private double start;
+  private double aButtonStart = 0;
+  private double aButtonEnd = 0;
   private double now;
   /**
    * This function is run when the robot is first started up and should be used
@@ -127,16 +127,17 @@ public class Robot extends TimedRobot {
     System.out.println("left motor rpm: " + left.getEncoder().getVelocity());
     System.out.println("right motor rpm: " + right.getEncoder().getVelocity());
     */
-    if(controls.getAButton() == true && !isRecording)
+    if(controls.getAButton() == true && !isRecording && ((now - aButtonEnd) > 0.5))
     {
-      System.out.println("Recording now");
       isRecording = true;  
-      start = Timer.getFPGATimestamp();
+      aButtonStart = now;
+      System.out.println("Recording now " + aButtonStart);
     }
     now = Timer.getFPGATimestamp();
-    if(controls.getAButton() && isRecording && now - start > 0.5)
+    if(controls.getAButton() && isRecording && ((now - aButtonStart) > 0.5))
     {
-      System.out.println("Done Recording");
+      aButtonEnd = now;
+      System.out.println("Done Recording " + now) ;
       isRecording = false;
 
     }
