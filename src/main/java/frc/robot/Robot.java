@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -36,11 +40,13 @@ public class Robot extends TimedRobot {
   private Encoder shaftEncoder;
   private double wheelVelocity = 0.0;
   private Controls controls;
-  private final int JOYSTICK_PORT = 1;
+  private final int JOYSTICK_PORT = 0;
   private boolean isRecording = false;
   private double aButtonStart = 0;
   private double aButtonEnd = 0;
   private double now;
+
+  private ArrayList<Double> speeds = new ArrayList<Double>();
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -58,6 +64,8 @@ public class Robot extends TimedRobot {
 
     shaftEncoder.setDistancePerPulse((4 * pi) / 2048);
     shaftEncoder.setReverseDirection(true);
+
+
   }
 
   /**
@@ -114,7 +122,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double motorSpeed = 0.1;
+    double motorSpeed = 1.0;
     left.set(-motorSpeed);
     right.set(motorSpeed);
 
@@ -133,12 +141,25 @@ public class Robot extends TimedRobot {
       aButtonStart = now;
       System.out.println("Recording now " + aButtonStart);
     }
+
+if(isRecording)
+{
+  speeds.add(wheelVelocity);
+}
+
     now = Timer.getFPGATimestamp();
     if(controls.getAButton() && isRecording && ((now - aButtonStart) > 0.5))
     {
       aButtonEnd = now;
       System.out.println("Done Recording " + now) ;
       isRecording = false;
+      Collections.sort(speeds);
+  
+
+      System.out.println("Min Speed " + speeds.get(0));
+      System.out.println("Median Speed " + speeds.get(speeds.size()/2));
+
+      speeds.clear();
 
     }
     
