@@ -11,9 +11,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,7 +36,11 @@ public class Robot extends TimedRobot {
   private CANSparkMax right;
   private Encoder shaftEncoder;
   private double wheelVelocity = 0.0;
-
+  private Controls controls;
+  private final int JOYSTICK_PORT = 1;
+  private boolean isRecording = false;
+  private double start;
+  private double now;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -47,6 +54,7 @@ public class Robot extends TimedRobot {
     left = new CANSparkMax(4, MotorType.kBrushless);
     right = new CANSparkMax(5, MotorType.kBrushless);
     shaftEncoder = new Encoder(0, 1);
+    controls = new Controls(new Joystick(JOYSTICK_PORT));
 
     shaftEncoder.setDistancePerPulse((4 * pi) / 2048);
     shaftEncoder.setReverseDirection(true);
@@ -106,7 +114,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double motorSpeed = 1.0;
+    double motorSpeed = 0.1;
     left.set(-motorSpeed);
     right.set(motorSpeed);
 
@@ -114,11 +122,25 @@ public class Robot extends TimedRobot {
 
     double rps = wheelVelocity / (4 * pi);
     double rpm = rps * 60;
-    System.out.println("Wheel Velocity (in/s): " + wheelVelocity);
+   /* System.out.println("Wheel Velocity (in/s): " + wheelVelocity);
     System.out.println("rpm: " + rpm);
     System.out.println("left motor rpm: " + left.getEncoder().getVelocity());
     System.out.println("right motor rpm: " + right.getEncoder().getVelocity());
+    */
+    if(controls.getAButton() == true && !isRecording)
+    {
+      System.out.println("Recording now");
+      isRecording = true;  
+      start = Timer.getFPGATimestamp();
+    }
+    now = Timer.getFPGATimestamp();
+    if(controls.getAButton() && isRecording && now - start > 0.5)
+    {
+      System.out.println("Done Recording");
+      isRecording = false;
 
+    }
+    
   }
 
   /**

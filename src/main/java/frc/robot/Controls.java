@@ -12,8 +12,6 @@ package frc.robot;
  */
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-
-
 public class Controls {
     private Joystick joystick;
     private final int LEFT_Y = 1;
@@ -21,15 +19,15 @@ public class Controls {
     private final int RIGHT_Y = 5;
 
     private final int RIGHT_BUMPER_ID = 6;
-    private final int RIGHT_TRIGGER_ID = 3;
+    private final int RIGHT_TRIGGER_ID = 8;
 
     private final int LEFT_BUMPER_ID = 5;
-    private final int LEFT_TRIGGER_ID = 2;
+    private final int LEFT_TRIGGER_ID = 7;
 
-    private final int B_BUTTON_ID = 2;
+    private final int B_BUTTON_ID = 3;
     private final int Y_BUTTON_ID = 4;
-    private final int A_BUTTON_ID = 1;
-    private final int X_BUTTON_ID = 3;
+    private final int A_BUTTON_ID = 2;
+    private final int X_BUTTON_ID = 1;
 
     public Controls(Joystick joystick) {
         this.joystick = joystick;
