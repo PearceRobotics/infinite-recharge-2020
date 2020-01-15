@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class Controls {
     private Joystick joystick;
+    //TODO add timer for debounce
     private final int LEFT_Y = 1;
     private final int RIGHT_X = 4;
     private final int RIGHT_Y = 5;
