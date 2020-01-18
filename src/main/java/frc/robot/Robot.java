@@ -8,8 +8,11 @@
 package frc.robot;
 
 
+import com.fasterxml.jackson.databind.cfg.ConfigFeature;
+
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -35,8 +38,10 @@ public class Robot extends TimedRobot {
 
   //Constants
   private final int JOYSTICK_PORT = 0;
-
   private final double DEADZONE = 0.11;
+
+  private double maxSpeed;
+  private double distance;
 
     
   /**
@@ -48,6 +53,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    Logger.configureLoggingAndConfig(this, false);
     
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
@@ -63,7 +70,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-
+    Logger.updateEntries();
 
   }
 
@@ -128,10 +135,23 @@ public class Robot extends TimedRobot {
 
     if(controls.getBButton())
     {
-      drive.driveStraight(36, .75);
+      setDistance(distance);
+      setMaxSpeed(maxSpeed);
+      drive.driveStraight(distance, maxSpeed);
     }
 
    // System.out.println("verticalSpeed" + controls.getLeftY(DEADZONE));
    // System.out.println("horizontalSpeed" + controls.getRightX(DEADZONE));
   }
+
+  @Config (defaultValueNumeric = 36)
+public void setDistance(double distance) {
+  this.distance = distance;
 }
+
+@Config(defaultValueNumeric = .75)
+public void setMaxSpeed(double maxSpeed) {
+  this.maxSpeed = maxSpeed;
+}
+}
+
