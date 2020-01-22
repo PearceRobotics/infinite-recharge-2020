@@ -51,8 +51,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    left = new CANSparkMax(4, MotorType.kBrushless);
-    right = new CANSparkMax(5, MotorType.kBrushless);
+    left = new CANSparkMax(6, MotorType.kBrushless);
+    right = new CANSparkMax(13, MotorType.kBrushless);
     shaftEncoder = new Encoder(0, 1);
     controls = new Controls(new Joystick(JOYSTICK_PORT));
 
@@ -114,9 +114,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double motorSpeed = 0.1;
-    left.set(-motorSpeed);
-    right.set(motorSpeed);
+    double motorSpeed = 1;
+    left.set(motorSpeed);
+    right.set(-motorSpeed);
+
+    System.out.println(left.getEncoder().getVelocity());
 
     wheelVelocity = shaftEncoder.getRate();
 
