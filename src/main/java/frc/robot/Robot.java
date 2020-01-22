@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -90,7 +89,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -107,7 +106,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
     manualControl();
     
   }

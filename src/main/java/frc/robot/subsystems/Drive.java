@@ -72,7 +72,6 @@ public class Drive {
         leftEncoder.reset();
         rightEncoder.reset();
       }
- 
 
       public void driveStraight(double distance, double maxSpeed){
         System.out.println("B Button Pressed");
@@ -93,9 +92,7 @@ public class Drive {
         setLeftSpeed(0);
         leftGearbox.setCoastMode();
         rightGearbox.setCoastMode();
- 
       }
-
 
 
   
