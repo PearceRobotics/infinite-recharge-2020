@@ -24,10 +24,10 @@ public class Controls {
     private final int LEFT_BUMPER_ID = 5;
     private final int LEFT_TRIGGER_ID = 7;
 
-    private final int B_BUTTON_ID = 3;
+    private final int B_BUTTON_ID = 2;
     private final int Y_BUTTON_ID = 4;
-    private final int A_BUTTON_ID = 2;
-    private final int X_BUTTON_ID = 1;
+    private final int A_BUTTON_ID = 1;
+    private final int X_BUTTON_ID = 3;
 
     public Controls(Joystick joystick) {
         this.joystick = joystick;
