@@ -7,17 +7,16 @@
 
 package frc.robot;
 
-
-import com.fasterxml.jackson.databind.cfg.ConfigFeature;
-
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.io.Controls;
 
 /**
@@ -33,8 +32,12 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  //Command autonomousCommand;
+  //SendableChooser<Command> chooser = new SendableChooser<>();
+
   private Drive drive;
   private Controls controls;
+  private AutonomousCommand autonomousCommand;
 
   //Constants
   private final int JOYSTICK_PORT = 0;
@@ -42,8 +45,8 @@ public class Robot extends TimedRobot {
 
   private double maxSpeed;
   private double distance;
+  private double constant;
 
-    
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -53,6 +56,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+
+   // SmartDashboard.putData("Autonomous Command", new AutonomousCommand(distance, maxSpeed, constant, drive));
 
     Logger.configureLoggingAndConfig(this, false);
     
@@ -71,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
-
+    Scheduler.getInstance().run();
   }
 
   /**
@@ -87,9 +93,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
+    setDistance(distance);
+    setMaxSpeed(maxSpeed);
+    setConstant(constant);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed,constant, drive);
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    if (autonomousCommand != null)
+            autonomousCommand.start();
+            System.out.println("got an if");
   }
 
   /**
@@ -97,16 +110,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
         break;
       case kDefaultAuto:
       default:
+
+    
+
         // Put default auto code here
-        break;
+      break;
     }
+   
   }
 
   /**
@@ -114,7 +131,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
     manualControl();
     
   }
@@ -128,20 +145,8 @@ public class Robot extends TimedRobot {
 
   private void manualControl() {
     drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) *0.75);
-    //System.out.println("verticalSpeed" + controls.getLeftY(DEADZONE));
-   // System.out.println("horizontalSpeed" + controls.getRightX(DEADZONE));
-   // System.out.println("LeftEncoder" + drive.leftEncoder.getDistance());
-   // System.out.println("RightEncoder"+ drive.rightEncoder.getDistance());
 
-    if(controls.getBButton())
-    {
-      setDistance(distance);
-      setMaxSpeed(maxSpeed);
-      drive.driveStraight(distance, maxSpeed);
-    }
 
-   // System.out.println("verticalSpeed" + controls.getLeftY(DEADZONE));
-   // System.out.println("horizontalSpeed" + controls.getRightX(DEADZONE));
   }
 
   @Config (defaultValueNumeric = 36)
@@ -152,6 +157,10 @@ public void setDistance(double distance) {
 @Config(defaultValueNumeric = .75)
 public void setMaxSpeed(double maxSpeed) {
   this.maxSpeed = maxSpeed;
+}
+@Config(defaultValueNumeric = 1.2)
+public void setConstant(double constant) {
+  this.constant = constant;
 }
 }
 

@@ -20,9 +20,9 @@ public class Gearbox {
 
 
 
-    public Gearbox ( final CANSparkMax frontController, final CANSparkMax middleController, final CANSparkMax backController) {
-       this.backController = backController;
-       this.middleController = middleController;
+    public Gearbox (final CANSparkMax frontController, final CANSparkMax middleController, final CANSparkMax backController) {
+        this.backController = backController;
+        this.middleController = middleController;
         this.frontController = frontController;
         this.setLeaderToFront();
     }
@@ -35,7 +35,7 @@ public class Gearbox {
         final CANError middleSlave = this.middleController.follow(this.frontController);
         if (backSlave != CANError.kOk || middleSlave != CANError.kOk) {
             throw new IllegalStateException("Unsuccessful in setting leader, BackSlave error status: "
-                    + backSlave.name() +  "MiddleSlave Error status: " + middleSlave.name());
+                    + backSlave.name() +  " MiddleSlave Error status: " + middleSlave.name());
         }
     }
 

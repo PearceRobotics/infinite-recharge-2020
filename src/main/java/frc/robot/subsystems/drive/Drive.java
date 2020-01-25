@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems.drive;
-import io.github.oblarg.oblog.Logger;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -73,30 +72,28 @@ public class Drive {
         leftEncoder.reset();
         rightEncoder.reset();
       }
- 
-   
-      public void driveStraight(double distance, double maxSpeed){
-        System.out.println("B Button Pressed");
+
+      public void driveStraight(double distance, double maxSpeed, double constant){
         leftGearbox.setBrakeMode();
         rightGearbox.setBrakeMode();
         resetEncoders();
-        while(leftEncoder.getDistance() < distance || rightEncoder.getDistance() < distance) {
-       // System.out.println("Left Distance Traveled" + leftEncoder.getDistance()); 
-       // System.out.println("Right Distance Traveled" + rightEncoder.getDistance());
+        while(leftEncoder.getDistance() < distance && rightEncoder.getDistance() < distance) {
+          System.out.println("left distance " + leftEncoder.getDistance());
+          System.out.println("right distance " + rightEncoder.getDistance());
         double error = leftEncoder.getDistance() - rightEncoder.getDistance();
         double turnPower =  error * .15;
-        double fowardSpeed = maxSpeed - ((leftEncoder.getDistance()/distance)*maxSpeed)*1.55;
-        System.out.println("forward speed: " + fowardSpeed);
-       //double turnPower = 0;
+        double fowardSpeed = maxSpeed - ((leftEncoder.getDistance()/distance)*maxSpeed);
+        
+        System.out.println("speed " + fowardSpeed);
          arcadeDrive(-fowardSpeed, -turnPower);
          } 
         setRightSpeed(0);
         setLeftSpeed(0);
+
        // leftGearbox.setCoastMode();
        // rightGearbox.setCoastMode();
- 
-      }
 
+      }
 
 
   
