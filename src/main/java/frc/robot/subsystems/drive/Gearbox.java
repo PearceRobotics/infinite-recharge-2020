@@ -10,6 +10,7 @@ package frc.robot.subsystems.drive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 /**
  * Add your docs here.
  */
@@ -18,9 +19,8 @@ public class Gearbox {
     private final CANSparkMax backController;
     private final CANSparkMax middleController;
 
-
-
-    public Gearbox (final CANSparkMax frontController, final CANSparkMax middleController, final CANSparkMax backController) {
+    public Gearbox(final CANSparkMax frontController, final CANSparkMax middleController,
+            final CANSparkMax backController) {
         this.backController = backController;
         this.middleController = middleController;
         this.frontController = frontController;
@@ -35,7 +35,7 @@ public class Gearbox {
         final CANError middleSlave = this.middleController.follow(this.frontController);
         if (backSlave != CANError.kOk || middleSlave != CANError.kOk) {
             throw new IllegalStateException("Unsuccessful in setting leader, BackSlave error status: "
-                    + backSlave.name() +  " MiddleSlave Error status: " + middleSlave.name());
+                    + backSlave.name() + " MiddleSlave Error status: " + middleSlave.name());
         }
     }
 
@@ -49,13 +49,13 @@ public class Gearbox {
     }
 
     public void setRampRate(final double rate) {
-        this.frontController.setOpenLoopRampRate(rate);   
+        this.frontController.setOpenLoopRampRate(rate);
     }
 
     public CANSparkMax getBackController() {
-       return this.backController;
+        return this.backController;
     }
-    
+
     public CANSparkMax getMiddleController() {
         return this.middleController;
     }
@@ -67,7 +67,7 @@ public class Gearbox {
     public void setBrakeMode() {
         this.frontController.setIdleMode(IdleMode.kBrake);
     }
-    
+
     public void setCoastMode() {
         this.frontController.setIdleMode(IdleMode.kCoast);
     }
