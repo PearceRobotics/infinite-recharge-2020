@@ -32,9 +32,6 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  //Command autonomousCommand;
-  //SendableChooser<Command> chooser = new SendableChooser<>();
-
   private Drive drive;
   private Controls controls;
   private AutonomousCommand autonomousCommand;
@@ -56,9 +53,6 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-
-
-   // SmartDashboard.putData("Autonomous Command", new AutonomousCommand(distance, maxSpeed, constant, drive));
 
     Logger.configureLoggingAndConfig(this, false);
     
@@ -149,7 +143,7 @@ public class Robot extends TimedRobot {
 
   }
 
-  @Config (defaultValueNumeric = 36)
+@Config (defaultValueNumeric = 36)
 public void setDistance(double distance) {
   this.distance = distance;
 }
@@ -158,6 +152,7 @@ public void setDistance(double distance) {
 public void setMaxSpeed(double maxSpeed) {
   this.maxSpeed = maxSpeed;
 }
+
 @Config(defaultValueNumeric = 1.2)
 public void setConstant(double constant) {
   this.constant = constant;

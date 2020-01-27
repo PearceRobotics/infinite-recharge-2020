@@ -46,9 +46,10 @@ public class Drive {
     this.leftEncoder = new Encoder(0, 1);
     this.rightEncoder = new Encoder(4, 5);
 
-    leftEncoder.setDistancePerPulse((6.00*Math.PI)/2048.0);
-    leftEncoder.setReverseDirection(true);
     rightEncoder.setDistancePerPulse((6.00*Math.PI)/2048.0);
+    leftEncoder.setDistancePerPulse((6.00*Math.PI)/2048.0);
+
+    leftEncoder.setReverseDirection(true);
       }
     
       public void setLeftSpeed(double speed) {
@@ -76,25 +77,19 @@ public class Drive {
       public void driveStraight(double distance, double maxSpeed, double constant){
         leftGearbox.setBrakeMode();
         rightGearbox.setBrakeMode();
+
         resetEncoders();
+
         while(leftEncoder.getDistance() < distance && rightEncoder.getDistance() < distance) {
-          System.out.println("left distance " + leftEncoder.getDistance());
-          System.out.println("right distance " + rightEncoder.getDistance());
+
         double error = leftEncoder.getDistance() - rightEncoder.getDistance();
         double turnPower =  error * .15;
         double fowardSpeed = maxSpeed - ((leftEncoder.getDistance()/distance)*maxSpeed);
-        
-        System.out.println("speed " + fowardSpeed);
+
          arcadeDrive(-fowardSpeed, -turnPower);
          } 
+
         setRightSpeed(0);
         setLeftSpeed(0);
-
-       // leftGearbox.setCoastMode();
-       // rightGearbox.setCoastMode();
-
       }
-
-
-  
 }

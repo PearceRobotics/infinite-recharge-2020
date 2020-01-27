@@ -54,17 +54,20 @@ public class Gearbox {
 
     public CANSparkMax getBackController() {
        return this.backController;
-        }
+    }
     
     public CANSparkMax getMiddleController() {
         return this.middleController;
-        }
+    }
+
     public CANSparkMax getFrontController() {
         return this.frontController;
-        }
+    }
+
     public void setBrakeMode() {
         this.frontController.setIdleMode(IdleMode.kBrake);
     }
+    
     public void setCoastMode() {
         this.frontController.setIdleMode(IdleMode.kCoast);
     }
