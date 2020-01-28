@@ -32,17 +32,14 @@ public class Shooter {
     private final double degrees = 58.0; 
     private final double radians = Math.toRadians(degrees);
     private double targetHeight = 88.0;
-    private double distanceToTarget;
     private double maxLaunchSpeed = maxTangentialSpeed*(1 - energyLost);
-    private double horizontalSpeed;
-    private double travelTime;
-    private double heightAtTargetDistance;
 
-    public double determineLaunchSpeed(double horizontalDistanceToTarget){
+    public double determineLaunchSpeed(double distanceToTarget){
         //declaration of % bounds
         double upperBound = initialUpperBound;
         double lowerBound = initialLowerBound;
         double launchPower = initialUpperBound;
+        double heightAtTargetDistance;
 
         //Determine height at target distance
      heightAtTargetDistance= getHeightAtTargetDistance(distanceToTarget,launchPower);
@@ -77,13 +74,15 @@ public class Shooter {
 
     }
     private double getHeightAtTargetDistance(double distanceToTarget, double launchPower){
+        double horizontalSpeed;
+        double travelTime;
         //if you have a triangle, with the hypnotonuse being the angled velocity vector, the adjacent being the horizontal velocity vector, and the opposite side being the height
         //horizontal speed = adjacent side -> cos(angle) = a/h -> hcos(angle) = a -> (maxLaunchSpeed * launchPower)cos(angle) = a
         horizontalSpeed = Math.cos(radians) * maxLaunchSpeed * launchPower;
         //v = d/t -> vt=d -> t = d/v
         travelTime = distanceToTarget/horizontalSpeed;;
         //current distance = original distance +vt + .5at^2
-        heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
+        double heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
         return heightAtTargetDistance;
     }
 
