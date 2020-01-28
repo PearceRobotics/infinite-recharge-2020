@@ -28,61 +28,65 @@ public class Shooter {
     private final double wheelCircumference = wheelDiameter*Math.PI;
     private final double maxTangentialSpeed = ( wheelCircumference * (maxRpm /60));
     private final double initialUpperBound = 1.0;
-    private final double initalLowerBound = 0.0;
-    private double launchPower = initialUpperBound;
+    private final double initialLowerBound = 0.0;
     private final double degrees = 58.0;
-    private final double radians = degrees * (Math.PI/180);
-    private double desiredHeight = 88.0;
+    private final double radians = Math.toRadians(degrees);
+    private double targetHeight = 88.0;
     private double distanceToTarget;
     private double maxLaunchSpeed = maxTangentialSpeed*(1 - energyLost);
-    private double horizontalSpeed = Math.cos(radians) * maxLaunchSpeed * launchPower;;
-    private double travelTime = distanceToTarget/horizontalSpeed;;
+    private double horizontalSpeed;
+    private double travelTime;
     private double heightAtTargetDistance;
-    private boolean shouldShoot;
 
-    public double determineLaunchSpeed(){
-        //Determine height at target distance
-        heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
-        if(heightAtTargetDistance < desiredHeight){
-            return -1.0;
-        }
-        else{
-            return 1.0;
-        }
-
-    }
-
-    public void determineHeightAtTargetDistance(){
-        heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
-        if(heightAtTargetDistance < desiredHeight){
-            shouldShoot = false;
-        }
-        else{
-            shouldShoot = true;
-        }
-    }
-    public void iteration(){
+    public double determineLaunchSpeed(double horizontalDistanceToTarget){
+        //declaration of % bounds
         double upperBound = initialUpperBound;
-        double lowerBound = initalLowerBound;
-        if(shouldShoot == true){
-            while (heightAtTargetDistance != desiredHeight){
-                if(heightAtTargetDistance > desiredHeight){
+        double lowerBound = initialLowerBound;
+        double launchPower = initialUpperBound;
+
+        //Determine height at target distance
+   getHeightAtTargetDistance(distanceToTarget,launchPower);
+   
+   
+        if(heightAtTargetDistance < targetHeight){
+            return -1.0;
+            //shot not possible at current distance
+        }
+        else if(heightAtTargetDistance == targetHeight){
+            return maxLaunchSpeed*launchPower;
+        }
+        //iteration
+        else{
+            for (int i = 0; i< 15; i++){
+                if(heightAtTargetDistance > targetHeight){
                     launchPower = launchPower - (Math.abs(upperBound -lowerBound)/2);
                     lowerBound = upperBound - (Math.abs(upperBound - lowerBound)/2);
                 }
-                    else if(heightAtTargetDistance < desiredHeight){
+                    else if(heightAtTargetDistance < targetHeight){
                         launchPower = launchPower + (Math.abs(upperBound - lowerBound)/2);
                         upperBound = upperBound + (Math.abs(upperBound - lowerBound)/2);
                     }
                 else{
-                    horizontalSpeed = Math.cos(radians) * maxLaunchSpeed * launchPower;
-                travelTime = distanceToTarget/ horizontalSpeed;
-                heightAtTargetDistance = launcherHeight + (Math.sin(radians)*maxLaunchSpeed*launchPower*travelTime)-(0.5 * Gravity * Math.pow(travelTime,2));
+                 break;
                 }
+                heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget,launchPower);
             }
         }
-        else{
-        //Shot is not possible
-        }
+        return launchPower * maxLaunchSpeed;
+
+        
+
     }
+    private double getHeightAtTargetDistance(double distanceToTarget, double launchPower){
+        //if you have a triangle, with the hypnotonuse being the angled velocity vector, the adjacent being the horizontal velocity vector, and the opposite side being the height
+        //horizontal speed = adjacent side -> cos(angle) = a/h -> hcos(angle) = a -> (maxLaunchSpeed * launchPower)cos(angle) = a
+        horizontalSpeed = Math.cos(radians) * maxLaunchSpeed * launchPower;
+        //v = d/t -> vt=d -> t = d/v
+        travelTime = distanceToTarget/horizontalSpeed;;
+        //current distance = original distance +vt + .5at^2
+        heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
+        return heightAtTargetDistance;
+    }
+
+   
 }
