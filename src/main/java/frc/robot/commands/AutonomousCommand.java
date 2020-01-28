@@ -77,14 +77,14 @@ public class AutonomousCommand extends Command {
     public void driveStraight(double distance, double maxSpeed) {
         drive.setBrakeMode();
         drive.resetEncoders();
-        while ( drive.getLeftEncoderDistance() < distance ||  drive.getRightEncoderDistance() < distance) {
-          double error = drive.getLeftEncoderDistance() -  drive.getRightEncoderDistance();
-          double turnPower = error * .15;
-          double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
-          System.out.println("forward speed: " + fowardSpeed);
-          drive.arcadeDrive(-fowardSpeed, -turnPower);
+        while (drive.getLeftEncoderDistance() < distance || drive.getRightEncoderDistance() < distance) {
+            double error = drive.getLeftEncoderDistance() - drive.getRightEncoderDistance();
+            double turnPower = error * .15;
+            double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
+            System.out.println("forward speed: " + fowardSpeed);
+            drive.arcadeDrive(-fowardSpeed, -turnPower);
         }
         drive.setRightSpeed(0);
         drive.setLeftSpeed(0);
-      }
+    }
 }
