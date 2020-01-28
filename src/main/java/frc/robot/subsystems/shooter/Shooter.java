@@ -27,9 +27,9 @@ public class Shooter {
     private final double energyLost = 0.66; 
     private final double wheelCircumference = wheelDiameter*Math.PI;
     private final double maxTangentialSpeed = ( wheelCircumference * (maxRpm /60));
-    private final double initialUpperBound = 1.0;
-    private final double initialLowerBound = 0.0;
-    private final double degrees = 58.0;
+    private final double initialUpperBound = 1.0; //%100 speed
+    private final double initialLowerBound = 0.0;//%0 speed
+    private final double degrees = 58.0; 
     private final double radians = Math.toRadians(degrees);
     private double targetHeight = 88.0;
     private double distanceToTarget;
@@ -45,26 +45,25 @@ public class Shooter {
         double launchPower = initialUpperBound;
 
         //Determine height at target distance
-   getHeightAtTargetDistance(distanceToTarget,launchPower);
-   
+     heightAtTargetDistance= getHeightAtTargetDistance(distanceToTarget,launchPower);
    
         if(heightAtTargetDistance < targetHeight){
             return -1.0;
             //shot not possible at current distance
         }
         else if(heightAtTargetDistance == targetHeight){
-            return maxLaunchSpeed*launchPower;
+            return maxLaunchSpeed*launchPower; // percent of max speed we should be going times the max speed 
         }
         //iteration
         else{
-            for (int i = 0; i< 15; i++){
-                if(heightAtTargetDistance > targetHeight){
-                    launchPower = launchPower - (Math.abs(upperBound -lowerBound)/2);
-                    lowerBound = upperBound - (Math.abs(upperBound - lowerBound)/2);
+            for (int i = 0; i< 15; i++){//binary search...gets close enough to what we want
+                if(heightAtTargetDistance > targetHeight){//if our current height is greater than our target height raise lowerbound
+                    launchPower = launchPower - (Math.abs(upperBound -lowerBound)/2); //decreases launchPower
+                    upperBound = upperBound - (Math.abs(upperBound - lowerBound)/2);//lowers upper bound to middle of upper and lower 
                 }
                     else if(heightAtTargetDistance < targetHeight){
-                        launchPower = launchPower + (Math.abs(upperBound - lowerBound)/2);
-                        upperBound = upperBound + (Math.abs(upperBound - lowerBound)/2);
+                        launchPower = launchPower + (Math.abs(upperBound - lowerBound)/2);//increases launchPower
+                        lowerBound = lowerBound + (Math.abs(upperBound - lowerBound)/2);// raises lower bound to middle of upper and lower 
                     }
                 else{
                  break;
@@ -72,7 +71,7 @@ public class Shooter {
                 heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget,launchPower);
             }
         }
-        return launchPower * maxLaunchSpeed;
+        return launchPower * maxLaunchSpeed; 
 
         
 
