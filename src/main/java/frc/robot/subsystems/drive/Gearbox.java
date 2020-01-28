@@ -10,6 +10,7 @@ package frc.robot.subsystems.drive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 /**
  * Add your docs here.
  */
@@ -49,7 +50,7 @@ public class Gearbox {
     }
 
     public void setRampRate(final double rate) {
-        this.frontController.setOpenLoopRampRate(rate);   
+        this.frontController.setOpenLoopRampRate(rate);
     }
 
     public CANSparkMax getBackController() {
@@ -59,10 +60,12 @@ public class Gearbox {
     
     public CANSparkMax getFrontController() {
         return this.frontController;
-        }
+    }
+
     public void setBrakeMode() {
         this.frontController.setIdleMode(IdleMode.kBrake);
     }
+
     public void setCoastMode() {
         this.frontController.setIdleMode(IdleMode.kCoast);
     }

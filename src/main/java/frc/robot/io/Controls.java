@@ -22,7 +22,7 @@ public class Controls {
 
     private final int RIGHT_BUMPER_ID = 6;
     private final int RIGHT_TRIGGER_ID = 3;
-    
+
     private final int LEFT_BUMPER_ID = 5;
     private final int LEFT_TRIGGER_ID = 2;
 
@@ -61,7 +61,7 @@ public class Controls {
 
     public double getRightX(double deadzone) {
         double x = joystick.getRawAxis(RIGHT_X);
-        if(Math.abs(x) < deadzone) {
+        if (Math.abs(x) < deadzone) {
             return 0.0;
         }
         return x;
@@ -69,7 +69,7 @@ public class Controls {
 
     public double getRightY(double deadzone) {
         double y = joystick.getRawAxis(RIGHT_Y);
-        if(Math.abs(y) < deadzone) {
+        if (Math.abs(y) < deadzone) {
             return 0.0;
         }
         return y;
@@ -77,7 +77,7 @@ public class Controls {
 
     public double getLeftY(double deadzone) {
         double y = joystick.getRawAxis(LEFT_Y);
-        if(Math.abs(y) < deadzone) {
+        if (Math.abs(y) < deadzone) {
             return 0.0;
         }
         return y;

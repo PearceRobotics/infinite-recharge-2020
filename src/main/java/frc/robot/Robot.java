@@ -9,11 +9,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.commands.AutonomousCommand;
 import frc.robot.io.Controls;
 
 /**
@@ -31,57 +34,72 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
+  private AutonomousCommand autonomousCommand;
 
   //Constants
   private final int JOYSTICK_PORT = 1;
 
   private final double DEADZONE = 0.11;
 
-    
+  private double maxSpeed;
+  private double distance;
+  private double constant;
+
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    
+
+    Logger.configureLoggingAndConfig(this, false);
+
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
-
-
+    Logger.updateEntries();
+    Scheduler.getInstance().run();
   }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
+   * between different autonomous modes using the dashboard. The sendable chooser
+   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+   * remove all of the chooser code and uncomment the getString line to get the
+   * auto name from the text box below the Gyro
    *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
+   * <p>
+   * You can add additional auto modes by adding additional comparisons to the
+   * switch structure below with additional strings. If using the SendableChooser
+   * make sure to add them to the chooser code above as well.
    */
   @Override
   public void autonomousInit() {
+
+    setDistance(distance);
+    setMaxSpeed(maxSpeed);
+    setConstant(constant);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, constant, drive);
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    if (autonomousCommand != null)
+      autonomousCommand.start();
+    System.out.println("got an if");
   }
 
   /**
@@ -91,14 +109,16 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
     switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
+    case kCustomAuto:
+      // Put custom auto code here
+      break;
+    case kDefaultAuto:
+    default:
+
+      // Put default auto code here
+      break;
     }
+
   }
 
   /**
@@ -108,7 +128,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     manualControl();
-    
+
   }
 
   /**
@@ -119,18 +139,22 @@ public class Robot extends TimedRobot {
   }
 
   private void manualControl() {
-    drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) *0.75);
-    //System.out.println("verticalSpeed" + controls.getLeftY(DEADZONE));
-   // System.out.println("horizontalSpeed" + controls.getRightX(DEADZONE));
-   // System.out.println("LeftEncoder" + drive.leftEncoder.getDistance());
-   // System.out.println("RightEncoder"+ drive.rightEncoder.getDistance());
+    drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) * 0.75);
 
-    if(controls.getBButton())
-    {
-      drive.driveStraight(36, .75);
-    }
+  }
 
-   // System.out.println("verticalSpeed" + controls.getLeftY(DEADZONE));
-   // System.out.println("horizontalSpeed" + controls.getRightX(DEADZONE));
+  @Config(defaultValueNumeric = 36)
+  public void setDistance(double distance) {
+    this.distance = distance;
+  }
+
+  @Config(defaultValueNumeric = .75)
+  public void setMaxSpeed(double maxSpeed) {
+    this.maxSpeed = maxSpeed;
+  }
+
+  @Config(defaultValueNumeric = 1.2)
+  public void setConstant(double constant) {
+    this.constant = constant;
   }
 }
