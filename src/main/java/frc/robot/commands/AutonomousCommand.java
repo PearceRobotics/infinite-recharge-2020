@@ -53,7 +53,7 @@ public class AutonomousCommand extends Command {
     @Override
     protected void execute() {
         System.out.println("executing");
-        drive.driveStraight(distance, maxSpeed, constant);
+        //drive.driveStraight(distance, maxSpeed, constant);
     }
 
     // Make this return true when this Command no longer needs to run execute()
