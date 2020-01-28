@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
   private Controls controls;
   private AutonomousCommand autonomousCommand;
 
-  //Constants
+  // Constants
   private final int JOYSTICK_PORT = 1;
 
   private final double DEADZONE = 0.11;
@@ -99,7 +99,6 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + m_autoSelected);
     if (autonomousCommand != null)
       autonomousCommand.start();
-    System.out.println("got an if");
   }
 
   /**

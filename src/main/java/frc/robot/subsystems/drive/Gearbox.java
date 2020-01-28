@@ -18,12 +18,9 @@ public class Gearbox {
     private final CANSparkMax frontController;
     private final CANSparkMax backController;
 
-
-
-
-    public Gearbox (final CANSparkMax frontController, final CANSparkMax backController) {
+    public Gearbox(final CANSparkMax frontController, final CANSparkMax backController) {
         this.backController = backController;
-    
+
         this.frontController = frontController;
         this.setLeaderToFront();
     }
@@ -33,10 +30,10 @@ public class Gearbox {
          * Slave controllers_only_mirror the voltage, no other settings
          */
         final CANError backSlave = this.backController.follow(this.frontController);
-        
+
         if (backSlave != CANError.kOk) {
-            throw new IllegalStateException("Unsuccessful in setting leader, BackSlave error status: "
-                    + backSlave.name());
+            throw new IllegalStateException(
+                    "Unsuccessful in setting leader, BackSlave error status: " + backSlave.name());
         }
     }
 
@@ -54,10 +51,9 @@ public class Gearbox {
     }
 
     public CANSparkMax getBackController() {
-       return this.backController;
-        }
-    
-    
+        return this.backController;
+    }
+
     public CANSparkMax getFrontController() {
         return this.frontController;
     }
