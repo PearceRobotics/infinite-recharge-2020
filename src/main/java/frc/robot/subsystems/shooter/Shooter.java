@@ -40,6 +40,18 @@ public class Shooter {
     private double heightAtTargetDistance;
     private boolean shouldShoot;
 
+    public double determineLaunchSpeed(){
+        //Determine height at target distance
+        heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
+        if(heightAtTargetDistance < desiredHeight){
+            return -1.0;
+        }
+        else{
+            return 1.0;
+        }
+
+    }
+
     public void determineHeightAtTargetDistance(){
         heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
         if(heightAtTargetDistance < desiredHeight){
