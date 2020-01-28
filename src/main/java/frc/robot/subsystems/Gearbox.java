@@ -16,13 +16,13 @@ import com.revrobotics.CANSparkMax.IdleMode;
 public class Gearbox {
     private final CANSparkMax frontController;
     private final CANSparkMax backController;
-    private final CANSparkMax middleController;
 
 
 
-    public Gearbox (final CANSparkMax frontController, final CANSparkMax middleController, final CANSparkMax backController) {
+
+    public Gearbox (final CANSparkMax frontController, final CANSparkMax backController) {
         this.backController = backController;
-        this.middleController = middleController;
+    
         this.frontController = frontController;
         this.setLeaderToFront();
     }
@@ -32,10 +32,10 @@ public class Gearbox {
          * Slave controllers_only_mirror the voltage, no other settings
          */
         final CANError backSlave = this.backController.follow(this.frontController);
-        final CANError middleSlave = this.middleController.follow(this.frontController);
-        if (backSlave != CANError.kOk || middleSlave != CANError.kOk) {
+        
+        if (backSlave != CANError.kOk) {
             throw new IllegalStateException("Unsuccessful in setting leader, BackSlave error status: "
-                    + backSlave.name() +  " MiddleSlave Error status: " + middleSlave.name());
+                    + backSlave.name());
         }
     }
 
@@ -56,9 +56,7 @@ public class Gearbox {
        return this.backController;
         }
     
-    public CANSparkMax getMiddleController() {
-        return this.middleController;
-        }
+    
     public CANSparkMax getFrontController() {
         return this.frontController;
         }

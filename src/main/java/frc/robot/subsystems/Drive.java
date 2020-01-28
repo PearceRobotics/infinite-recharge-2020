@@ -23,21 +23,17 @@ public class Drive {
     private Gearbox rightGearbox;
     //left gear box CAN ids
     private final int LEFT_BACK_CAN_ID = 6;
-    private final int LEFT_MIDDLE_CAN_ID = 13;
-    private final int LEFT_FRONT_CAN_ID = 5;
+    private final int LEFT_FRONT_CAN_ID = 12;
     //right gear box CAN ids
-    private final int RIGHT_BACK_CAN_ID = 7;
-    private final int RIGHT_MIDDLE_CAN_ID = 8;
-    private final int RIGHT_FRONT_CAN_ID = 10;
+    private final int RIGHT_BACK_CAN_ID = 4;
+    private final int RIGHT_FRONT_CAN_ID = 5;
 
     private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
     public Drive() {
         this.leftGearbox = new Gearbox(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE), 
-                                        new CANSparkMax(LEFT_MIDDLE_CAN_ID, DRIVE_MOTOR_TYPE), 
                                         new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
     
-        this.rightGearbox = new Gearbox(new CANSparkMax(RIGHT_BACK_CAN_ID, DRIVE_MOTOR_TYPE), 
-                                        new CANSparkMax(RIGHT_MIDDLE_CAN_ID, DRIVE_MOTOR_TYPE), 
+        this.rightGearbox = new Gearbox(new CANSparkMax(RIGHT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
                                         new CANSparkMax(RIGHT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
         this.leftGearbox.setRampRate(1);
         this.rightGearbox.setRampRate(1);
@@ -60,8 +56,10 @@ public class Drive {
       }
     
       public void arcadeDrive(double staightSpeed, double turnModifer) {
-        this.setLeftSpeed(-(staightSpeed - turnModifer));
+        this.setLeftSpeed((staightSpeed - turnModifer));
         this.setRightSpeed(staightSpeed + turnModifer);
+
+        
       }
     
       public void arcadeDrive(DrivingDeltas drivingDeltas) {

@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   private Controls controls;
 
   //Constants
-  private final int JOYSTICK_PORT = 0;
+  private final int JOYSTICK_PORT = 1;
 
   private final double DEADZONE = 0.11;
 
