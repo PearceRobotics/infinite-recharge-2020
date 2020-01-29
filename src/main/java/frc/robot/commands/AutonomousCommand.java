@@ -74,5 +74,4 @@ public class AutonomousCommand extends CommandBase {
     public void end(boolean interrupted) {
         drive.setCoastMode();
     }
-
 }
