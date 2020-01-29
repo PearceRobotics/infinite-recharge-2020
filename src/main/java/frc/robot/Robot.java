@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.io.Controls;
 
@@ -30,13 +31,13 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
+  private Lights lights;
 
   //Constants
   private final int JOYSTICK_PORT = 0;
 
   private final double DEADZONE = 0.05;
 
-    
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -46,6 +47,10 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    this.drive = new Drive();
+    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+    this.lights = new Lights(9, 60);
   }
 
   /**
@@ -58,10 +63,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    this.drive = new Drive();
-    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-
-
   }
 
   /**
@@ -106,7 +107,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     manualControl();
-    
+    lights.idleAnimation();
   }
 
   /**
