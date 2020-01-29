@@ -39,9 +39,11 @@ public class Lights {
     }
 
     public void idleAnimation() {
-        for (int x = ledBuffer.getLength() - 1; x > 0; x--) {
+        for (int x = ledBuffer.getLength() - 2; x > 0; x--) {
             ledBuffer.setLED(ledBuffer.getLength() - x, RED);
             ledBuffer.setLED(x, RED);
+            ledBuffer.setLED(ledBuffer.getLength() - x + 1, RED);
+            ledBuffer.setLED(x + 1, RED);
             ledStrip.setData(ledBuffer);
             try {
                 Thread.sleep(50);
@@ -51,6 +53,8 @@ public class Lights {
             }
             ledBuffer.setLED(ledBuffer.getLength() - x, BLUE);
             ledBuffer.setLED(x, BLUE);
+            ledBuffer.setLED(ledBuffer.getLength() - x + 1, BLUE);
+            ledBuffer.setLED(x + 1, BLUE);
             ledStrip.setData(ledBuffer);
             try {
                 Thread.sleep(50);
