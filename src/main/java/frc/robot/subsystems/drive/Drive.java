@@ -74,6 +74,11 @@ public class Drive {
     rightGearbox.setBrakeMode();
   }
 
+  public void setCoastMode(){
+    leftGearbox.setCoastMode();
+    rightGearbox.setCoastMode();
+  }
+
   public double getLeftEncoderDistance(){
     double leftEncoderDistance =leftEncoder.getDistance();
     return leftEncoderDistance;
@@ -81,6 +86,11 @@ public class Drive {
   public double getRightEncoderDistance(){
     double rightEncoderDistance =leftEncoder.getDistance();
     return rightEncoderDistance;
+  }
+  public double straightTurnPower(){
+    double error = getLeftEncoderDistance() - getRightEncoderDistance();
+    double turnPower = error * .15;
+    return turnPower;
   }
 
  /* public void driveStraight(double distance, double maxSpeed) {

@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
@@ -94,7 +96,7 @@ public class Robot extends TimedRobot {
     setDistance(distance);
     setMaxSpeed(maxSpeed);
     setConstant(constant);
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, constant, drive);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed);
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     if (autonomousCommand != null)
@@ -119,7 +121,10 @@ public class Robot extends TimedRobot {
     }
 
   }
-
+  @Override
+ public void teleopInit(){
+  // does nothing 
+ }
   /**
    * This function is called periodically during operator control.
    */
