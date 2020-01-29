@@ -31,13 +31,12 @@ public class Shooter {
     private final double initialLowerBound = 0.0;//%0 speed
     private final double degrees = 58.0; 
     private final double radians = Math.toRadians(degrees);
-    private double targetHeight = 88.0;
+    private double targetHeight = 98.0;
     private double maxLaunchSpeed = maxTangentialSpeed*(1 - energyLost);
 
     public double determineLaunchSpeed(double distanceToTarget){
         //declaration of % bounds
-        double upperBound = initialUpperBound;
-        double lowerBound = initialLowerBound;
+        double range = initialUpperBound - initialLowerBound;
         double launchPower = initialUpperBound;
         double heightAtTargetDistance;
 
@@ -55,12 +54,10 @@ public class Shooter {
         else{
             for (int i = 0; i< 15; i++){//binary search...gets close enough to what we want
                 if(heightAtTargetDistance > targetHeight){//if our current height is greater than our target height raise lowerbound
-                    launchPower = launchPower - (Math.abs(upperBound -lowerBound)/2); //decreases launchPower
-                    upperBound = upperBound - (Math.abs(upperBound - lowerBound)/2);//lowers upper bound to middle of upper and lower 
+                    launchPower = launchPower - (range/(2*Math.pow(2,i))); //decreases launchPower
                 }
                     else if(heightAtTargetDistance < targetHeight){
-                        launchPower = launchPower + (Math.abs(upperBound - lowerBound)/2);//increases launchPower
-                        lowerBound = lowerBound + (Math.abs(upperBound - lowerBound)/2);// raises lower bound to middle of upper and lower 
+                        launchPower = launchPower + (range/(2*Math.pow(2,i)));//increases launchPower
                     }
                 else{
                  break;
