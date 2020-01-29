@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
 
 /**
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
   private Drive drive;
   private Controls controls;
   private AutonomousCommand autonomousCommand;
+  private TeleopCommand teleopCommand;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -96,7 +98,7 @@ public class Robot extends TimedRobot {
     setDistance(distance);
     setMaxSpeed(maxSpeed);
     setConstant(constant);
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     if (autonomousCommand != null)
@@ -123,15 +125,19 @@ public class Robot extends TimedRobot {
   }
   @Override
  public void teleopInit(){
+  this.teleopCommand = new TeleopCommand(controls, drive);
+  if (teleopCommand != null)
+    teleopCommand.start();
+}
   // does nothing 
- }
+ 
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    manualControl();
+   // manualControl();
 
   }
 
