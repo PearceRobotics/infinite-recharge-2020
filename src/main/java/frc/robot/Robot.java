@@ -7,16 +7,13 @@
 
 package frc.robot;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopCommand;
@@ -42,8 +39,6 @@ public class Robot extends TimedRobot {
 
   // Constants
   private final int JOYSTICK_PORT = 1;
-
-  private final double DEADZONE = 0.11;
 
   private double maxSpeed;
   private double distance;
@@ -77,7 +72,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -102,7 +97,7 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     if (autonomousCommand != null)
-      autonomousCommand.start();
+      autonomousCommand.schedule();
   }
 
   /**
@@ -110,7 +105,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
     switch (m_autoSelected) {
     case kCustomAuto:
       // Put custom auto code here
@@ -127,7 +122,7 @@ public class Robot extends TimedRobot {
  public void teleopInit(){
   this.teleopCommand = new TeleopCommand(controls, drive);
   if (teleopCommand != null)
-    teleopCommand.start();
+    teleopCommand.schedule();
 }
   // does nothing 
  
@@ -136,7 +131,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
    // manualControl();
 
   }
@@ -146,11 +141,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-  }
-
-  private void manualControl() {
-    drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) * 0.75);
-
   }
 
   @Config(defaultValueNumeric = 36)

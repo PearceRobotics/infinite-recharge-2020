@@ -10,13 +10,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
 
 /**
  *
  */
-public class AutonomousCommand extends Command {
+public class AutonomousCommand extends CommandBase {
 
     private Drive drive;
     double distance;
@@ -43,7 +43,7 @@ public class AutonomousCommand extends Command {
 
     // Called just before this Command runs the first time
     @Override
-    protected void initialize() {
+    public void initialize() {
         System.out.println("Initialized");
         drive.setBrakeMode();
         drive.resetEncoders();
@@ -51,7 +51,7 @@ public class AutonomousCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     @Override
-    protected void execute() {
+    public void execute() {
         System.out.println("executing");
         double turnPower = drive.straightTurnPower();
         double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
@@ -60,7 +60,7 @@ public class AutonomousCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         if (drive.getLeftEncoderDistance() >= distance && drive.getRightEncoderDistance() >= distance) {
             drive.setRightSpeed(0);
             drive.setLeftSpeed(0);
@@ -71,14 +71,8 @@ public class AutonomousCommand extends Command {
 
     // Called once after isFinished returns true
     @Override
-    protected void end() {
+    public void end(boolean interrupted) {
         drive.setCoastMode();
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    @Override
-    protected void interrupted() {
     }
 
 }

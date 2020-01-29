@@ -46,14 +46,14 @@ public class TeleopCommand extends CommandBase {
 
     // Called just before this Command runs the first time
     @Override
-    protected void initialize() {
+    public void initialize() {
         System.out.println("Initialized");
 
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
-    protected void execute() {
+    public void execute() {
         System.out.println("executing");
 
         if (controls.getRightX(DEADZONE) == 0.0) {
