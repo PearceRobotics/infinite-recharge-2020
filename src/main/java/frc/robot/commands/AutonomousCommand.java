@@ -52,13 +52,15 @@ public class AutonomousCommand extends Command {
     @Override
     protected void execute() {
         System.out.println("executing");
-        driveStraightAuton(distance, maxSpeed);
+        double turnPower = drive.straightTurnPower();
+        double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
+        drive.arcadeDrive(-fowardSpeed, -turnPower);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        if( drive.getLeftEncoderDistance() >= distance && drive.getRightEncoderDistance() >= distance){
+        if (drive.getLeftEncoderDistance() >= distance && drive.getRightEncoderDistance() >= distance) {
             drive.setRightSpeed(0);
             drive.setLeftSpeed(0);
             return true;
@@ -77,11 +79,5 @@ public class AutonomousCommand extends Command {
     @Override
     protected void interrupted() {
     }
-
-    public void driveStraightAuton(double distance, double maxSpeed) {
-            double turnPower = drive.straightTurnPower();
-            double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
-            drive.arcadeDrive(-fowardSpeed, -turnPower);
-        }
 
 }
