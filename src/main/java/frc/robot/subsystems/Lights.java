@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class Lights {
     // Docs -
@@ -9,9 +10,9 @@ public class Lights {
     private AddressableLED ledStrip;
     private AddressableLEDBuffer ledBuffer;
 
-    private final RGBValues RED = new RGBValues(255, 0, 0);
-    private final RGBValues BLUE = new RGBValues(0, 0, 139);
-    private final RGBValues LIME_GREEN = new RGBValues(0, 255, 0);
+    private final Color8Bit RED = new Color8Bit(255, 0, 0);
+    private final Color8Bit BLUE = new Color8Bit(0, 0, 139);
+    private final Color8Bit LIME_GREEN = new Color8Bit(0, 255, 0);
 
     public Lights(int pwmPort, int numLeds) {
         ledStrip = new AddressableLED(pwmPort);
@@ -29,9 +30,9 @@ public class Lights {
         this.setColor(LIME_GREEN);
     }
 
-    private void setColor(RGBValues color) {
+    private void setColor(Color8Bit color) {
         for (int x = 0; x < ledBuffer.getLength(); x++) {
-            ledBuffer.setRGB(x, color.getRed(), color.getGreen(), color.getBlue());
+            ledBuffer.setLED(x, color);
         }
 
         ledStrip.setData(ledBuffer);
@@ -39,8 +40,8 @@ public class Lights {
 
     public void idleAnimation() {
         for (int x = ledBuffer.getLength() - 1; x > 0; x--) {
-            ledBuffer.setRGB(ledBuffer.getLength() - x, RED.getRed(), RED.getGreen(), RED.getBlue());
-            ledBuffer.setRGB(x, RED.getRed(), RED.getGreen(), RED.getBlue());
+            ledBuffer.setLED(ledBuffer.getLength() - x, RED);
+            ledBuffer.setLED(x, RED);
             ledStrip.setData(ledBuffer);
             try {
                 Thread.sleep(50);
@@ -48,8 +49,8 @@ public class Lights {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            ledBuffer.setRGB(ledBuffer.getLength() - x, BLUE.getRed(), BLUE.getGreen(), BLUE.getBlue());
-            ledBuffer.setRGB(x, BLUE.getRed(), BLUE.getGreen(), BLUE.getBlue());
+            ledBuffer.setLED(ledBuffer.getLength() - x, BLUE);
+            ledBuffer.setLED(x, BLUE);
             ledStrip.setData(ledBuffer);
             try {
                 Thread.sleep(50);
@@ -58,30 +59,6 @@ public class Lights {
                 e.printStackTrace();
             }
         }
-    }
-}
-
-class RGBValues {
-    private int red;
-    private int green;
-    private int blue;
-
-    public RGBValues(int red, int green, int blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-    }
-
-    public int getRed() {
-        return red;
-    }
-
-    public int getGreen() {
-        return green;
-    }
-
-    public int getBlue() {
-        return blue;
     }
 }
 
