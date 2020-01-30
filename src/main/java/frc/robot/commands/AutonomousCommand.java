@@ -52,7 +52,6 @@ public class AutonomousCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println("executing");
         double turnPower = drive.straightTurnPower();
         double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
         drive.arcadeDrive(-fowardSpeed, -turnPower);

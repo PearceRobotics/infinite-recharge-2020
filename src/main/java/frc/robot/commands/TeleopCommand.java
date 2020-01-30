@@ -54,20 +54,17 @@ public class TeleopCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println("executing");
-
         if (controls.getRightX(DEADZONE) == 0.0) {
             if (resetEncoders = false) {
                 drive.resetEncoders();
                 resetEncoders = true;
             }
+            System.out.println("drive straight: " + controls.getLeftY(DEADZONE));
+            System.out.println("turn code: " + (drive.straightTurnPower()));
             drive.arcadeDrive(controls.getLeftY(DEADZONE), drive.straightTurnPower());
         } else {
-            drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) * 0.75);
+            drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
             resetEncoders = false;
         }
     }
-
-
-
 }

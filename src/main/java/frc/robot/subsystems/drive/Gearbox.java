@@ -20,7 +20,6 @@ public class Gearbox {
 
     public Gearbox(final CANSparkMax frontController, final CANSparkMax backController) {
         this.backController = backController;
-
         this.frontController = frontController;
         this.setLeaderToFront();
     }
