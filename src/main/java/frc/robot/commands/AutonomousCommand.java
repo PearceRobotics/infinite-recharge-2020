@@ -10,7 +10,6 @@ public class AutonomousCommand extends CommandBase {
     private double maxSpeed;
 
     public AutonomousCommand(double distance, double maxSpeed, Drive drive) {
-
         this.distance = distance;
         this.maxSpeed = maxSpeed;
         this.drive = drive;
