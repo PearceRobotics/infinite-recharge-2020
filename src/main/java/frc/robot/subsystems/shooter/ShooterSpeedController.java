@@ -18,12 +18,12 @@ public class ShooterSpeedController
     private final double WHEEL_DIAMETER = 4.0; //inches
     private final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI; //inches
 
-    private final double ACCEPTABLE_DIFFERENCE = 10.0; //inches per second allowable difference for shot to be made
+    private final double ACCEPTABLE_DIFFERENCE = 5.0; //inches per second allowable difference for shot to be made
 
     private final CANSparkMax leftController;
     private final CANSparkMax rightController;
 
-    private final double FULL_SPEED = .50;
+    private final double FULL_SPEED = 1.0; //percent of motor power
 
     private double setLaunchSpeed; //in inches/second
 
