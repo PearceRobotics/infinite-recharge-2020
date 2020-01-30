@@ -1,15 +1,9 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,13 +13,6 @@ import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -40,10 +27,10 @@ public class Robot extends TimedRobot {
   // Constants
   private final int JOYSTICK_PORT = 1;
 
+  @Log
   private double maxSpeed;
+  @Log
   private double distance;
-  private double constant;
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -89,15 +76,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
-    setDistance(distance);
-    setMaxSpeed(maxSpeed);
-    setConstant(constant);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
-    if (autonomousCommand != null)
-      autonomousCommand.schedule();
+    switch(m_autoSelected) {
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+        default:
+          if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+          }
+        break;
+    }
   }
 
   /**
@@ -106,25 +97,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-
-      // Put default auto code here
-      break;
-    }
-
   }
+
   @Override
- public void teleopInit(){
-  this.teleopCommand = new TeleopCommand(controls, drive);
-  if (teleopCommand != null)
-    teleopCommand.schedule();
-}
-  // does nothing 
+  public void teleopInit() {
+    this.teleopCommand = new TeleopCommand(controls, drive);
+    if (teleopCommand != null) {
+      teleopCommand.schedule();
+    }
+  }
  
   /**
    * This function is called periodically during operator control.
@@ -141,20 +122,5 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-  }
-
-  @Config(defaultValueNumeric = 36)
-  public void setDistance(double distance) {
-    this.distance = distance;
-  }
-
-  @Config(defaultValueNumeric = .75)
-  public void setMaxSpeed(double maxSpeed) {
-    this.maxSpeed = maxSpeed;
-  }
-
-  @Config(defaultValueNumeric = 1.2)
-  public void setConstant(double constant) {
-    this.constant = constant;
   }
 }

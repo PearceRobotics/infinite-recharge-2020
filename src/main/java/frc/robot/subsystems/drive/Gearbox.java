@@ -1,9 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems.drive;
 
@@ -11,23 +5,17 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-/**
- * Add your docs here.
- */
 public class Gearbox {
     private final CANSparkMax frontController;
     private final CANSparkMax backController;
 
     public Gearbox(final CANSparkMax frontController, final CANSparkMax backController) {
-        this.backController = backController;
         this.frontController = frontController;
+        this.backController = backController;
         this.setLeaderToFront();
     }
 
     private void setLeaderToFront() {
-        /**
-         * Slave controllers_only_mirror the voltage, no other settings
-         */
         final CANError backSlave = this.backController.follow(this.frontController);
 
         if (backSlave != CANError.kOk) {
