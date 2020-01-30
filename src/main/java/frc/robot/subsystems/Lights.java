@@ -9,14 +9,16 @@ public class Lights {
     // https://docs.wpilib.org/en/latest/docs/software/actuators/addressable-leds.html
     private AddressableLED ledStrip;
     private AddressableLEDBuffer ledBuffer;
+    private long delay;
 
     private final Color8Bit RED = new Color8Bit(255, 0, 0);
     private final Color8Bit BLUE = new Color8Bit(0, 0, 139);
     private final Color8Bit LIME_GREEN = new Color8Bit(0, 255, 0);
 
-    public Lights(int pwmPort, int numLeds) {
+    public Lights(int pwmPort, int numLeds, long delay) {
         ledStrip = new AddressableLED(pwmPort);
         ledBuffer = new AddressableLEDBuffer(numLeds);
+        this.delay = delay;
         ledStrip.setLength(ledBuffer.getLength());
         ledStrip.setData(ledBuffer);
         ledStrip.start();
@@ -46,7 +48,7 @@ public class Lights {
             ledBuffer.setLED(x + 1, RED);
             ledStrip.setData(ledBuffer);
             try {
-                Thread.sleep(50);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -57,7 +59,7 @@ public class Lights {
             ledBuffer.setLED(x + 1, BLUE);
             ledStrip.setData(ledBuffer);
             try {
-                Thread.sleep(50);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

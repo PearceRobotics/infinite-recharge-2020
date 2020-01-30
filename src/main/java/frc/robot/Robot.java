@@ -48,9 +48,9 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    this.drive = new Drive();
+    //this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.lights = new Lights(9, 60);
+    this.lights = new Lights(9, 60, 50);
   }
 
   /**
@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    manualControl();
+    //manualControl();
     lights.idleAnimation();
   }
 
