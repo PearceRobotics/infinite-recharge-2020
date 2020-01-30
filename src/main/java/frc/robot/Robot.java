@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.ShooterSpeedController;;
+import frc.robot.subsystems.shooter.ShooterSpeedController;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.io.Controls;
 
 /**
@@ -31,6 +33,7 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
+  private ShooterCommand shooterCommand;
   private ShooterSpeedController shooterSpeedController;
 
   private boolean shotRequested = false;
@@ -63,6 +66,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    
+    CommandScheduler.getInstance().run();
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
 
@@ -104,34 +109,44 @@ public class Robot extends TimedRobot {
     }
   }
 
+  @Override
+  public void teleopInit() {
+    this.shooterCommand = new ShooterCommand(shooterSpeedController);
+    if (shooterCommand != null)
+    shooterCommand.schedule();
+  }
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
 
-    shooterSpeedController.execute();
-
-    if (controls.getRightTrigger()) {
+    if (controls.getRightTrigger() || true) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
-      shooterSpeedController.setLaunchSpeed(337.0); //using a number that should be replaced
+      shooterSpeedController.setLaunchSpeed(600.0); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested
       shotRequested = true;
     }
 
+    
+    System.out.println("current launch speed " + shooterSpeedController.getLaunchSpeed());
+    System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
+
     // when firing the shooter, make sure it's at speed
     if (shotRequested && shooterSpeedController.isAtSpeed()) {
       // fire the shooter
       //code to fire shooter
+      System.out.println("at speed and firing!");
 
       //Set the bool to know that the shot was fired
       shotRequested = false;
     }
 
-    manualControl();
+    // manualControl();
 
   }
 
@@ -143,6 +158,6 @@ public class Robot extends TimedRobot {
   }
 
   private void manualControl() {
-    drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) * 0.75);
+    // drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) * 0.75);
   }
 }
