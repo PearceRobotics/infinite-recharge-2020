@@ -46,7 +46,7 @@ public class Drive {
   }
 
   public void arcadeDrive(double staightSpeed, double turnModifer) {
-    this.setLeftSpeed(-  (staightSpeed - turnModifer));
+    this.setLeftSpeed(-(staightSpeed - turnModifer));
     this.setRightSpeed(staightSpeed + turnModifer);
   }
 

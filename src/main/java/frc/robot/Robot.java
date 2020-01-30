@@ -79,16 +79,9 @@ public class Robot extends TimedRobot {
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
-    switch(m_autoSelected) {
-      case kCustomAuto:
-        break;
-      case kDefaultAuto:
-        default:
-          if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-          }
-        break;
-    }
+      if (autonomousCommand != null) {
+        autonomousCommand.schedule();
+      }
   }
 
   /**
