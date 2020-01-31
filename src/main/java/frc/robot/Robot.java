@@ -1,30 +1,20 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -39,10 +29,17 @@ public class Robot extends TimedRobot {
   private boolean shotRequested = false;
 
   // Constants
-  private final int JOYSTICK_PORT = 0;
+  private final int JOYSTICK_PORT = 1;
 
   private final double DEADZONE = 0.05;
 
+  private AutonomousCommand autonomousCommand;
+  private TeleopCommand teleopCommand;
+
+  @Log
+  private double maxSpeed;
+  @Log
+  private double distance;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -52,7 +49,12 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    shooterSpeedController = new ShooterSpeedController();
+    this.shooterSpeedController = new ShooterSpeedController();
+
+    Logger.configureLoggingAndConfig(this, false);
+
+    this.drive = new Drive();
+    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
   }
 
   /**
@@ -66,11 +68,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    
+    Logger.updateEntries();
     CommandScheduler.getInstance().run();
-    this.drive = new Drive();
-    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-
   }
 
   /**
@@ -87,9 +86,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    switch(m_autoSelected) {
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+        default:
+          if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+          }
+        break;
+    }
   }
 
   /**
@@ -97,16 +106,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      break;
-    }
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -114,8 +114,14 @@ public class Robot extends TimedRobot {
     this.shooterCommand = new ShooterCommand(shooterSpeedController);
     if (shooterCommand != null)
     shooterCommand.schedule();
-  }
+  
 
+    this.teleopCommand = new TeleopCommand(controls, drive);
+    if (teleopCommand != null) {
+      teleopCommand.schedule();
+    }
+  }
+ 
   /**
    * This function is called periodically during operator control.
    */
@@ -126,7 +132,7 @@ public class Robot extends TimedRobot {
     if (controls.getRightTrigger() || true) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
-      shooterSpeedController.setLaunchSpeed(600.0); //using a number that should be replaced
+      shooterSpeedController.setLaunchSpeed(1150.0); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested
       shotRequested = true;
@@ -155,9 +161,5 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-  }
-
-  private void manualControl() {
-    // drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE) * 0.75);
   }
 }
