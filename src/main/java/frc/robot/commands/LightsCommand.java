@@ -12,6 +12,6 @@ public class LightsCommand extends CommandBase {
 
     @Override
     public void execute() {
-        lights.idleAnimation(2);
+        lights.idleAnimation(3);
     }
 }
