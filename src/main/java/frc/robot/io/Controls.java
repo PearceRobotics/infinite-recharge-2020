@@ -8,7 +8,8 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 /**
  * Add your docs here.
@@ -58,7 +59,7 @@ public class Controls {
 
     public double getRightX(double deadzone) {
         double x = joystick.getRawAxis(RIGHT_X);
-        if(Math.abs(x) < deadzone) {
+        if (Math.abs(x) < deadzone) {
             return 0.0;
         } 
         return x;
