@@ -47,7 +47,7 @@ public class ShooterSpeedController {
 
         // PID coefficients
         kP = 5e-5;
-        kI = 1e-6;
+        kI = 1e-7;
         kD = 0;
         kIz = 0;
         kFF = 0;
