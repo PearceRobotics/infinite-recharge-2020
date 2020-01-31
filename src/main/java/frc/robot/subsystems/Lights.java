@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class Lights {
     // Docs -
-    // https://docs.wpilib.org/en/latest/docs/software/actuators/addressable-leds.html
+    //
     private AddressableLED ledStrip;
     private AddressableLEDBuffer ledBuffer;
     private long delay;
@@ -40,24 +40,17 @@ public class Lights {
         ledStrip.setData(ledBuffer);
     }
 
-    public void idleAnimation() {
-        for (int x = ledBuffer.getLength() - 2; x > 0; x--) {
-            ledBuffer.setLED(ledBuffer.getLength() - x, RED);
-            ledBuffer.setLED(x, RED);
-            ledBuffer.setLED(ledBuffer.getLength() - x + 1, RED);
-            ledBuffer.setLED(x + 1, RED);
-            ledStrip.setData(ledBuffer);
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+    public void idleAnimation(int length) {
+        for (int x = ledBuffer.getLength() - length; x > 1; x--) {
+            for(int y = 0; y < length; y++) {
+                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, RED);
+                ledBuffer.setLED(x + y, RED);
             }
-            ledBuffer.setLED(ledBuffer.getLength() - x, BLUE);
-            ledBuffer.setLED(x, BLUE);
-            ledBuffer.setLED(ledBuffer.getLength() - x + 1, BLUE);
-            ledBuffer.setLED(x + 1, BLUE);
             ledStrip.setData(ledBuffer);
+            for(int y = 0; y < length; y++) {
+                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, BLUE);
+                ledBuffer.setLED(x + y, BLUE);
+            }
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException e) {
