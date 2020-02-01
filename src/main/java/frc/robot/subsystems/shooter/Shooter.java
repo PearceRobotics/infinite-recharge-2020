@@ -34,6 +34,11 @@ public class Shooter {
     private double targetHeight = 98.0;
     private double maxLaunchSpeed = maxTangentialSpeed*(1 - energyLost);
 
+    public Shooter()
+    {
+        //empty contructor
+    }
+
     public double determineLaunchSpeed(double distanceToTarget){
         //declaration of % bounds
         double range = initialUpperBound - initialLowerBound;
@@ -48,7 +53,7 @@ public class Shooter {
             //shot not possible at current distance
         }
         else if(heightAtTargetDistance == targetHeight){
-            return maxLaunchSpeed*launchPower; // percent of max speed we should be going times the max speed 
+            return maxTangentialSpeed*launchPower; // percent of max speed we should be going times the max speed 
         }
         //iteration
         else{
@@ -65,7 +70,7 @@ public class Shooter {
                 heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget,launchPower);
             }
         }
-        return launchPower * maxLaunchSpeed; 
+        return launchPower * maxTangentialSpeed; 
 
         
 

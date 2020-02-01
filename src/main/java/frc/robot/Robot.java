@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.AutonomousCommand;
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
+  private Shooter shooter;
   private ShooterCommand shooterCommand;
   private ShooterSpeedController shooterSpeedController;
 
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot {
 
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+    this.shooter = new Shooter();
   }
 
   /**
@@ -133,21 +136,22 @@ public class Robot extends TimedRobot {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
 
-      shooterSpeedController.setLaunchSpeed(1150.0); //using a number that should be replaced
+      double speed = shooter.determineLaunchSpeed(141.0);
+      shooterSpeedController.setLaunchSpeed(speed); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested
       shotRequested = true;
     }
 
     
-    System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
-    System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
+    // System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
+    // System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
 
     // when firing the shooter, make sure it's at speed
     if (shotRequested && shooterSpeedController.isAtSpeed()) {
       // fire the shooter
       //code to fire shooter
-      System.out.println("at speed and firing!");
+      System.out.println("*******FIREFIREFIRE******!");
 
       //Set the bool to know that the shot was fired
       shotRequested = false;
