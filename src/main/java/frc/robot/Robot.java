@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -121,12 +120,12 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-  @Config(methodName = "Distance", defaultValueNumeric = 36)
-  public void setDistance(double distance){
+  @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
+  public void setAutonDistance(double distance){
     this.distance = distance;
   }
 
-  @Config(methodName = "Maximum Speed", defaultValueNumeric = .75)
+  @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
   public void setMaxSpeed(double maxSpeed){
     this.maxSpeed = maxSpeed;
   }

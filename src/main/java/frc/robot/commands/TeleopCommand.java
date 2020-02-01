@@ -30,10 +30,11 @@ public class TeleopCommand extends CommandBase {
             if (resetEncoders = false) {
                 drive.resetEncoders();
                 resetEncoders = true;
+                System.out.println("correction");
             }
-            drive.arcadeDrive(controls.getLeftY(DEADZONE), drive.straightTurnPower());
+            drive.arcadeDrive(-controls.getLeftY(DEADZONE), drive.straightTurnPower());
         } else {
-            drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
+            drive.arcadeDrive(-controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
             resetEncoders = false;
         }
     }

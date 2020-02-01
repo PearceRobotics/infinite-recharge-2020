@@ -59,27 +59,27 @@ public class Drive {
     rightEncoder.reset();
   }
 
-  public void setBrakeMode(){
+  public void setBrakeMode() {
     leftGearbox.setBrakeMode();
     rightGearbox.setBrakeMode();
   }
 
-  public void setCoastMode(){
+  public void setCoastMode() {
     leftGearbox.setCoastMode();
     rightGearbox.setCoastMode();
   }
 
-  public double getLeftEncoderDistance(){
+  public double getLeftEncoderDistance() {
     double leftEncoderDistance =leftEncoder.getDistance();
     return leftEncoderDistance;
   }
 
-  public double getRightEncoderDistance(){
+  public double getRightEncoderDistance() {
     double rightEncoderDistance = leftEncoder.getDistance();
     return rightEncoderDistance;
   }
 
-  public double straightTurnPower(){
+  public double straightTurnPower() {
     double error = getLeftEncoderDistance() - getRightEncoderDistance();
     double turnPower = error * .15;
     return turnPower;
