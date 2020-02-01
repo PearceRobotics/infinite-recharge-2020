@@ -10,33 +10,43 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Config.Configs;
+
 /**
  * Add your docs here.
  */
 public class Shooter {
-
-    private final int leftMotorCanId = 11;
-    private final int rightMotorCanId = 12;
-    private final CANSparkMax leftMotor = new CANSparkMax(leftMotorCanId, MotorType.kBrushless);
-    private final CANSparkMax rightMotor = new CANSparkMax(rightMotorCanId,MotorType.kBrushless);
-
     private final double wheelDiameter = 4; //inch
     private final double Gravity = 386.0886;
     private final double maxRpm = 7640.0; 
     private final double launcherHeight = 24.0; //inch
-    private final double energyLost = 0.66; 
+    private double energyLostBase = 0.58; //(0.58 works from initiation line) 
     private final double wheelCircumference = wheelDiameter*Math.PI;
-    private final double maxTangentialSpeed = ( wheelCircumference * (maxRpm /60));
+    private final double maxTangentialSpeed = ( wheelCircumference * (maxRpm /60.0));
     private final double initialUpperBound = 1.0; //%100 speed
     private final double initialLowerBound = 0.0;//%0 speed
     private final double degrees = 58.0; 
     private final double radians = Math.toRadians(degrees);
     private double targetHeight = 98.0;
-    private double maxLaunchSpeed = maxTangentialSpeed*(1 - energyLost);
+
+    private double maxLaunchSpeed = maxTangentialSpeed*(1.0 - energyLostBase);
+
+    private void setMaxLaunchSpeed(double energyLoss)
+    {
+        System.out.println("energy loss " + energyLoss);
+        this.maxLaunchSpeed = maxTangentialSpeed * (1.0 - (energyLostBase + energyLoss));
+    }
 
     public Shooter()
     {
         //empty contructor
+    }
+
+    @Config
+    public void setEnergyLost(double energyLostBase)
+    {
+        this.energyLostBase = energyLostBase;
     }
 
     public double determineLaunchSpeed(double distanceToTarget){
@@ -44,6 +54,10 @@ public class Shooter {
         double range = initialUpperBound - initialLowerBound;
         double launchPower = initialUpperBound;
         double heightAtTargetDistance;
+
+        //account for air resistance
+        double airResistanceLoss = (distanceToTarget/10000.0) * 1.1;
+        this.setMaxLaunchSpeed(airResistanceLoss); 
 
         //Determine height at target distance
      heightAtTargetDistance= getHeightAtTargetDistance(distanceToTarget,launchPower);
@@ -80,11 +94,11 @@ public class Shooter {
         double travelTime;
         //if you have a triangle, with the hypnotonuse being the angled velocity vector, the adjacent being the horizontal velocity vector, and the opposite side being the height
         //horizontal speed = adjacent side -> cos(angle) = a/h -> hcos(angle) = a -> (maxLaunchSpeed * launchPower)cos(angle) = a
-        horizontalSpeed = Math.cos(radians) * maxLaunchSpeed * launchPower;
+        horizontalSpeed = Math.sin(radians) * maxLaunchSpeed * launchPower;
         //v = d/t -> vt=d -> t = d/v
         travelTime = distanceToTarget/horizontalSpeed;;
         //current distance = original distance +vt + .5at^2
-        double heightAtTargetDistance = launcherHeight + (Math.sin(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
+        double heightAtTargetDistance = launcherHeight + (Math.cos(radians)* maxLaunchSpeed * launchPower *travelTime) -(0.5 * Gravity *Math.pow(travelTime, 2 ));
         return heightAtTargetDistance;
     }
 

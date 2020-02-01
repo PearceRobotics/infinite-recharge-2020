@@ -30,6 +30,7 @@ public class ShooterSpeedController {
     // Pid controller variables below
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
+
     // Default Constructor. Set initial launch speed to 0 inches/second.
     public ShooterSpeedController() {
         this.leftController = new CANSparkMax(LEFT_SHOOTER_CAN_ID, DRIVE_MOTOR_TYPE);
@@ -46,11 +47,11 @@ public class ShooterSpeedController {
         this.rightController.restoreFactoryDefaults();
 
         // PID coefficients
-        kP = 5e-5;
-        kI = 1e-7;
-        kD = 0;
-        kIz = 0;
-        kFF = 0;
+        kP = 0.000050; //5e-5;
+        kI = 0.0000004; //4e-7;
+        kD = 0.0; //0.0
+        kIz = 0.0; //0.0
+        kFF = 0.0; //0.0
         kMaxOutput = 1;
         kMinOutput = -1;
 
@@ -112,6 +113,7 @@ public class ShooterSpeedController {
     }
 
     public boolean isAtSpeed() {
+        System.out.println("set launch speed " + setLaunchSpeed);
         if (Math.abs(getCurrentSpeed() - setLaunchSpeed) < ACCEPTABLE_DIFFERENCE) {
             return true;
         } else {
