@@ -2,14 +2,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Lights;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
 
@@ -21,8 +22,11 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
+  private Lights lights;
+  
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
+  private LightsCommand lightsCommand;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -45,6 +49,9 @@ public class Robot extends TimedRobot {
 
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+    this.lights = new Lights(9, 60, 50);
+
+    this.lightsCommand = new LightsCommand(lights);
   }
 
   /**
@@ -60,6 +67,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
+    lightsCommand.schedule();
   }
 
   /**
@@ -113,7 +121,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-   // manualControl();
   }
 
   /**
