@@ -12,7 +12,7 @@ public class TeleopCommand extends CommandBase {
     private double DEADZONE = 0.11;
     private boolean resetEncoders;
   
-    public TeleopCommand(Controls controls, Drive drive,double  pValue) {
+    public TeleopCommand(Controls controls, Drive drive, double pValue) {
         this.controls = controls;
         this.drive = drive;
         this.pValue = pValue;
