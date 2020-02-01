@@ -79,9 +79,10 @@ public class Drive {
     return rightEncoderDistance;
   }
 
-  public double straightTurnPower() {
+  public double straightTurnPower(double pValue) {
     double error = getLeftEncoderDistance() - getRightEncoderDistance();
-    double turnPower = error * .15;
+    double turnPower = error * pValue;
+    System.out.println("Left Encoder" + getLeftEncoderDistance() + "Right Encoder" + getRightEncoderDistance());
     return turnPower;
   }
 }

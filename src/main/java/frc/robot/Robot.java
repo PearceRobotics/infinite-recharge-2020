@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
 
   private double maxSpeed;
   private double distance;
+  private double pValue;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -73,7 +74,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     switch(m_autoSelected) {
@@ -98,7 +99,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    this.teleopCommand = new TeleopCommand(controls, drive);
+    this.teleopCommand = new TeleopCommand(controls, drive, pValue);
     if (teleopCommand != null) {
       teleopCommand.schedule();
     }
@@ -129,4 +130,9 @@ public class Robot extends TimedRobot {
   public void setMaxSpeed(double maxSpeed){
     this.maxSpeed = maxSpeed;
   }
+
+  @Config(tabName = "Autonomous", name = "Constant", defaultValueNumeric = .1)
+  public void setPValue(double pValue){
+    this.pValue = pValue;
+  } 
 }

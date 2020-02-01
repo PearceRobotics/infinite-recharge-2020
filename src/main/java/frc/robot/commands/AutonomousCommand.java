@@ -6,11 +6,13 @@ import frc.robot.subsystems.drive.Drive;
 public class AutonomousCommand extends CommandBase {
 
     private Drive drive;
-    double distance;
+    private double pValue;
+    private double distance;
     private double maxSpeed;
 
-    public AutonomousCommand(double distance, double maxSpeed, Drive drive) {
+    public AutonomousCommand(double distance, double maxSpeed, Drive drive, double PValue) {
         this.distance = distance;
+        this.pValue = pValue;
         this.maxSpeed = maxSpeed;
         this.drive = drive;
     }
@@ -27,9 +29,9 @@ public class AutonomousCommand extends CommandBase {
     @Override
     public void execute() {
         System.out.println("executing");
-        double turnPower = drive.straightTurnPower();
+        double turnPower = drive.straightTurnPower(pValue);
         double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
-        drive.arcadeDrive(fowardSpeed, turnPower);
+        drive.arcadeDrive(-fowardSpeed, -turnPower);
         System.out.println("Current Distance " + drive.getLeftEncoderDistance());
         System.out.println("Desired Distance " + distance);
     }
@@ -37,7 +39,7 @@ public class AutonomousCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (drive.getLeftEncoderDistance() >= distance && drive.getRightEncoderDistance() >= distance) {
+        if (drive.getLeftEncoderDistance() <= -distance && drive.getRightEncoderDistance() <= -distance) {
             drive.setRightSpeed(0);
             drive.setLeftSpeed(0);
             return true;
