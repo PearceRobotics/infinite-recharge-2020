@@ -132,6 +132,7 @@ public class Robot extends TimedRobot {
     if (controls.getRightTrigger() || true) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
+
       shooterSpeedController.setLaunchSpeed(1150.0); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested
@@ -139,7 +140,7 @@ public class Robot extends TimedRobot {
     }
 
     
-    System.out.println("current launch speed " + shooterSpeedController.getLaunchSpeed());
+    System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
     System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
 
     // when firing the shooter, make sure it's at speed
