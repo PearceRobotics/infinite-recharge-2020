@@ -33,6 +33,12 @@ public class Controls {
     private final int A_BUTTON_ID = 1;
     private final int X_BUTTON_ID = 3;
 
+    private final int DPAD_UP_BUTTON_ID;
+    private final int DPAD_DOWN_BUTTON_ID;
+    private final int DPAD_LEFT_BUTTON_ID;
+    private final int DPAD_RIGHT_BUTTON_ID;
+
+
     public Controls(Joystick joystick) {
         this.joystick = joystick;
     }
@@ -47,6 +53,21 @@ public class Controls {
 
     public boolean getXButton() {
         return joystick.getRawButton(X_BUTTON_ID);
+    }
+
+    public boolean getDpadUpButton() {
+        return joystick.getRawButton(DPAD_UP_BUTTON_ID);
+    }
+
+    public boolean getDpadDownButton() {
+        return joystick.getRawButton(DPAD_DOWN_BUTTON_ID);
+    }
+
+    public boolean getDpadLeftButton() {
+        return joystick.getRawButton(DPAD_LEFT_BUTTON_ID);
+    }
+    public boolean getDpadRightButton() {
+        return joystick.getRawButton(DPAD_RIGHT_BUTTON_ID);
     }
 
     public JoystickButton getYJoystickButton(){
