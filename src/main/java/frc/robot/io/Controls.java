@@ -9,6 +9,7 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 
 /**
@@ -33,10 +34,8 @@ public class Controls {
     private final int A_BUTTON_ID = 1;
     private final int X_BUTTON_ID = 3;
 
-    private final int DPAD_UP_BUTTON_ID;
-    private final int DPAD_DOWN_BUTTON_ID;
-    private final int DPAD_LEFT_BUTTON_ID;
-    private final int DPAD_RIGHT_BUTTON_ID;
+    POVButton DPAD_UP = POVButton​(GenericHID joystick, 0);
+
 
 
     public Controls(Joystick joystick) {

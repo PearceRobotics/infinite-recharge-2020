@@ -17,8 +17,9 @@ import com.analog.adis16470.frc.ADIS16470_IMU;
  */
 public class Gyroscope {
 
-    public static final ADIS16470_IMU imu = new ADIS16470_IMU();
+
     private Drive drive;
+    public static final ADIS16470_IMU imu = new ADIS16470_IMU();
 
     public Gyroscope(Drive drive){
         this.drive = drive;

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
@@ -21,6 +22,7 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
+  private Gyroscope gyroscope;
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
 
@@ -101,7 +103,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    this.teleopCommand = new TeleopCommand(controls, drive);
+    this.teleopCommand = new TeleopCommand(controls, drive, gyroscope);
     if (teleopCommand != null) {
       teleopCommand.schedule();
     }
