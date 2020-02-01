@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -76,9 +77,16 @@ public class Robot extends TimedRobot {
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
-      if (autonomousCommand != null) {
-        autonomousCommand.schedule();
-      }
+    switch(m_autoSelected) {
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+        default:
+          if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+          }
+        break;
+    }
   }
 
   /**

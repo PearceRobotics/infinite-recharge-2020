@@ -13,10 +13,10 @@ public class Drive {
   private Gearbox rightGearbox;
   // left gear box CAN ids
   private final int LEFT_BACK_CAN_ID = 6;
-  private final int LEFT_FRONT_CAN_ID = 5;//orig 12
+  private final int LEFT_FRONT_CAN_ID = 12;
   // right gear box CAN ids
-  private final int RIGHT_BACK_CAN_ID = 7;//orig 4
-  private final int RIGHT_FRONT_CAN_ID = 8;//orig 5
+  private final int RIGHT_BACK_CAN_ID = 4;
+  private final int RIGHT_FRONT_CAN_ID = 5;
 
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
