@@ -21,8 +21,6 @@ public class TeleopCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        System.out.println("Initialized");
-
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -32,7 +30,6 @@ public class TeleopCommand extends CommandBase {
             if (resetEncoders == false) {
                 drive.resetEncoders();
                 resetEncoders = true;
-                System.out.println("correction");
             }
             drive.arcadeDrive(controls.getLeftY(DEADZONE), -drive.straightTurnPower(pValue));
         } else {

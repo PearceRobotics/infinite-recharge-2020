@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
     switch(m_autoSelected) {
       case kCustomAuto:
         break;
@@ -122,17 +121,17 @@ public class Robot extends TimedRobot {
   }
 
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
-  public void setAutonDistance(double distance){
+  public void setAutonStraightDistance(double distance){
     this.distance = distance;
   }
 
   @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
-  public void setMaxSpeed(double maxSpeed){
+  public void setAutonMaxSpeedForDriveStraight(double maxSpeed){
     this.maxSpeed = maxSpeed;
   }
 
-  @Config(tabName = "Autonomous", name = "Constant", defaultValueNumeric = .1)
-  public void setPValue(double pValue){
+  @Config(name = "Constant", defaultValueNumeric = .1)
+  public void setDriveStraightPValue(double pValue){
     this.pValue = pValue;
   } 
 }
