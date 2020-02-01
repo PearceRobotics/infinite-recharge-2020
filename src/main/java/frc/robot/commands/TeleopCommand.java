@@ -31,8 +31,6 @@ public class TeleopCommand extends CommandBase {
                 drive.resetEncoders();
                 resetEncoders = true;
             }
-            System.out.println("drive straight: " + controls.getLeftY(DEADZONE));
-            System.out.println("turn code: " + (drive.straightTurnPower()));
             drive.arcadeDrive(controls.getLeftY(DEADZONE), drive.straightTurnPower());
         } else {
             drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
