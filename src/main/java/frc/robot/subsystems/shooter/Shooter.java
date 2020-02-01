@@ -92,6 +92,17 @@ public class Shooter {
     private double getHeightAtTargetDistance(double distanceToTarget, double launchPower){
         double horizontalSpeed;
         double travelTime;
+
+        double density = .0027 * 12.0 * 12.0 * 12.0;
+        double area = 3.5 * 3.5 * Math.PI;
+        double Cd = 0.5;
+        double dragForce = 0.5 * density * (maxLaunchSpeed * launchPower) * (maxLaunchSpeed * launchPower) * area * Cd;
+
+        //155 inches is 10,000,000 //speed 1179
+
+        //184 inches is 9,250,000 //speed 1144
+
+        System.out.println("dragForce " + dragForce);
         //if you have a triangle, with the hypnotonuse being the angled velocity vector, the adjacent being the horizontal velocity vector, and the opposite side being the height
         //horizontal speed = adjacent side -> cos(angle) = a/h -> hcos(angle) = a -> (maxLaunchSpeed * launchPower)cos(angle) = a
         horizontalSpeed = Math.sin(radians) * maxLaunchSpeed * launchPower;
