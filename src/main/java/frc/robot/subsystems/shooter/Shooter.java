@@ -32,12 +32,6 @@ public class Shooter {
 
     private double maxLaunchSpeed = maxTangentialSpeed*(1.0 - energyLostBase);
 
-    private void setMaxLaunchSpeed(double energyLoss)
-    {
-        System.out.println("energy loss " + energyLoss);
-        this.maxLaunchSpeed = maxTangentialSpeed * (1.0 - (energyLostBase + energyLoss));
-    }
-
     public Shooter()
     {
         //empty contructor
@@ -54,10 +48,6 @@ public class Shooter {
         double range = initialUpperBound - initialLowerBound;
         double launchPower = initialUpperBound;
         double heightAtTargetDistance;
-
-        //account for air resistance
-        double airResistanceLoss = (distanceToTarget/10000.0) * 1.1;
-        this.setMaxLaunchSpeed(airResistanceLoss); 
 
         //Determine height at target distance
      heightAtTargetDistance= getHeightAtTargetDistance(distanceToTarget,launchPower);
@@ -98,9 +88,9 @@ public class Shooter {
         double Cd = 0.5;
         double dragForce = 0.5 * density * (maxLaunchSpeed * launchPower) * (maxLaunchSpeed * launchPower) * area * Cd;
 
-        //155 inches is 10,000,000 //speed 1179
+        //155 inches is 9977017 //speed 1122
 
-        //184 inches is 9,250,000 //speed 1144
+        //184 inches is 9,244,452 //speed 1080
 
         System.out.println("dragForce " + dragForce);
         //if you have a triangle, with the hypnotonuse being the angled velocity vector, the adjacent being the horizontal velocity vector, and the opposite side being the height
