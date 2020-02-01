@@ -6,11 +6,13 @@ import frc.robot.subsystems.drive.Drive;
 public class AutonomousCommand extends CommandBase {
 
     private Drive drive;
-    double distance;
+    private double pValue;
+    private double distance;
     private double maxSpeed;
 
-    public AutonomousCommand(double distance, double maxSpeed, Drive drive) {
+    public AutonomousCommand(double distance, double maxSpeed, Drive drive, double pValue) {
         this.distance = distance;
+        this.pValue = pValue;
         this.maxSpeed = maxSpeed;
         this.drive = drive;
     }
@@ -18,7 +20,6 @@ public class AutonomousCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        System.out.println("Initialized");
         drive.setBrakeMode();
         drive.resetEncoders();
     }
@@ -26,7 +27,7 @@ public class AutonomousCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        double turnPower = drive.straightTurnPower();
+        double turnPower = drive.straightTurnPower(pValue);
         double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
         drive.arcadeDrive(-fowardSpeed, -turnPower);
     }
@@ -34,7 +35,7 @@ public class AutonomousCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (drive.getLeftEncoderDistance() >= distance && drive.getRightEncoderDistance() >= distance) {
+        if (drive.getLeftEncoderDistance() <= -distance && drive.getRightEncoderDistance() <= -distance) {
             drive.setRightSpeed(0);
             drive.setLeftSpeed(0);
             return true;

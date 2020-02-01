@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Log;
+import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,10 +31,9 @@ public class Robot extends TimedRobot {
   // Constants
   private final int JOYSTICK_PORT = 1;
 
-  @Log
   private double maxSpeed;
-  @Log
   private double distance;
+  private double pValue;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -84,9 +83,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
     switch(m_autoSelected) {
       case kCustomAuto:
         break;
@@ -109,7 +107,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    this.teleopCommand = new TeleopCommand(controls, drive);
+    this.teleopCommand = new TeleopCommand(controls, drive, pValue);
     if (teleopCommand != null) {
       teleopCommand.schedule();
     }
@@ -129,4 +127,19 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
+  @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
+  public void setAutonStraightDistance(double distance){
+    this.distance = distance;
+  }
+
+  @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
+  public void setAutonMaxSpeedForDriveStraight(double maxSpeed){
+    this.maxSpeed = maxSpeed;
+  }
+
+  @Config(name = "Constant", defaultValueNumeric = .1)
+  public void setDriveStraightPValue(double pValue){
+    this.pValue = pValue;
+  } 
 }
