@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
 
-      double speed = shooter.determineLaunchSpeed(184.5 + 29.0);
+      double speed = shooter.determineLaunchSpeed(227.0 + 29.0);
       shooterSpeedController.setLaunchSpeed(speed); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested
