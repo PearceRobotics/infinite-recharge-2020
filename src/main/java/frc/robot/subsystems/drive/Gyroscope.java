@@ -21,8 +21,11 @@ public class Gyroscope {
     private Drive drive;
     public static final ADIS16470_IMU imu = new ADIS16470_IMU();
 
-    public Gyroscope(Drive drive){
+    boolean drivingStraight = false;
+
+    public Gyroscope(Drive drive, boolean drivingStraight){
         this.drive = drive;
+        this.drivingStraight = drivingStraight;
     }
 
     public void gyroCalibrate(){
@@ -48,15 +51,35 @@ public class Gyroscope {
         else{
         speed = -speed; //speed is negative
         }
+        drive.setBrakeMode();
         while(getGyroAngle() < newAngle){
             drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
         }
     }
 
     public void driveStraightGyro(double forwardSpeed){
+        if(drivingStraight == false){
+            double desiredAngle = getGyroAngle(); //saves current angle
+            drivingStraight = true;
+        }
         double desiredAngle = getGyroAngle(); //saves current angle
-        double error = desiredAngle-getGyroAngle()*.15; 
+        double error = (desiredAngle-getGyroAngle())*.15; 
         drive.arcadeDrive(forwardSpeed, error);
+    }
+
+    public void backToStartingAngle(double speed){
+        double currentAngle = getGyroAngle();
+        double turnAngle = currentAngle % 360;
+        if( turnAngle/ Math.abs(turnAngle) == 1){
+            speed = speed; //speed stays positive
+        }
+        else{
+        speed = -speed; //speed is negative
+        }
+        drive.setBrakeMode();
+        while(Math.abs(getGyroAngle()) < Math.abs(currentAngle)){
+            drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
+        }
     }
     
  

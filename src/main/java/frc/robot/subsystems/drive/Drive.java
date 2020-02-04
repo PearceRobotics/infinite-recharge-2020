@@ -18,6 +18,8 @@ public class Drive {
   private final int RIGHT_BACK_CAN_ID = 4;
   private final int RIGHT_FRONT_CAN_ID = 5;
 
+  boolean brakeMode = false;
+
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
   public Drive() {
@@ -60,13 +62,25 @@ public class Drive {
   }
 
   public void setBrakeMode(){
+    if(brakeMode == false){
     leftGearbox.setBrakeMode();
     rightGearbox.setBrakeMode();
+    brakeMode = true;
+    }
+    else{
+      //do nothing
+    }
   }
 
   public void setCoastMode(){
+    if(brakeMode == true){
     leftGearbox.setCoastMode();
     rightGearbox.setCoastMode();
+    brakeMode = false;
+    }
+    else{
+      //do nothing
+    }
   }
 
   public double getLeftEncoderDistance(){

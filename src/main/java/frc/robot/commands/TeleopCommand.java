@@ -11,12 +11,13 @@ public class TeleopCommand extends CommandBase {
     private Gyroscope gyroscope;
     private Controls controls;
     private double DEADZONE = 0.11;
-    private boolean resetEncoders;
+    boolean drivingStraight = false;
   
-    public TeleopCommand(Controls controls, Drive drive, Gyroscope gyroscope) {
+    public TeleopCommand(Controls controls, Drive drive, Gyroscope gyroscope, boolean drivingStraight) {
         this.controls = controls;
         this.drive = drive;
         this.gyroscope = gyroscope;
+        this.drivingStraight = drivingStraight;
     }
 
     // Called just before this Command runs the first time
@@ -24,32 +25,33 @@ public class TeleopCommand extends CommandBase {
     public void initialize() {
         System.out.println("Initialized");
         gyroscope.resetGyroAngle();
-
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
         if (controls.getRightX(DEADZONE) == 0.0) {
-            if (resetEncoders = false) {
-                drive.resetEncoders();
-                resetEncoders = true;
-            }
-            drive.arcadeDrive(controls.getLeftY(DEADZONE), drive.straightTurnPower());
+            drive.setCoastMode();
+            System.out.println("driveStraight");
+            gyroscope.driveStraightGyro(controls.getLeftY(DEADZONE));
         } else {
+            drive.setCoastMode();
             drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
-            resetEncoders = false;
         }
-        if(controls.getDpadUpButton()){
+        if(controls.getRightTrigger()){
+            drive.setBrakeMode();
             gyroscope.rotate(180, .3); //rotate right 180 degrees
         }
-        else if(controls.getDpadDownButton()){
+        else if(controls.getLeftTrigger()){
+            drive.setBrakeMode();
             gyroscope.rotate(-180, .3); //rotate left 180 degrees
         }
-        else if(controls.getDpadLeftButton()){
+        else if(controls.getLeftBumper()){
+            drive.setBrakeMode();
             gyroscope.rotate(-90, .3); //rotate left 90 degrees
         }
-        else if(controls.getDpadRightButton()){
+        else if(controls.getRightBumper()){
+            drive.setBrakeMode();
             gyroscope.rotate(90, .3); //rotate right 90 degrees
         }
     }
