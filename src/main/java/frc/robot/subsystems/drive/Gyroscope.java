@@ -23,9 +23,8 @@ public class Gyroscope {
 
     boolean drivingStraight = false;
 
-    public Gyroscope(Drive drive, boolean drivingStraight){
+    public Gyroscope(Drive drive){
         this.drive = drive;
-        this.drivingStraight = drivingStraight;
     }
 
     public void gyroCalibrate(){
@@ -57,12 +56,8 @@ public class Gyroscope {
         }
     }
 
-    public void driveStraightGyro(double forwardSpeed){
-        if(drivingStraight == false){
-            double desiredAngle = getGyroAngle(); //saves current angle
-            drivingStraight = true;
-        }
-        double desiredAngle = getGyroAngle(); //saves current angle
+    public void driveStraightGyro(double forwardSpeed,double desiredAngle){
+       // double desiredAngle = getGyroAngle(); //saves current angle
         double error = (desiredAngle-getGyroAngle())*.15; 
         drive.arcadeDrive(forwardSpeed, error);
     }

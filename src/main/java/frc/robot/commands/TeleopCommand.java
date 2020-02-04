@@ -11,13 +11,13 @@ public class TeleopCommand extends CommandBase {
     private Gyroscope gyroscope;
     private Controls controls;
     private double DEADZONE = 0.11;
+    double desiredAngle;
     boolean drivingStraight = false;
   
-    public TeleopCommand(Controls controls, Drive drive, Gyroscope gyroscope, boolean drivingStraight) {
+    public TeleopCommand(Controls controls, Drive drive, Gyroscope gyroscope) {
         this.controls = controls;
         this.drive = drive;
         this.gyroscope = gyroscope;
-        this.drivingStraight = drivingStraight;
     }
 
     // Called just before this Command runs the first time
@@ -33,10 +33,15 @@ public class TeleopCommand extends CommandBase {
         if (controls.getRightX(DEADZONE) == 0.0) {
             drive.setCoastMode();
             System.out.println("driveStraight");
-            gyroscope.driveStraightGyro(controls.getLeftY(DEADZONE));
+            if(drivingStraight == false){
+                desiredAngle = gyroscope.getGyroAngle(); 
+                drivingStraight = true;
+            }
+            gyroscope.driveStraightGyro(controls.getLeftY(DEADZONE), desiredAngle);
         } else {
             drive.setCoastMode();
             drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
+            drivingStraight = false;
         }
         if(controls.getRightTrigger()){
             drive.setBrakeMode();

@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
 
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.gyroscope = new Gyroscope(drive, drivingStraight);
+    this.gyroscope = new Gyroscope(drive);
   }
 
   /**
