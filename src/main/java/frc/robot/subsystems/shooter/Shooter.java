@@ -1,33 +1,22 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Config.Configs;
 
 /**
  * Add your docs here.
  */
 public class Shooter {
-    private final double wheelDiameter = 4; // inch
-    private final double Gravity = 386.0886;
-    private final double maxRpm = 7640.0;
-    private final double launcherHeight = 24.0; // inch
-    private double energyLostBase = 0.60; // (0.58 works from initiation line)
-    private final double wheelCircumference = wheelDiameter * Math.PI;
-    private final double maxTangentialSpeed = (wheelCircumference * (maxRpm / 60.0));
-    private final double initialUpperBound = 1.0; // %100 speed
-    private final double initialLowerBound = 0.0;// %0 speed
-    private final double degrees = 32.0;
-    private final double radians = Math.toRadians(degrees);
+    private final double wheelDiameter = 4; // inches
+    private final double Gravity = 386.0886; //inches per second squared
+    private final double maxRpm = 7640.0; //rpms
+    private final double launcherHeight = 24.0; // inches
+    private double energyLostBase = 0.60; // Percent energy lost from full tangential speed to actual ball speed
+    private final double wheelCircumference = wheelDiameter * Math.PI; //inches
+    private final double maxTangentialSpeed = (wheelCircumference * (maxRpm / 60.0)); //inches per second
+    private final double initialUpperBound = 1.0; // 100% speed
+    private final double initialLowerBound = 0.0;// 0% speed
+    private final double launcherDegrees = 32.0; //launcherDegrees
+    private final double launcherRadians = Math.toRadians(launcherDegrees);
     private double targetHeight = 98.0;
 
     private final double INCHES_TO_METERS = 2.54 / 100.0;
@@ -83,8 +72,8 @@ public class Shooter {
         double ballDiameterInches = 7.0;
         double ballDiameterMeters = ballDiameterInches * INCHES_TO_METERS;
 
-        double B = 0.00016;
-        double C = 0.25;
+        double beta = 0.00016;
+        double gamma = 0.25;
 
         // 155 inches is 9977017 //speed 1122
 
@@ -95,44 +84,41 @@ public class Shooter {
         // side being the height
         // horizontal speed = adjacent side -> cos(angle) = a/h -> hcos(angle) = a ->
         // (maxLaunchSpeed * launchPower)cos(angle) = a
-        horizontalSpeed = Math.cos(radians) * maxLaunchSpeed * launchPower;
+        horizontalSpeed = Math.cos(launcherRadians) * maxLaunchSpeed * launchPower;
 
         double horizontalSpeedMs = horizontalSpeed * INCHES_TO_METERS;
 
-        double horizontalAirResistanceMetersPerSecondSquared = (ballDiameterMeters * B * horizontalSpeedMs)
-                + (C * ballDiameterMeters * ballDiameterMeters * horizontalSpeedMs * horizontalSpeedMs);
+        double horizontalAirResistanceMetersPerSecondSquared = (ballDiameterMeters * beta * horizontalSpeedMs)
+                + (gamma * ballDiameterMeters * ballDiameterMeters * horizontalSpeedMs * horizontalSpeedMs);
 
         double horizontalAirResistanceInchesPerSecondSquared = horizontalAirResistanceMetersPerSecondSquared
                 / INCHES_TO_METERS;
 
-        double a = -0.5 * horizontalAirResistanceInchesPerSecondSquared;
-        double b = horizontalSpeed;
-        double c = -distanceToTarget;
-
-        double qPlus = (-b + Math.sqrt((b * b) - (4.0 * a * c))) / (2.0 * a);
+        double qPlus = (-horizontalSpeed + Math.sqrt((horizontalSpeed * horizontalSpeed)
+                - (4.0 * -0.5 * horizontalAirResistanceInchesPerSecondSquared * -distanceToTarget)))
+                / (2.0 * -0.5 * horizontalAirResistanceInchesPerSecondSquared);
 
         // v = d/t -> vt=d -> t = d/v
         travelTime = qPlus;// distanceToTarget / horizontalSpeed;
 
         // System.out.println("travel time " + travelTime);
 
-        double verticalSpeedMetersPerSecond = (Math.sin(radians) * maxLaunchSpeed * launchPower) * INCHES_TO_METERS;
-
+        double verticalSpeedMetersPerSecond = (Math.sin(launcherRadians) * maxLaunchSpeed * launchPower) * INCHES_TO_METERS;
 
         // System.out.println("vertical m/s " + verticalSpeedMetersPerSecond);
 
-        double verticalAirResistanceMetersPerSecondSquared = (ballDiameterMeters * B * verticalSpeedMetersPerSecond)
-                + (C * ballDiameterMeters * ballDiameterMeters * verticalSpeedMetersPerSecond
+        double verticalAirResistanceMetersPerSecondSquared = (ballDiameterMeters * beta * verticalSpeedMetersPerSecond)
+                + (gamma * ballDiameterMeters * ballDiameterMeters * verticalSpeedMetersPerSecond
                         * verticalSpeedMetersPerSecond);
 
         double verticalAirResistanceInchesPerSecondSquared = verticalAirResistanceMetersPerSecondSquared
                 / INCHES_TO_METERS;
 
-                
-        // System.out.println("vertical air resistance time " + verticalAirResistanceInchesPerSecondSquared);
+        // System.out.println("vertical air resistance time " +
+        // verticalAirResistanceInchesPerSecondSquared);
 
         // current distance = original distance +vt + .5at^2
-        double heightAtTargetDistance = launcherHeight + (Math.sin(radians) * maxLaunchSpeed * launchPower * travelTime)
+        double heightAtTargetDistance = launcherHeight + (Math.sin(launcherRadians) * maxLaunchSpeed * launchPower * travelTime)
                 - (0.5 * (Gravity + verticalAirResistanceInchesPerSecondSquared) * Math.pow(travelTime, 2));
         return heightAtTargetDistance;
     }

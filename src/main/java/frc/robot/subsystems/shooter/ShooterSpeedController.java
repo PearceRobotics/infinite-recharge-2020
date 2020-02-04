@@ -1,7 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2020 1745 JJ Pearce Robotics. All Rights Reserved.           */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
