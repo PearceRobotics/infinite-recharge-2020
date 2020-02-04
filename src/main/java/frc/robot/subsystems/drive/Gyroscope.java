@@ -9,8 +9,11 @@
 package frc.robot.subsystems.drive;
 
 import frc.robot.subsystems.drive.Drive;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
+
 import com.analog.adis16470.frc.ADIS16470_IMU;
-//import com.analog.adis16470.frc.ADIS16470_IMU.Axis;
+import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 
 /**
  * Add your docs here.
@@ -24,7 +27,10 @@ public class Gyroscope {
     boolean drivingStraight = false;
 
     public Gyroscope(Drive drive){
+        imu.setYawAxis(IMUAxis.kY);
         this.drive = drive;
+        gyroCalibrate();
+        resetGyroAngle();
     }
 
     public void gyroCalibrate(){
@@ -36,6 +42,7 @@ public class Gyroscope {
     }
 
     //Angle does not reset to 0 after full rotation - goes to 361...2... etc
+    @Log
     public double getGyroAngle(){
         return imu.getAngle();
     }
@@ -56,7 +63,7 @@ public class Gyroscope {
         }
     }
 
-    public void driveStraightGyro(double forwardSpeed,double desiredAngle){
+    public void driveStraightGyro(double forwardSpeed,double desiredAngle){ // 
         double error = (desiredAngle-getGyroAngle())*.15; 
         drive.arcadeDrive(forwardSpeed, error);
     }
@@ -75,6 +82,5 @@ public class Gyroscope {
             drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
         }
     }
-    
- 
+
 }
