@@ -57,7 +57,6 @@ public class Gyroscope {
     }
 
     public void driveStraightGyro(double forwardSpeed,double desiredAngle){
-       // double desiredAngle = getGyroAngle(); //saves current angle
         double error = (desiredAngle-getGyroAngle())*.15; 
         drive.arcadeDrive(forwardSpeed, error);
     }

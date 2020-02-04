@@ -38,6 +38,8 @@ public class TeleopCommand extends CommandBase {
                 drivingStraight = true;
             }
             gyroscope.driveStraightGyro(controls.getLeftY(DEADZONE), desiredAngle);
+            System.out.println("desired Angle" + desiredAngle);
+            System.out.println("GyroAngle" + gyroscope.getGyroAngle());
         } else {
             drive.setCoastMode();
             drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
