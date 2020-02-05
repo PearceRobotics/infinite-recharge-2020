@@ -1,20 +1,24 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Lights;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.ColorSensorCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
+import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Config;
+
+
 
 public class Robot extends TimedRobot {
+  
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -27,6 +31,7 @@ public class Robot extends TimedRobot {
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
+  private ColorSensorCommand colorSensorCommand;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -51,6 +56,7 @@ public class Robot extends TimedRobot {
     this.lights = new Lights(9, 60, 50);
 
     this.lightsCommand = new LightsCommand(lights);
+    this.colorSensorCommand = new ColorSensorCommand();
   }
 
   /**
@@ -67,6 +73,9 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
+    colorSensorCommand.schedule();
+   
+    
   }
 
   /**
