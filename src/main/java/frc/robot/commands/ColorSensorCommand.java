@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Add your docs here.
  */
 public class ColorSensorCommand extends CommandBase {
-    private double ballGreen;
-    private double ballBlue;
-    private double ballRed;
+    private double ballGreen = 0.5;
+    private double ballBlue = 0.16 ;
+    private double ballRed = 0.33;
     private I2C.Port i2cPort;
     private ColorSensorV3 m_colorSensor;
     private final double COLOR_RANGE = 0.05;
