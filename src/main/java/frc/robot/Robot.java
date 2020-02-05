@@ -10,6 +10,7 @@ import frc.robot.subsystems.Lights;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.DistanceSensorDetectorCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
@@ -27,7 +28,7 @@ public class Robot extends TimedRobot {
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
-
+  private DistanceSensorDetectorCommand distanceSensorDetectorCommand;
   // Constants
   private final int JOYSTICK_PORT = 1;
 
@@ -67,6 +68,7 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
+    distanceSensorDetectorCommand.schedule();
   }
 
   /**
