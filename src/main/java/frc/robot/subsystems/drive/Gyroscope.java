@@ -11,9 +11,9 @@ package frc.robot.subsystems.drive;
 import frc.robot.subsystems.drive.Drive;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
+import edu.wpi.first.wpilibj.SPI;
 
-import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * Add your docs here.
@@ -21,30 +21,21 @@ import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 public class Gyroscope {
 
 
-    private Drive drive;
-    public static final ADIS16470_IMU imu = new ADIS16470_IMU();
+    private Drive drive; 
+    AHRS imu = new AHRS(SPI.Port.kMXP);
 
     boolean drivingStraight = false;
 
     public Gyroscope(Drive drive){
-        imu.setYawAxis(IMUAxis.kY);
         this.drive = drive;
-        gyroCalibrate();
-        resetGyroAngle();
-    }
-
-    public void gyroCalibrate(){
-        imu.calibrate();
-    }
-
-    public void resetGyroAngle(){
-        imu.reset();
     }
 
     //Angle does not reset to 0 after full rotation - goes to 361...2... etc
-    @Log
+    public void resetGyro(){
+        imu.reset();
+    }
     public double getGyroAngle(){
-        return imu.getAngle();
+        return imu.getYaw();
     }
 
     public void rotate(double degrees, double speed){ //might want to add speed controller for turning
@@ -64,7 +55,7 @@ public class Gyroscope {
     }
 
     public void driveStraightGyro(double forwardSpeed,double desiredAngle){ // 
-        double error = (desiredAngle-getGyroAngle())*.15; 
+        double error = (desiredAngle-getGyroAngle())*.025; 
         drive.arcadeDrive(forwardSpeed, error);
     }
 

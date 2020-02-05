@@ -24,14 +24,14 @@ public class TeleopCommand extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("Initialized");
-        gyroscope.resetGyroAngle();
+        gyroscope.resetGyro();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
         System.out.println(" Y axis" + gyroscope.getGyroAngle());
-      /*  if (controls.getRightX(DEADZONE) == 0.0) {
+        if (controls.getRightX(DEADZONE) == 0.0) {
             drive.setCoastMode();
             System.out.println("driveStraight");
             if(drivingStraight == false){
@@ -61,7 +61,7 @@ public class TeleopCommand extends CommandBase {
         else if(controls.getRightBumper()){
             drive.setBrakeMode();
             gyroscope.rotate(90, .3); //rotate right 90 degrees
-        }*/
+        }
     }
 
 }
