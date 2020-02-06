@@ -18,7 +18,7 @@ import com.revrobotics.Rev2mDistanceSensor.Port;
  */
 public class DistanceSensorDetectorCommand extends CommandBase{
     private Rev2mDistanceSensor distOnboard; 
-    
+    private final double DISTANCE_RANGE = 0.05;
     public DistanceSensorDetectorCommand()
     {
         //Empty constructor might add more later
@@ -37,7 +37,10 @@ public class DistanceSensorDetectorCommand extends CommandBase{
         if(distOnboard.isRangeValid()) {
             SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
             SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
-          }
+        }
+        if(Math.abs(distOnboard.getRange() - 7 <= DISTANCE_RANGE){
+            System.out.print("Is a ball");
+        }
 
     }
 
