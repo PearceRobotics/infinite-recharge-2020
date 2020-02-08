@@ -46,22 +46,7 @@ public class TeleopCommand extends CommandBase {
             drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
             drivingStraight = false;
         }
-        if(controls.getRightTrigger()){
-            drive.setBrakeMode();
-            gyroscope.rotate(180, .3); //rotate right 180 degrees
-        }
-        else if(controls.getLeftTrigger()){
-            drive.setBrakeMode();
-            gyroscope.rotate(-180, .3); //rotate left 180 degrees
-        }
-        else if(controls.getLeftBumper()){
-            drive.setBrakeMode();
-            gyroscope.rotate(-90, .3); //rotate left 90 degrees
-        }
-        else if(controls.getRightBumper()){
-            drive.setBrakeMode();
-            gyroscope.rotate(90, .3); //rotate right 90 degrees
-        }
+
     }
 
 }

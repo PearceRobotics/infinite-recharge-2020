@@ -5,7 +5,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-public class Gearbox {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Gearbox extends SubsystemBase{
     private final CANSparkMax frontController;
     private final CANSparkMax backController;
 
