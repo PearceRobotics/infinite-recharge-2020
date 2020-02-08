@@ -13,8 +13,11 @@ import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
+import frc.robot.io.IO;
 
 public class Robot extends TimedRobot {
+
+  public IO io;
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -22,7 +25,7 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
-  private Gyroscope gyroscope;
+  private Gyroscope gyro;
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
 
@@ -46,10 +49,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     Logger.configureLoggingAndConfig(this, false);
-
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.gyroscope = new Gyroscope(drive);
+    this.gyro = new Gyroscope(drive);
+    this.io = new IO(controls,drive, gyro);
   }
 
   /**
@@ -106,10 +109,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    this.teleopCommand = new TeleopCommand(controls, drive, gyroscope);
-    if (teleopCommand != null) {
-      teleopCommand.schedule();
-    }
+    drive.setDefaultCommand(new TeleopCommand(controls,drive, gyro));
   }
  
   /**

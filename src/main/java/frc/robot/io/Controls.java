@@ -8,6 +8,7 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * Add your docs here.
  */
 
-public class Controls {
+public class Controls extends SubsystemBase{
     private Joystick joystick;
     private final int LEFT_X = 0;
     private final int LEFT_Y = 1;
@@ -93,11 +94,22 @@ public class Controls {
         return joystick.getRawAxis(RIGHT_TRIGGER_ID) > 0;
     }
 
+    public JoystickButton getRightJoystickTrigger() {
+        return new JoystickButton(joystick, RIGHT_TRIGGER_ID);
+    }
+
     public boolean getLeftBumper() {
         return joystick.getRawButton(LEFT_BUMPER_ID);
+    }
+    public JoystickButton getLeftJoystickBumper(){
+        return new JoystickButton(joystick, LEFT_BUMPER_ID);
     }
 
     public boolean getLeftTrigger() {
         return joystick.getRawAxis(LEFT_TRIGGER_ID) > 0;
+    }
+
+    public JoystickButton getLeftJoystickTrigger() {
+        return new JoystickButton(joystick, LEFT_TRIGGER_ID);
     }
 } 

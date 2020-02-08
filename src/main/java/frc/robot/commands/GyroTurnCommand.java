@@ -19,20 +19,23 @@ public class GyroTurnCommand extends CommandBase{
     private Drive drive;
     private double newAngle;
 
-    GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive){
+    public GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive){
         this.gyro = gyro;
         this.turnAngle = turnAngle;
         this.drive = drive;
+
+        addRequirements(gyro);
+        addRequirements(drive);
     }
     @Override
     public void initialize() {
         double currentAngle = gyro.getGyroAngle();
         newAngle = currentAngle + turnAngle;
         if( newAngle/ Math.abs(newAngle) == 1){
-        speed = .75; //speed stays positive
+        speed = .2; //speed stays positive
         }
         else{
-        speed = -.75; //speed is negative
+        speed = -.2; //speed is negative
         }
         drive.setBrakeMode();
     }
@@ -40,7 +43,10 @@ public class GyroTurnCommand extends CommandBase{
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-                drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
+                drive.arcadeDrive(0, speed);
+                System.out.println("desired angle" + newAngle);
+                System.out.println("gyro angle" + gyro.getGyroAngle());
+                 //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
         }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -18,29 +18,28 @@ public class TeleopCommand extends CommandBase {
         this.controls = controls;
         this.drive = drive;
         this.gyroscope = gyroscope;
+
+        addRequirements(controls);
+        addRequirements(drive);
+        addRequirements(gyroscope);
     }
 
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        System.out.println("Initialized");
         gyroscope.resetGyro();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println(" Y axis" + gyroscope.getGyroAngle());
         if (controls.getRightX(DEADZONE) == 0.0) {
             drive.setCoastMode();
-            System.out.println("driveStraight");
             if(drivingStraight == false){
                 desiredAngle = gyroscope.getGyroAngle(); 
                 drivingStraight = true;
             }
             gyroscope.driveStraightGyro(controls.getLeftY(DEADZONE), desiredAngle);
-            System.out.println("desired Angle" + desiredAngle);
-            System.out.println("GyroAngle" + gyroscope.getGyroAngle());
         } else {
             drive.setCoastMode();
             drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));

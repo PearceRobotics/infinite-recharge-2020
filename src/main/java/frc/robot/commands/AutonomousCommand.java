@@ -13,6 +13,8 @@ public class AutonomousCommand extends CommandBase {
         this.distance = distance;
         this.maxSpeed = maxSpeed;
         this.drive = drive;
+
+        addRequirements(drive);
     }
 
     // Called just before this Command runs the first time
