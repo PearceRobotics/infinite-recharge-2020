@@ -35,24 +35,17 @@ public class Gyroscope extends SubsystemBase {
         imu.reset();
     }
     public double getGyroAngle(){
-        return imu.getYaw();
+        return imu.getAngle();
     }
 
-    public void rotate(double degrees, double speed){ //might want to add speed controller for turning
-        double currentAngle = getGyroAngle();
-        double newAngle = currentAngle + degrees;
-
-        if( degrees/ Math.abs(degrees) == 1){
-            speed = speed; //speed stays positive
-        }
-        else{
-        speed = -speed; //speed is negative
-        }
-        drive.setBrakeMode();
-        while(getGyroAngle() < newAngle){
-            drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
-        }
+    public double getPitch(){
+        return imu.getPitch();
     }
+
+    public double getRoll(){
+        return imu.getRoll();
+    }
+
 
     public void driveStraightGyro(double forwardSpeed,double desiredAngle){ 
         double error = (desiredAngle-getGyroAngle()) * .0014; 
@@ -72,10 +65,6 @@ public class Gyroscope extends SubsystemBase {
         while(Math.abs(getGyroAngle()) < Math.abs(currentAngle)){
             drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
         }
-    }
-@Config
-    public void setPValue(double pValue){
-        this.pValue = pValue;
     }
 
 }

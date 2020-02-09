@@ -27,7 +27,6 @@ public class Robot extends TimedRobot {
   private Controls controls;
   private Gyroscope gyro;
   private AutonomousCommand autonomousCommand;
-  private TeleopCommand teleopCommand;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -36,6 +35,11 @@ public class Robot extends TimedRobot {
   private double maxSpeed;
   @Log
   private double distance;
+
+  private double kP = 0.0;
+  private double kI = 0.0;
+  private double kD = 0.0;
+  private double kF = 0.0;
 
   boolean drivingStraight = false;
   /**
@@ -52,7 +56,7 @@ public class Robot extends TimedRobot {
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.gyro = new Gyroscope(drive);
-    this.io = new IO(controls,drive, gyro);
+    this.io = new IO(controls,drive, gyro, kP, kI, kD, kF);
   }
 
   /**
