@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
     this.lights = new Lights(9, 60, 50);
 
     this.lightsCommand = new LightsCommand(lights);
+    this.distanceSensorDetectorCommand = new DistanceSensorDetectorCommand();
   }
 
   /**
