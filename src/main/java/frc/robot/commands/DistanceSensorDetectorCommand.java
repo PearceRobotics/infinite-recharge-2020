@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.*;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
+
 /**
  * Add your docs here.
  */
@@ -38,7 +39,7 @@ public class DistanceSensorDetectorCommand extends CommandBase{
             SmartDashboard.putNumber("Range Onboard", distOnboard.getRange());
             SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
         }
-        if(Math.abs(distOnboard.getRange() - 7 <= DISTANCE_RANGE){
+        if(Math.abs(distOnboard.getRange() - 7) <= DISTANCE_RANGE){
             System.out.print("Is a ball");
         }
 
