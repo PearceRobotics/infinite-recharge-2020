@@ -21,8 +21,8 @@ import com.revrobotics.Rev2mDistanceSensor.Unit;
 public class DistanceSensorDetectorCommand extends CommandBase{
     private Rev2mDistanceSensor distOnboard; 
     private final double DISTANCE_RANGE = 0.5;
-    public DistanceSensorDetectorCommand()
     private double distance;
+    public DistanceSensorDetectorCommand()
     {
         //Empty constructor might add more later
     }
@@ -38,8 +38,8 @@ public class DistanceSensorDetectorCommand extends CommandBase{
     @Override
     public void execute() {
         if(distOnboard.isRangeValid()) {
-            distance = Integer.valueOf(distOnboard.getRange());
-            SmartDashboard.putNumber("Range Onboard", int distOnboard.getRange());
+            distance = Double.valueOf(distOnboard.getRange());
+            SmartDashboard.putNumber("Range Onboard", distance);
             SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
         }
         if(Math.abs(distOnboard.getRange(Unit.kInches) - 6.0) <= DISTANCE_RANGE){
