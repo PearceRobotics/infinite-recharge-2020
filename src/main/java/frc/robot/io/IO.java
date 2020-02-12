@@ -20,9 +20,9 @@ public class IO {
 
     public IO(Controls controls, Drive drive, Gyroscope gyro, double kP, double kI, double kD, double kF){
 
-     //   controls.getLeftJoystickTrigger().whenPressed(new GyroTurnCommand(gyro, -180, drive, kP, kI, kD, kF));
-       // controls.getRightJoystickTrigger().whenPressed(new GyroTurnCommand(gyro, 180, drive, kP, kI, kD, kF));
-       // controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, -90, drive, kP, kI, kD, kF));
-         controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, 90, drive, kP, kI, kD));
+      controls.getLeftJoystickTrigger().whenPressed(new GyroTurnCommand(gyro, -180, drive, kP, kI, kD));
+      controls.getRightJoystickTrigger().whenPressed(new GyroTurnCommand(gyro, 180, drive, kP, kI, kD));
+      controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, -90, drive, kP, kI, kD));
+      controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, 90, drive, kP, kI, kD));
     }
 }

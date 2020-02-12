@@ -92,6 +92,7 @@ public class Controls extends SubsystemBase{
 
     public boolean getRightTrigger() {
         return joystick.getRawAxis(RIGHT_TRIGGER_ID) > 0;
+    
     }
 
     public JoystickButton getRightJoystickTrigger() {
