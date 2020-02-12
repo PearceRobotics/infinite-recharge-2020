@@ -113,7 +113,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drive.setDefaultCommand(new TeleopCommand(controls,drive, gyro));
+    gyro.resetGyro();
+   // drive.setDefaultCommand(new TeleopCommand(controls,drive, gyro));
   }
  
   /**

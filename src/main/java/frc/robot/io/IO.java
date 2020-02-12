@@ -23,6 +23,6 @@ public class IO {
      //   controls.getLeftJoystickTrigger().whenPressed(new GyroTurnCommand(gyro, -180, drive, kP, kI, kD, kF));
        // controls.getRightJoystickTrigger().whenPressed(new GyroTurnCommand(gyro, 180, drive, kP, kI, kD, kF));
        // controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, -90, drive, kP, kI, kD, kF));
-         controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, 90, drive, kP, kI, kD, kF));
+         controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, 90, drive, kP, kI, kD));
     }
 }

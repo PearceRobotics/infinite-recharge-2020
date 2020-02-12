@@ -10,10 +10,13 @@ package frc.robot.subsystems.drive;
 
 import frc.robot.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.annotations.Config;
-import com.kauailabs.navx.frc.AHRS;
+import java.lang.Math;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 /**
  * Add your docs here.
  */
@@ -21,31 +24,31 @@ public class Gyroscope extends SubsystemBase {
 
 
     private Drive drive; 
-    AHRS imu = new AHRS(SPI.Port.kMXP);
+    private ADIS16470_IMU imu;
 
     boolean drivingStraight = false;
     double pValue;
+    double startTime;
+    double driftPerSecond;
+    
 
     public Gyroscope(Drive drive){
+        this.imu = new ADIS16470_IMU();
         this.drive = drive;
+        imu.setYawAxis(IMUAxis.kY);
+        gyroCalibrate();
     }
 
-    //Angle does not reset to 0 after full rotation - goes to 361...2... etc
+    public double getGyroAngle(){
+        double runTime = Timer.getFPGATimestamp() - startTime;
+        double drift = runTime * driftPerSecond;
+        return imu.getAngle() - drift;
+    }
+
     public void resetGyro(){
         imu.reset();
+        startTime = Timer.getFPGATimestamp();
     }
-    public double getGyroAngle(){
-        return imu.getAngle();
-    }
-
-    public double getPitch(){
-        return imu.getPitch();
-    }
-
-    public double getRoll(){
-        return imu.getRoll();
-    }
-
 
     public void driveStraightGyro(double forwardSpeed,double desiredAngle){ 
         double error = (desiredAngle-getGyroAngle()) * .0014; 
@@ -67,4 +70,17 @@ public class Gyroscope extends SubsystemBase {
         }
     }
 
+    public void gyroCalibrate(){
+        startTime = Timer.getFPGATimestamp();        
+        double startAngle = imu.getAngle();
+    
+        try{
+            Thread.sleep(16000);
+        }catch(Exception e)
+        {
+            //dont care about exceptions rn
+        }
+    
+        driftPerSecond = (imu.getAngle() - startAngle)/(Timer.getFPGATimestamp() - startTime);
+    }
 }

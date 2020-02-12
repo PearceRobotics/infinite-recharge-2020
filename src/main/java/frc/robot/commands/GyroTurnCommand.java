@@ -18,21 +18,20 @@ public class GyroTurnCommand extends CommandBase{
     private double turnAngle;
     private Drive drive;
     private double newAngle;
-    private PIDController rotateController;
+   // private PIDController rotateController;
 
-    public GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive, double kP, double kI, double kD, double  kF){
+    public GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive, double kP, double kI, double kD){
 
         this.gyro = gyro;
         this.turnAngle = turnAngle;
         this.drive = drive;
-        rotateController = new PIDController(kP, kI, kD, kF);
+       // rotateController = new PIDController(kP, kI, kD);
 
         addRequirements(gyro);
         addRequirements(drive);
     }
     @Override
     public void initialize() {
-        System.out.println("initialized");
         double currentAngle = gyro.getGyroAngle();
         newAngle = currentAngle + turnAngle;
         drive.setBrakeMode();
@@ -41,25 +40,35 @@ public class GyroTurnCommand extends CommandBase{
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-                double speed = (newAngle - gyro.getGyroAngle())*(0.0027) *.75;
-                if (speed /Math.abs(speed) == -1 ){
-                    speed = speed;
-                }
-                else if( speed < .05){
-                    speed = .05;
+                double error = newAngle - gyro.getGyroAngle();
+                double speed = -error*(0.0027) *.65;
+                if(Math.abs(speed) < .1){
+                    if (speed/ Math.abs(speed) == -1){
+                        speed = -.1;
+                    }
+                    else if(speed/ Math.abs(speed) == 1) {
+                        speed = .1;
+                    }
+                    else{
+                        // do nothing
+                    }
                 }
                 drive.arcadeDrive(0, speed);
+                System.out.println("gyro angle" + gyro.getGyroAngle());
+                System.out.println("gyro speed" + speed);
         }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if(Math.abs(gyro.getGyroAngle() - newAngle) > 5)
+        if(Math.abs(gyro.getGyroAngle() - newAngle) > 1)
         {
             return false;
         }
         else{
+            System.out.println("gyro angle" + gyro.getGyroAngle());
             System.out.println("complete");
+            drive.arcadeDrive(0,0);
             return true;
         }
       

@@ -33,6 +33,7 @@ public class TeleopCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
+        System.out.println(gyroscope.getGyroAngle());
         if (controls.getRightX(DEADZONE) == 0.0) {
             drive.setCoastMode();
             if(drivingStraight == false){
@@ -46,6 +47,9 @@ public class TeleopCommand extends CommandBase {
             drivingStraight = false;
         }
 
+        if(controls.getAButton()){
+            gyroscope.resetGyro();
+        }
     }
 
 }
