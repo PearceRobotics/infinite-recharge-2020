@@ -1,20 +1,8 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-
-/**
- * Add your docs here.
- */
 
 public class Controls extends SubsystemBase{
     private Joystick joystick;
@@ -46,8 +34,16 @@ public class Controls extends SubsystemBase{
         return joystick.getRawButton(A_BUTTON_ID);
     }
 
+    public JoystickButton getJoystickAButton(){
+        return new JoystickButton(joystick, A_BUTTON_ID);
+    }
+
     public boolean getXButton() {
         return joystick.getRawButton(X_BUTTON_ID);
+    }
+
+    public JoystickButton getJoystickXButton(){
+        return new JoystickButton(joystick, X_BUTTON_ID);
     }
 
     public JoystickButton getYJoystickButton(){
@@ -95,22 +91,15 @@ public class Controls extends SubsystemBase{
     
     }
 
-    public JoystickButton getRightJoystickTrigger() {
-        return new JoystickButton(joystick, RIGHT_TRIGGER_ID);
-    }
-
     public boolean getLeftBumper() {
         return joystick.getRawButton(LEFT_BUMPER_ID);
     }
+
     public JoystickButton getLeftJoystickBumper(){
         return new JoystickButton(joystick, LEFT_BUMPER_ID);
     }
 
     public boolean getLeftTrigger() {
         return joystick.getRawAxis(LEFT_TRIGGER_ID) > 0;
-    }
-
-    public JoystickButton getLeftJoystickTrigger() {
-        return new JoystickButton(joystick, LEFT_TRIGGER_ID);
     }
 } 

@@ -1,27 +1,13 @@
-
-/*What this needs to do 
- Drive Straight
- Turn 90 Left on button push
- Turn 90 Right on button push
- Turn 180 Left on button push
- Turn 180 Right on button push
- Re-orient to field*/
 package frc.robot.subsystems.drive;
 
 import frc.robot.subsystems.drive.Drive;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import io.github.oblarg.oblog.annotations.Config;
 import java.lang.Math;
-
 import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
-/**
- * Add your docs here.
- */
-public class Gyroscope extends SubsystemBase {
 
+public class Gyroscope extends SubsystemBase {
 
     private Drive drive; 
     private ADIS16470_IMU imu;
@@ -31,7 +17,6 @@ public class Gyroscope extends SubsystemBase {
     double startTime;
     double driftPerSecond;
     
-
     public Gyroscope(Drive drive){
         this.imu = new ADIS16470_IMU();
         this.drive = drive;
@@ -73,14 +58,12 @@ public class Gyroscope extends SubsystemBase {
     public void gyroCalibrate(){
         startTime = Timer.getFPGATimestamp();        
         double startAngle = imu.getAngle();
-    
         try{
             Thread.sleep(16000);
         }catch(Exception e)
         {
             //dont care about exceptions rn
         }
-    
         driftPerSecond = (imu.getAngle() - startAngle)/(Timer.getFPGATimestamp() - startTime);
     }
 }
