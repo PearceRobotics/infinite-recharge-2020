@@ -44,8 +44,6 @@ public class ReorientToFieldCommand extends CommandBase{
                     }
                 }
                 drive.arcadeDrive(0.0, speed);
-                System.out.println("gyro angle" + error);
-                System.out.println("gyro speed" + speed);
         }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -56,7 +54,6 @@ public class ReorientToFieldCommand extends CommandBase{
             return false;
         }
         else{
-            System.out.println("complete");
             drive.arcadeDrive(0.0, 0.0);
             return true;
         }

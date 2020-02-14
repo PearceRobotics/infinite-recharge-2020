@@ -22,7 +22,6 @@ public class GyroTurnCommand extends CommandBase{
         this.gyro = gyro;
         this.turnAngle = turnAngle;
         this.drive = drive;
-       // rotateController = new PIDController(kP, kI, kD);
 
         addRequirements(gyro);
         addRequirements(drive);
@@ -54,8 +53,6 @@ public class GyroTurnCommand extends CommandBase{
             }
         }
         drive.arcadeDrive(0.0, speed);
-        System.out.println("gyro angle" + gyro.getGyroAngle());
-        System.out.println("gyro speed" + speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
