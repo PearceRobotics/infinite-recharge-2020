@@ -8,14 +8,14 @@ import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 
 public class Gyroscope extends SubsystemBase {
-
+    //Classes
     private Drive drive; 
     private ADIS16470_IMU imu;
-
-    boolean drivingStraight = false;
-    double pValue;
-    double startTime;
-    double driftPerSecond;
+    //variables
+    private double startTime;
+    private double driftPerSecond;
+    //constants
+    private double pValue = .0014;
     
     public Gyroscope(Drive drive){
         this.imu = new ADIS16470_IMU();
@@ -36,23 +36,8 @@ public class Gyroscope extends SubsystemBase {
     }
 
     public void driveStraightGyro(double forwardSpeed,double desiredAngle){ 
-        double error = (desiredAngle-getGyroAngle()) * .0014; 
+        double error = (desiredAngle-getGyroAngle()) * pValue; 
         drive.arcadeDrive(forwardSpeed, error);
-    }
-
-    public void backToStartingAngle(double speed){
-        double currentAngle = getGyroAngle();
-        double turnAngle = currentAngle % 360;
-        if( turnAngle/ Math.abs(turnAngle) == 1){
-            speed = speed; //speed stays positive
-        }
-        else{
-        speed = -speed; //speed is negative
-        }
-        drive.setBrakeMode();
-        while(Math.abs(getGyroAngle()) < Math.abs(currentAngle)){
-            drive.arcadeDrive(-0, -speed); //b/c joysticks come out negative, we can either change the arcade method, or just make all things plugged in negative
-        }
     }
 
     public void gyroCalibrate(){

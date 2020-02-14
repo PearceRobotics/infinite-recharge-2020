@@ -5,9 +5,18 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Gyroscope;
 
 public class ReorientToFieldCommand extends CommandBase{
-
+    //Classes
     private Drive drive;
     private Gyroscope gyro;
+    //Variables
+    private double error; //error the robot is off its original position (from 0 to 360)
+    private double speed;//speed the robot turns
+    //Constants
+    private double ratio = 0.0027;//ratio to multiply error by to get a number between -1 and 1 for the speed
+    private double minSpeed = 0.1;// minimum speed the robot will drive
+    private double p = 0.65;//p loop constant
+
+
     public ReorientToFieldCommand(Drive drive, Gyroscope gyro){
         this.drive = drive;
         this.gyro = gyro;
@@ -22,20 +31,20 @@ public class ReorientToFieldCommand extends CommandBase{
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-                double error = gyro.getGyroAngle()%360;
-                double speed = -error*(0.0027) *.65;
-                if(Math.abs(speed) < .1){
-                    if (speed/ Math.abs(speed) == -1){
-                        speed = -.1;
+                error = gyro.getGyroAngle() % 360.0;
+                speed = -error*(ratio) * p;
+                if(Math.abs(speed) < minSpeed){
+                    if (speed < 0.0){
+                        speed = -minSpeed;
                     }
-                    else if(speed/ Math.abs(speed) == 1) {
-                        speed = .1;
+                    else if(speed >= 0.0) {
+                        speed = minSpeed;
                     }
                     else{
                         // do nothing
                     }
                 }
-                drive.arcadeDrive(0, speed);
+                drive.arcadeDrive(0.0, speed);
                 System.out.println("gyro angle" + gyro.getGyroAngle());
                 System.out.println("gyro speed" + speed);
         }
@@ -43,26 +52,21 @@ public class ReorientToFieldCommand extends CommandBase{
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if((Math.abs(gyro.getGyroAngle())% 360) > 1)
+        if((Math.abs(gyro.getGyroAngle())% 360.0) > 1.0)
         {
             return false;
         }
         else{
             System.out.println("gyro angle" + gyro.getGyroAngle());
             System.out.println("complete");
-            drive.arcadeDrive(0,0);
+            drive.arcadeDrive(0.0, 0.0);
             return true;
         }
-      
     }
 
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
      
-    }
-
-    
+    }    
 }
-
-
