@@ -30,6 +30,10 @@ public class Controls extends SubsystemBase{
         return joystick.getRawButton(B_BUTTON_ID);
     }
 
+    public JoystickButton getJoystickBButton(){
+        return new JoystickButton(joystick, B_BUTTON_ID);
+    }
+
     public boolean getAButton() {
         return joystick.getRawButton(A_BUTTON_ID);
     }
@@ -46,13 +50,10 @@ public class Controls extends SubsystemBase{
         return new JoystickButton(joystick, X_BUTTON_ID);
     }
 
-    public JoystickButton getYJoystickButton(){
+    public JoystickButton getJoystickYButton(){
         return new JoystickButton(joystick, Y_BUTTON_ID);
     }
 
-    public JoystickButton getAJoystickButton(){
-        return new JoystickButton(joystick, A_BUTTON_ID);
-    }
 
     public double getRightX(double deadzone) {
         double x = joystick.getRawAxis(RIGHT_X);

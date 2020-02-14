@@ -36,11 +36,6 @@ public class Robot extends TimedRobot {
   @Log
   private double distance;
 
-  private double kP = 0.0;
-  private double kI = 0.0;
-  private double kD = 0.0;
-  private double kF = 0.0;
-
   boolean drivingStraight = false;
   /**
    * This function is run when the robot is first started up and should be used
@@ -56,7 +51,7 @@ public class Robot extends TimedRobot {
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.gyro = new Gyroscope(drive);
-    this.io = new IO(controls,drive, gyro, kP, kI, kD, kF);
+    this.io = new IO(controls,drive, gyro);
   }
 
   /**
@@ -72,6 +67,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
+    
   }
 
   /**
@@ -89,6 +85,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
+    gyro.resetGyro();
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     switch(m_autoSelected) {
@@ -103,9 +100,6 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /**
-   * This function is called periodically during autonomous.
-   */
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
@@ -113,22 +107,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    gyro.resetGyro();
    // drive.setDefaultCommand(new TeleopCommand(controls,drive, gyro));
   }
  
-  /**
-   * This function is called periodically during operator control.
-   */
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-   // manualControl();
   }
 
-  /**
-   * This function is called periodically during test mode.
-   */
   @Override
   public void testPeriodic() {
   }
