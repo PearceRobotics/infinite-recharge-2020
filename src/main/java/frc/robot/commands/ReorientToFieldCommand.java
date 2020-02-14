@@ -24,7 +24,6 @@ public class ReorientToFieldCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        double currentAngle = gyro.getGyroAngle();
         drive.setBrakeMode();
     }
 
@@ -32,12 +31,12 @@ public class ReorientToFieldCommand extends CommandBase{
     @Override
     public void execute() {
                 error = gyro.getGyroAngle() % 360.0;
-                speed = -error*(ratio) * p;
+                speed = error*(ratio) * p;
                 if(Math.abs(speed) < minSpeed){
                     if (speed < 0.0){
                         speed = -minSpeed;
                     }
-                    else if(speed >= 0.0) {
+                    else if(speed > 0.0) {
                         speed = minSpeed;
                     }
                     else{
@@ -45,7 +44,7 @@ public class ReorientToFieldCommand extends CommandBase{
                     }
                 }
                 drive.arcadeDrive(0.0, speed);
-                System.out.println("gyro angle" + gyro.getGyroAngle());
+                System.out.println("gyro angle" + error);
                 System.out.println("gyro speed" + speed);
         }
 
@@ -57,7 +56,6 @@ public class ReorientToFieldCommand extends CommandBase{
             return false;
         }
         else{
-            System.out.println("gyro angle" + gyro.getGyroAngle());
             System.out.println("complete");
             drive.arcadeDrive(0.0, 0.0);
             return true;
