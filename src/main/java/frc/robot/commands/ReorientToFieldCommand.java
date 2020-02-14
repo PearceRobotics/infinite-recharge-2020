@@ -14,7 +14,7 @@ public class ReorientToFieldCommand extends CommandBase{
     //Constants
     private double ratio = 0.0027;//ratio to multiply error by to get a number between -1 and 1 for the speed
     private double minSpeed = 0.1;// minimum speed the robot will drive
-    private double p = 0.65;//p loop constant
+    private double p = 1.0;//p loop constant
 
 
     public ReorientToFieldCommand(Drive drive, Gyroscope gyro){
