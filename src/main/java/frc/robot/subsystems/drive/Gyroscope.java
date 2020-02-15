@@ -3,7 +3,6 @@ package frc.robot.subsystems.drive;
 import frc.robot.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.lang.Math;
 import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 
@@ -17,7 +16,7 @@ public class Gyroscope extends SubsystemBase {
     //constants
     private double pValue = .0014;
     
-    public Gyroscope(Drive drive){
+    public Gyroscope(Drive drive){     
         this.imu = new ADIS16470_IMU();
         this.drive = drive;
         imu.setYawAxis(IMUAxis.kY);
@@ -41,10 +40,10 @@ public class Gyroscope extends SubsystemBase {
     }
 
     public void gyroCalibrate(){
-        startTime = Timer.getFPGATimestamp();        
+        startTime = Timer.getFPGATimestamp();   
         double startAngle = imu.getAngle();
         try{
-            Thread.sleep(16000);
+            Thread.sleep(8000);
         }catch(Exception e)
         {
             //dont care about exceptions rn
