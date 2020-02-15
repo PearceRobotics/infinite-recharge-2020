@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
   // Constants
   private final int JOYSTICK_PORT = 1;
 
-  private final double DEADZONE = 0.05;
+  private double distanceToGoal = 0.0;
 
   private double maxSpeed;
   private double distance;
@@ -130,6 +130,12 @@ public class Robot extends TimedRobot {
       teleopCommand.schedule();
     }
   }
+
+  @Config
+  public void setDistanceToGoal(double distanceToGoal)
+  {
+    this.distanceToGoal = distanceToGoal;
+  }
  
   /**
    * This function is called periodically during operator control.
@@ -138,6 +144,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
    if( controls.getRightTrigger()){
+     System.out.println("indexer triggered");
      shooterSpeedController.IndexerSpeed(indexerSpeed);
    }
    else{
@@ -147,7 +154,7 @@ public class Robot extends TimedRobot {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
 
-      double speed = shooter.determineLaunchSpeed(227.0 + 29.0);
+      double speed = shooter.determineLaunchSpeed(distanceToGoal + 29.0);
       shooterSpeedController.setLaunchSpeed(speed); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested

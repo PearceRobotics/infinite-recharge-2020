@@ -12,11 +12,13 @@ public class Drive {
   private Gearbox leftGearbox;
   private Gearbox rightGearbox;
   // left gear box CAN ids
-  private final int LEFT_BACK_CAN_ID = 6;
+  private final int LEFT_BACK_CAN_ID = 11;
   private final int LEFT_FRONT_CAN_ID = 12;
+  //  private final int LEFT_MIDDLE_CAN_ID = 13;
   // right gear box CAN ids
   private final int RIGHT_BACK_CAN_ID = 4;
   private final int RIGHT_FRONT_CAN_ID = 5;
+  //  private final int RIGHT_MIDDLE_CAN_ID = 6;
 
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -30,7 +32,7 @@ public class Drive {
     this.rightGearbox.setRampRate(1);
 
     this.leftEncoder = new Encoder(0, 1);
-    this.rightEncoder = new Encoder(4, 5);
+    this.rightEncoder = new Encoder(2, 3);
 
     leftEncoder.setDistancePerPulse((6.0 * Math.PI) / 2048.0);
     leftEncoder.setReverseDirection(true);

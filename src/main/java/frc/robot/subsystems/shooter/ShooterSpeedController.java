@@ -6,9 +6,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class ShooterSpeedController {
 
-    private final int LEFT_SHOOTER_CAN_ID = 9;
-    private final int RIGHT_SHOOTER_CAN_ID = 8;
-    private final int INDEX_CONTROLLER_CAN_ID = 10;
+    private final int LEFT_SHOOTER_CAN_ID = 14;
+    private final int RIGHT_SHOOTER_CAN_ID = 7;
+    private final int INDEX_CONTROLLER_CAN_ID = 8;
     private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
     private final double RATIO = (22.0 / 16.0); // gear ratio

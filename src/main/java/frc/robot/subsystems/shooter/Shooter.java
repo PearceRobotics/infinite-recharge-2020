@@ -10,7 +10,7 @@ public class Shooter {
     private final double Gravity = 386.0886; //inches per second squared
     private final double maxRpm = 7640.0; //rpms
     private final double launcherHeight = 24.0; // inches
-    private double energyLostBase = 0.60; // Percent energy lost from full tangential speed to actual ball speed
+    private double energyLostBase = 0.5; // Percent energy lost from full tangential speed to actual ball speed
     private final double wheelCircumference = wheelDiameter * Math.PI; //inches
     private final double maxTangentialSpeed = (wheelCircumference * (maxRpm / 60.0)); //inches per second
     private final double initialUpperBound = 1.0; // 100% speed
