@@ -9,10 +9,12 @@ package frc.robot.subsystems.vision;
 
 import frc.robot.subsystems.drive.DrivingDeltas;
 import edu.wpi.first.networktables.NetworkTableInstance;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * Add your docs here.
  */
-public class Limelight {
+public class Limelight extends SubsystemBase {
 
     private final double KpAIM = 0.005; 
     private final double KpDISTANCE = 0.025; // larger than kpAim in initial
