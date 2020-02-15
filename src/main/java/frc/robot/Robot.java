@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
 
   private boolean shotRequested = false;
 
+  private double indexerSpeed;
+
   // Constants
   private final int JOYSTICK_PORT = 1;
 
@@ -131,7 +133,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-
+   if( controls.getRightTrigger()){
+     shooterSpeedController.IndexerSpeed(indexerSpeed);
+   }
+   else{
+     shooterSpeedController.IndexerSpeed(0.0);
+   }
     if (controls.getRightTrigger() || true) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
@@ -166,5 +173,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
+  public void setIndexerSpeed(double indexerSpeed){
+    this.indexerSpeed = indexerSpeed;
   }
 }
