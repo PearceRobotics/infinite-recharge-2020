@@ -18,7 +18,6 @@ public class GyroTurnCommand extends CommandBase{
     private double p = 1.0;//p loop constant
 
     public GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive){
-
         this.gyro = gyro;
         this.turnAngle = turnAngle;
         this.drive = drive;
@@ -28,7 +27,6 @@ public class GyroTurnCommand extends CommandBase{
     }
     @Override
     public void initialize() {
-
         double currentAngle = gyro.getGyroAngle();
         newAngle = currentAngle + turnAngle;
         drive.setBrakeMode();
@@ -74,6 +72,3 @@ public class GyroTurnCommand extends CommandBase{
      
     }
 }
-
-
-

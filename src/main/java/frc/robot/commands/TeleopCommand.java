@@ -51,5 +51,4 @@ public class TeleopCommand extends CommandBase {
             gyroscope.resetGyro();
         }
     }
-
 }
