@@ -10,21 +10,13 @@ package frc.robot.commands;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.Lights;
 /**
  * Add your docs here.
  */
 public class LimelightTopTarget extends CommandBase{
 
-    private Drive drive;
-    private Limelight limelight;
+    public LimeLightTopTarget() {
 
-    public LimelightTopTarget(Drive drive, Limelight limelight) {
-        this.drive = drive;
-        this.limelight = limelight;
-
-        addRequirements(drive);
-        addRequirements(limelight);
     }
 
     // Called just before this Command runs the first time
@@ -37,12 +29,6 @@ public class LimelightTopTarget extends CommandBase{
     @Override
     public void execute() {
     
-        if (limelight.hasValidTarget()) {
-            drive.arcadeDrive(calculatedDeltas.getForwardPower(), calculatedDeltas.getSteeringPower());
-            hadTarget = true;
-        } else {
-            drive.arcadeDrive(.1, 0);
-        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
