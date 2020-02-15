@@ -15,7 +15,6 @@ public class GyroTurnCommand extends CommandBase{
     //Constants
     private double ratio = 0.0027;//ratio to multiply error by to get a number between -1 and 1 for the speed
     private double minSpeed = 0.1;// minimum speed the robot will drive
-    private double p = 1.0;//p loop constant
 
     public GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive){
         this.gyro = gyro;
@@ -37,7 +36,7 @@ public class GyroTurnCommand extends CommandBase{
     public void execute() {
 
         error = newAngle - gyro.getGyroAngle();
-        speed = -error*(ratio) *p;
+        speed = -error*(ratio);
 
         if(Math.abs(speed) < minSpeed){
             if (speed < 0.0){
