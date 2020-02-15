@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterSpeedController;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
@@ -21,11 +24,19 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
-  private AutonomousCommand autonomousCommand;
-  private TeleopCommand teleopCommand;
+  private Shooter shooter;
+  private ShooterCommand shooterCommand;
+  private ShooterSpeedController shooterSpeedController;
+
+  private boolean shotRequested = false;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
+
+  private final double DEADZONE = 0.05;
+
+  private AutonomousCommand autonomousCommand;
+  private TeleopCommand teleopCommand;
 
   @Log
   private double maxSpeed;
@@ -40,11 +51,13 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    this.shooterSpeedController = new ShooterSpeedController();
 
     Logger.configureLoggingAndConfig(this, false);
 
     this.drive = new Drive();
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+    this.shooter = new Shooter();
   }
 
   /**
@@ -101,6 +114,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    this.shooterCommand = new ShooterCommand(shooterSpeedController);
+    if (shooterCommand != null)
+    shooterCommand.schedule();
+  
+
     this.teleopCommand = new TeleopCommand(controls, drive);
     if (teleopCommand != null) {
       teleopCommand.schedule();
@@ -113,7 +131,34 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-   // manualControl();
+
+    if (controls.getRightTrigger() || true) {
+      // call shooter.determineLaunchSpeed
+      // use it to set the shooterSpeedController
+
+      double speed = shooter.determineLaunchSpeed(227.0 + 29.0);
+      shooterSpeedController.setLaunchSpeed(speed); //using a number that should be replaced
+
+      //Set the bool to know that a shot is requested
+      shotRequested = true;
+    }
+
+    
+    // System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
+    // System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
+
+    // when firing the shooter, make sure it's at speed
+    if (shotRequested && shooterSpeedController.isAtSpeed()) {
+      // fire the shooter
+      //code to fire shooter
+      System.out.println("*******FIREFIREFIRE******!");
+
+      //Set the bool to know that the shot was fired
+      shotRequested = false;
+    }
+
+    // manualControl();
+
   }
 
   /**
