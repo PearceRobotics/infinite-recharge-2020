@@ -15,15 +15,9 @@ import frc.robot.subsystems.drive.Drive;
  */
 public class LimelightTopTarget extends CommandBase{
 
-    private Drive drive;
-    private Limelight limelight;
+    private 
+    public LimeLightTopTarget() {
 
-    public LimelightTopTarget(Drive drive, Limelight limelight) {
-        this.drive = drive;
-        this.limelight = limelight;
-
-        addRequirements(drive);
-        addRequirements(limelight);
     }
 
     // Called just before this Command runs the first time
