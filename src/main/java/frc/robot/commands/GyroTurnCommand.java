@@ -14,7 +14,7 @@ public class GyroTurnCommand extends CommandBase{
     private double speed;//speed the robot turns
     //Constants
     private double ratio = 0.0027;//ratio to multiply error by to get a number between -1 and 1 for the speed
-    private double minSpeed = 0.1;// minimum speed the robot will drive
+    private double minSpeed = 0.15;// minimum speed the robot will drive
 
     public GyroTurnCommand(Gyroscope gyro, double turnAngle, Drive drive){
         this.gyro = gyro;

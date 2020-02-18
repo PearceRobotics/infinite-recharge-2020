@@ -13,11 +13,13 @@ public class Drive extends SubsystemBase {
   private Gearbox leftGearbox;
   private Gearbox rightGearbox;
   // left gear box CAN ids
-  private final int LEFT_BACK_CAN_ID = 6;//6
-  private final int LEFT_FRONT_CAN_ID = 5;//12
+  private final int LEFT_BACK_CAN_ID = 11;
+  // private final int LEFT_MIDDLE_CAN_ID = 13;
+  private final int LEFT_FRONT_CAN_ID = 12;
   // right gear box CAN ids
-  private final int RIGHT_BACK_CAN_ID = 8;//4
-  private final int RIGHT_FRONT_CAN_ID = 7;//5
+  private final int RIGHT_BACK_CAN_ID = 4;
+  // private final int RIGHT_MIDDLE_CAN_ID = 6;
+  private final int RIGHT_FRONT_CAN_ID = 5;
 
   boolean brakeMode = false;
 
