@@ -8,7 +8,6 @@ public class ShooterSpeedController {
 
     private final int LEFT_SHOOTER_CAN_ID = 14;
     private final int RIGHT_SHOOTER_CAN_ID = 7;
-    private final int INDEX_CONTROLLER_CAN_ID = 8;
     private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
     private final double RATIO = (22.0 / 16.0); // gear ratio
@@ -21,10 +20,8 @@ public class ShooterSpeedController {
 
     private final CANSparkMax leftController;
     private final CANSparkMax rightController;
-    private final CANSparkMax indexerMotor;
 
     private double setLaunchSpeed; // in inches/second
-    private double indexerSpeed;
     // Pid controller variables below
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
@@ -33,7 +30,6 @@ public class ShooterSpeedController {
     public ShooterSpeedController() {
         this.leftController = new CANSparkMax(LEFT_SHOOTER_CAN_ID, DRIVE_MOTOR_TYPE);
         this.rightController = new CANSparkMax(RIGHT_SHOOTER_CAN_ID, DRIVE_MOTOR_TYPE);
-        this.indexerMotor = new CANSparkMax(INDEX_CONTROLLER_CAN_ID, DRIVE_MOTOR_TYPE);
         setLaunchSpeed = 0.0;
 
         // PID calls
@@ -44,7 +40,6 @@ public class ShooterSpeedController {
          */
         this.leftController.restoreFactoryDefaults();
         this.rightController.restoreFactoryDefaults();
-        this.indexerMotor.restoreFactoryDefaults();
 
         // PID coefficients
         kP = 0.000050; //5e-5;
@@ -114,14 +109,6 @@ public class ShooterSpeedController {
 
     public boolean isAtSpeed() {
         System.out.println("set launch speed " + setLaunchSpeed);
-        if (Math.abs(getCurrentSpeed() - setLaunchSpeed) < ACCEPTABLE_DIFFERENCE) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void IndexerSpeed(double speed){
-        indexerMotor.set(speed);
+        return (Math.abs(getCurrentSpeed() - setLaunchSpeed) < ACCEPTABLE_DIFFERENCE);
     }
 }

@@ -13,7 +13,7 @@ public class Controls {
     private final int RIGHT_TRIGGER_ID = 3;
 
     private final int LEFT_BUMPER_ID = 5;
-    private final int LEFT_TRIGGER_ID = 7;
+    private final int LEFT_TRIGGER_ID = 2;
 
     private final int B_BUTTON_ID = 2;
     private final int Y_BUTTON_ID = 4;
