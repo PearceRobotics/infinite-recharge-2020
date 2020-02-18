@@ -6,6 +6,8 @@ import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.HopperController;
+import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.Lights;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
@@ -28,6 +30,8 @@ public class Robot extends TimedRobot {
   private Shooter shooter;
   private ShooterCommand shooterCommand;
   private ShooterSpeedController shooterSpeedController;
+  private HopperController hopperController;
+  private IndexerController indexerController;
 
   private boolean shotRequested = false;
 
@@ -63,6 +67,8 @@ public class Robot extends TimedRobot {
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.shooter = new Shooter();
     this.lights = new Lights(9, 60, 50);
+    this.hopperController = new HopperController();
+    this.indexerController = new IndexerController();
 
     this.lightsCommand = new LightsCommand(lights);
   }
@@ -143,14 +149,19 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-   if( controls.getRightTrigger()){
-     System.out.println("indexer triggered");
-     shooterSpeedController.IndexerSpeed(indexerSpeed);
-   }
-   else{
-     shooterSpeedController.IndexerSpeed(0.0);
-   }
-    if (controls.getRightTrigger() || true) {
+    if(controls.getRightTrigger()) {
+      System.out.println("indexer triggered");
+      indexerController.intake();
+      hopperController.start();
+    }
+    else {
+      indexerController.stop();
+      hopperController.stop();
+    }
+    if(controls.getLeftTrigger()) {
+      indexerController.outtake();
+    }
+    if(controls.getRightTrigger() || true) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
 
@@ -174,9 +185,6 @@ public class Robot extends TimedRobot {
       //Set the bool to know that the shot was fired
       shotRequested = false;
     }
-
-    // manualControl();
-
   }
 
   /**
