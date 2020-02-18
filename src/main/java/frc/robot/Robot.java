@@ -148,6 +148,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+
+    //remove
+    this.distanceToGoal = 234.0;
     CommandScheduler.getInstance().run();
     if(controls.getRightTrigger()) {
       System.out.println("indexer triggered");
