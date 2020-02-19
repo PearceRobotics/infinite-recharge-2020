@@ -21,13 +21,13 @@ public class Shooter {
     private final double ballDiameter = 7.0; // in
     private final double rho = 0.00004428; // lbm/in^3, STP air density
     private final double ballArea = (ballDiameter / 2.0) * (ballDiameter / 2.0) * Math.PI; // in^2
-    private final double cd = 0.5; // unitless, taken from Chief Delphi 2012 game piece calculations
+    private final double cd = 0.35; // unitless, taken from Chief Delphi 2012 game piece calculations
     private final double ballMass = 5.0 / 16.0; // lbm, AndyMark says balls are ~5 ounces
 
     private final int iterations = 20; //number of iterations when searching for the solution
 
     //not final so we can set with shuffleboard
-    private double energyLostBase = 0.5; // Percent energy lost from full tangential speed to actual ball speed
+    private double energyLostBase = 0.58; // Percent energy lost from full tangential speed to actual ball speed
     private double maxLaunchSpeed = maxTangentialSpeed * (1.0 - energyLostBase); // in/s
 
     public Shooter() {

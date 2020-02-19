@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   private final int JOYSTICK_PORT = 1;
 
   private double distanceToGoal = 0.0;
+  private double overrideSpeed = 1330.0;
 
   private double maxSpeed;
   private double distance;
@@ -142,6 +143,12 @@ public class Robot extends TimedRobot {
   {
     this.distanceToGoal = distanceToGoal;
   }
+
+  @Config
+  public void setOverrideSpeed(double overrideSpeed)
+  {
+    this.overrideSpeed = overrideSpeed;
+  }
  
   /**
    * This function is called periodically during operator control.
@@ -149,8 +156,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    //distance 125 
     //remove
-    this.distanceToGoal = 234.0;
+    this.distanceToGoal = 125.0;
     CommandScheduler.getInstance().run();
     if(controls.getRightTrigger()) {
       System.out.println("indexer triggered");
@@ -174,6 +182,11 @@ public class Robot extends TimedRobot {
       //Set the bool to know that a shot is requested
       shotRequested = true;
     }
+
+    // if(controls.getRightBumper())
+    // {
+    //   shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
+    // }
 
     
     // System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
