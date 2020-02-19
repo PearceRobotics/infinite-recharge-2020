@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
 
   private double distanceToGoal = 0.0;
   private double overrideSpeed = 1330.0;
+  private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
   private double maxSpeed;
   private double distance;
@@ -160,23 +161,23 @@ public class Robot extends TimedRobot {
     //remove
     this.distanceToGoal = 125.0;
     CommandScheduler.getInstance().run();
-    if(controls.getRightTrigger()) {
-      System.out.println("indexer triggered");
-      indexerController.intake();
-      hopperController.start();
-    }
-    else {
-      indexerController.stop();
-      hopperController.stop();
-    }
+    // if(controls.getRightTrigger()) {
+    //   System.out.println("indexer triggered");
+    //   indexerController.intake();
+    //   hopperController.start();
+    // }
+    // else {
+    //   indexerController.stop();
+    //   hopperController.stop();
+    // }
     if(controls.getLeftTrigger()) {
       indexerController.outtake();
     }
-    if(controls.getRightTrigger() || true) {
+    if(controls.getAButton()) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
 
-      double speed = shooter.determineLaunchSpeed(distanceToGoal + 29.0);
+      double speed = shooter.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET);
       shooterSpeedController.setLaunchSpeed(speed); //using a number that should be replaced
 
       //Set the bool to know that a shot is requested
@@ -200,6 +201,21 @@ public class Robot extends TimedRobot {
 
       //Set the bool to know that the shot was fired
       shotRequested = false;
+      
+      indexerController.intake();
+      hopperController.start();
+
+      try
+      {
+        Thread.sleep(1000);
+      }
+      catch (Exception e)
+      {
+
+      }
+      
+      indexerController.stop();
+      hopperController.stop();
     }
   }
 
