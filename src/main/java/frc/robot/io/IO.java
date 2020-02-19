@@ -10,8 +10,8 @@ public class IO {
 
   public IO(Controls controls, Drive drive, Gyroscope gyro){
     controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, 180, drive));
-    controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, -90, drive));
-    controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, 90, drive));
+    controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, -90, drive));
+    controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, 90, drive));
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(drive, gyro));
   }
 }

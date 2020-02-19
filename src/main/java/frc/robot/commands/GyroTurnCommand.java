@@ -14,7 +14,7 @@ public class GyroTurnCommand extends CommandBase {
     private double error; // continuous error the robot is off from its desired position
     private double speed;// speed the robot turns
     // Constants
-    private final double P_VALUE = 0.0027 * 2;
+    private final double P_VALUE = 0.0027 * 2.25;
     private final double minSpeed = 0.15;// minimum speed the robot will drive
     private final double DEADBAND = 1.0;
 
