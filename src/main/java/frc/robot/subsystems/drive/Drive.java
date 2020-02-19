@@ -59,8 +59,8 @@ public class Drive extends SubsystemBase {
     this.rightGearbox.setSpeed(speed);
   }
 
-  public void arcadeDrive(double staightSpeed, double turnModifer) {
-    if(turnModifer == 0) {
+  public void arcadeDrive(double throttle, double turnModifer) {
+    if(turnModifer == 0.0 && throttle != 0.0 ) {
       if(desiredAngle == Integer.MAX_VALUE) {
         desiredAngle = gyroscope.getGyroAngle();
       }
@@ -69,8 +69,8 @@ public class Drive extends SubsystemBase {
     else {
       desiredAngle = Integer.MAX_VALUE;
     }
-    this.setLeftSpeed(-(staightSpeed - turnModifer));
-    this.setRightSpeed(staightSpeed + turnModifer);
+    this.setLeftSpeed(-(throttle - turnModifer));
+    this.setRightSpeed(throttle + turnModifer);
   }
 
   public void arcadeDrive(DrivingDeltas drivingDeltas) {
