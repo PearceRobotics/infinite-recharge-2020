@@ -16,7 +16,7 @@ public class GyroTurnCommand extends CommandBase {
     // Constants
     private final double P_VALUE = 0.0027 * 2;
     private final double minSpeed = 0.15;// minimum speed the robot will drive
-    private final double DEADBAND = 5.0;
+    private final double DEADBAND = 1.0;
 
     public GyroTurnCommand(final Gyroscope gyro, final double turnAngle, final Drive drive) {
         this.gyro = gyro;
@@ -41,10 +41,17 @@ public class GyroTurnCommand extends CommandBase {
         error = newAngle - gyro.getGyroAngle();
         speed = -error * P_VALUE;
 
-        /*
-         * if(Math.abs(speed) < minSpeed){ if (speed < 0.0){ speed = -minSpeed; } else
-         * if(speed >= 0.0) { speed = minSpeed; } else{ // do nothing } }
-         */
+        if(Math.abs(speed) < minSpeed) {
+            if (speed < 0.0) {
+                speed = -minSpeed;
+            }
+            else if(speed >= 0.0) {
+                speed = minSpeed;
+            } else {
+                 // do nothing 
+            } 
+        }
+         
         drive.arcadeDrive(0.0, speed);
     }
 
