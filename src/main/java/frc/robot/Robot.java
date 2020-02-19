@@ -17,7 +17,6 @@ import frc.robot.io.IO;
 
 public class Robot extends TimedRobot {
 
-  public IO io;
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -27,6 +26,7 @@ public class Robot extends TimedRobot {
   private Controls controls;
   private Gyroscope gyro;
   private AutonomousCommand autonomousCommand;
+  private IO io;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
