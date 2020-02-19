@@ -15,6 +15,7 @@ import frc.robot.subsystems.drive.DrivingDeltas;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
+import frc.robot.commands.LimelightTopTargetCommand;
 import frc.robot.io.Controls;
 
 public class Robot extends TimedRobot {
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
+  private LimelightTopTargetCommand limelightTopTargetCommand;
+
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -57,6 +60,7 @@ public class Robot extends TimedRobot {
     this.vision = new Vision(limelight,lights);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
+    this.limelightTopTargetCommand = new LimelightTopTargetCommand(drive, limelight);
   }
 
   /**
@@ -126,6 +130,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     DrivingDeltas calculatedDeltas = vision.targetDelta();
+    if(controls.getXButton() == true){
+      LimelightTopTargetCommandInstance.run();
+    }
   }
 
   /**
