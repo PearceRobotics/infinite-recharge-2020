@@ -17,6 +17,8 @@ import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.commands.LimelightTopTargetCommand;
 import frc.robot.io.Controls;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -130,9 +132,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     DrivingDeltas calculatedDeltas = vision.targetDelta();
-    if(controls.getXButton() == true){
-      LimelightTopTargetCommandInstance.run();
-    }
+      controls.getXButton().whenPressed(new LimelightTopTargetCommand(drive, limelight));
   }
 
   /**
