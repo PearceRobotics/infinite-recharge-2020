@@ -7,11 +7,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase {
 
-  public Encoder leftEncoder;
-  public Encoder rightEncoder;
-
+  private Encoder leftEncoder;
+  private Encoder rightEncoder;
   private Gearbox leftGearbox;
   private Gearbox rightGearbox;
+
+  private Gyroscope gyroscope;
+
+  //variables
+  private double desiredAngle;
+  private double turnModifer;
+
+  //constants
+  private final double P_VALUE = .0014;
   // left gear box CAN ids
   private final int LEFT_BACK_CAN_ID = 11;
   // private final int LEFT_MIDDLE_CAN_ID = 13;
@@ -25,7 +33,8 @@ public class Drive extends SubsystemBase {
 
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
-  public Drive() {
+  public Drive(Gyroscope gyroscope) {
+    this.gyroscope = gyroscope;
     this.leftGearbox = new Gearbox(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
         new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
 
@@ -51,7 +60,16 @@ public class Drive extends SubsystemBase {
   }
 
   public void arcadeDrive(double staightSpeed, double turnModifer) {
-    this.setLeftSpeed(-  (staightSpeed - turnModifer));
+    if(turnModifer == 0) {
+      if(desiredAngle == Integer.MAX_VALUE) {
+        desiredAngle = gyroscope.getGyroAngle();
+      }
+      turnModifer = driveStraightGyro(desiredAngle); 
+    }
+    else {
+      desiredAngle = Integer.MAX_VALUE;
+    }
+    this.setLeftSpeed(-(staightSpeed - turnModifer));
     this.setRightSpeed(staightSpeed + turnModifer);
   }
 
@@ -100,5 +118,9 @@ public class Drive extends SubsystemBase {
     double error = getLeftEncoderDistance() - getRightEncoderDistance();
     double turnPower = error * .15;
     return turnPower;
+  }
+
+  public double driveStraightGyro(double desiredAngle){  
+    return  (desiredAngle - gyroscope.getGyroAngle()) * P_VALUE;
   }
 }

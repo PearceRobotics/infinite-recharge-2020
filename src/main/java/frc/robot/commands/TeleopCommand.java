@@ -3,52 +3,29 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.io.Controls;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.Gyroscope;
 
 public class TeleopCommand extends CommandBase {
 
     private Drive drive;
-    private Gyroscope gyroscope;
     private Controls controls;
-    private double DEADZONE = 0.11;
-    double desiredAngle;
-    boolean drivingStraight = false;
+    private double DEADZONE = 0.2;
   
-    public TeleopCommand(Controls controls, Drive drive, Gyroscope gyroscope) {
+    public TeleopCommand(Controls controls, Drive drive) {
         this.controls = controls;
         this.drive = drive;
-        this.gyroscope = gyroscope;
 
         addRequirements(controls);
         addRequirements(drive);
-        addRequirements(gyroscope);
     }
 
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        gyroscope.resetGyro();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println(gyroscope.getGyroAngle());
-        if (controls.getRightX(DEADZONE) == 0.0) {
-            drive.setCoastMode();
-            if(drivingStraight == false){
-                desiredAngle = gyroscope.getGyroAngle(); 
-                drivingStraight = true;
-            }
-            gyroscope.driveStraightGyro(controls.getLeftY(DEADZONE), desiredAngle);
-        } else {
-            drive.setCoastMode();
-            drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
-            drivingStraight = false;
-        }
-
-        if(controls.getAButton()){
-            gyroscope.resetGyro();
-        }
+        drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
     }
 }

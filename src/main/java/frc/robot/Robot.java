@@ -48,10 +48,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     Logger.configureLoggingAndConfig(this, false);
-    this.drive = new Drive();
+
+    this.gyro = new Gyroscope();
+    this.drive = new Drive(gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.gyro = new Gyroscope(drive);
-    this.io = new IO(controls,drive, gyro);
+    this.io = new IO(controls, drive, gyro);
   }
 
   /**
@@ -67,7 +68,6 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
-    
   }
 
   /**
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-   // drive.setDefaultCommand(new TeleopCommand(controls,drive, gyro));
+    drive.setDefaultCommand(new TeleopCommand(controls, drive));
   }
  
   @Override
