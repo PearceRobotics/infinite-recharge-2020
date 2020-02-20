@@ -29,31 +29,27 @@ public class Robot extends TimedRobot {
   private Drive drive;
   private Controls controls;
   private Shooter shooter;
+  private Lights lights;
   private ShooterCommand shooterCommand;
+  private AutonomousCommand autonomousCommand;
+  private TeleopCommand teleopCommand;
+  private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
 
   private boolean shotRequested = false;
   private boolean shotInProgress = false;
-
-
   private final double BALL_SHOOT_TIME = 1.0;
+  private final double INNER_DISTANCE_FROM_TARGET = 29.0;
   private double ballShootStartTime;
-
-  private double indexerSpeed;
-  private Lights lights;
-
-  private AutonomousCommand autonomousCommand;
-  private TeleopCommand teleopCommand;
-  private LightsCommand lightsCommand;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
 
   private double distanceToGoal = 0.0;
   private double overrideSpeed = 1330.0;
-  private final double INNER_DISTANCE_FROM_TARGET = 29.0;
+  private double indexerSpeed = 0.3;
 
   private double maxSpeed;
   private double distance;
@@ -146,14 +142,17 @@ public class Robot extends TimedRobot {
     }
   }
 
+  // Use this for the speed finding algorithm
   @Config
   public void setDistanceToGoal(double distanceToGoal) {
     this.distanceToGoal = distanceToGoal;
   }
 
+  // use this to override the algorithm and just use a speed
   @Config
   public void setOverrideSpeed(double overrideSpeed) {
     this.overrideSpeed = overrideSpeed;
+    shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
 
   /**
@@ -161,10 +160,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
-    // distance 125
-    // remove
-    this.distanceToGoal = 125.0;
     CommandScheduler.getInstance().run();
 
     if (controls.getLeftTrigger()) {
@@ -173,44 +168,29 @@ public class Robot extends TimedRobot {
     if (controls.getAButton()) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
-
+      // TODO Limelight might take inner distance to account, revisit this
       double speed = shooter.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET);
-      shooterSpeedController.setLaunchSpeed(speed); // using a number that should be replaced
+      shooterSpeedController.setLaunchSpeed(speed);
 
       // Set the bool to know that a shot is requested
       shotRequested = true;
     }
 
-    if(shotRequested)
-    {
-      System.out.println("Shot requested ");
-    }
-
-    // if(controls.getRightBumper())
-    // {
-    //   shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
-    // }
-
-    
-    // System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
-    // System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
-
-    // when firing the shooter, make sure it's at speed
+    // Make sure the shooter is at speed before loading a power cell
     if (shotRequested && shooterSpeedController.isAtSpeed() && !shotInProgress) {
-      // fire the shooter
-      //code to fire shooter
-      System.out.println("*******FIREFIREFIRE******!");
+      // record the start time so we can turn off the indexer after a period of time
       ballShootStartTime = Timer.getFPGATimestamp();
 
-      //Set the bool to know that the shot was fired
+      // Set the bool to know that the indexer is spinning
       shotInProgress = true;
-      
+
+      // turn on the indexer and hopper
       indexerController.intake();
-      hopperController.start();      
+      hopperController.start();
     }
 
-    if(shotInProgress && ((Timer.getFPGATimestamp() - ballShootStartTime) > BALL_SHOOT_TIME))
-    {
+    // turn off the indexer after a set amount of time
+    if (shotInProgress && ((Timer.getFPGATimestamp() - ballShootStartTime) > BALL_SHOOT_TIME)) {
       indexerController.stop();
       hopperController.stop();
 
@@ -229,20 +209,24 @@ public class Robot extends TimedRobot {
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
   public void setIndexerSpeed(double indexerSpeed) {
     this.indexerSpeed = indexerSpeed;
+    this.indexerController.setSpeed(this.indexerSpeed);
   }
 
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
   public void setAutonStraightDistance(double distance) {
     this.distance = distance;
+    this.autonomousCommand.setDistance(this.distance);
   }
 
   @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
   public void setAutonMaxSpeedForDriveStraight(double maxSpeed) {
     this.maxSpeed = maxSpeed;
+    this.autonomousCommand.setMaxSpeed(this.maxSpeed);
   }
 
   @Config(name = "Constant", defaultValueNumeric = .1)
   public void setDriveStraightPValue(double pValue) {
     this.pValue = pValue;
+    this.autonomousCommand.setPValue(this.pValue);
   }
 }
