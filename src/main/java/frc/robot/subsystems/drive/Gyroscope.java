@@ -28,14 +28,13 @@ public class Gyroscope {
         this.startTime = Timer.getFPGATimestamp();
     }
 
-    public void calibrate(){
+    public void calibrate() {
         this.startTime = Timer.getFPGATimestamp();   
         double startAngle = imu.getAngle();
         try{
             Thread.sleep(8000);
-        }catch(Exception e)
-        {
-            //dont care about exceptions rn
+        } catch(Exception e) {
+            System.out.println("Exception caught when sleeping for gyro calibration: "+ e.getMessage());
         }
         this.driftPerSecond = (imu.getAngle() - startAngle)/(Timer.getFPGATimestamp() - startTime);
     }
