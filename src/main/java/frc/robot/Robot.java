@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
@@ -14,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
@@ -33,10 +31,9 @@ public class Robot extends TimedRobot {
   private Controls controls;
   private Shooter shooter;
   private Lights lights;
-  private ShooterCommand shooterCommand;
   private Gyroscope gyro;
   private IO io;
-  
+
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
@@ -44,16 +41,9 @@ public class Robot extends TimedRobot {
   private HopperController hopperController;
   private IndexerController indexerController;
 
-  private boolean shotRequested = false;
-  private boolean shotInProgress = false;
-  private final double BALL_SHOOT_TIME = 1.0;
-  private final double INNER_DISTANCE_FROM_TARGET = 29.0;
-  private double ballShootStartTime;
-
   // Constants
   private final int JOYSTICK_PORT = 1;
 
-  private double distanceToGoal = 0.0;
   private double overrideSpeed = 1330.0;
   private double indexerSpeed = 0.3;
 
@@ -70,7 +60,6 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    this.shooterSpeedController = new ShooterSpeedController();
 
     Logger.configureLoggingAndConfig(this, false);
 
@@ -79,9 +68,10 @@ public class Robot extends TimedRobot {
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.shooter = new Shooter();
     this.lights = new Lights(9, 60, 50);
+    this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
-    this.io = new IO(controls, drive, gyro);
+    this.io = new IO(controls, drive, gyro, shooter, shooterSpeedController, hopperController, indexerController);
 
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
@@ -138,15 +128,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    this.shooterCommand = new ShooterCommand(shooterSpeedController);
-    if (shooterCommand != null)
-      shooterCommand.schedule();
-  }
-
-  // Use this for the speed finding algorithm
-  @Config
-  public void setDistanceToGoal(double distanceToGoal) {
-    this.distanceToGoal = distanceToGoal;
   }
 
   // use this to override the algorithm and just use a speed
@@ -166,42 +147,11 @@ public class Robot extends TimedRobot {
     if (controls.getLeftTrigger()) {
       indexerController.outtake();
     }
-    if (controls.getAButton()) {
-      // call shooter.determineLaunchSpeed
-      // use it to set the shooterSpeedController
-      // TODO Limelight might take inner distance to account, revisit this
-      double speed = shooter.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET);
-      shooterSpeedController.setLaunchSpeed(speed);
-
-      // Set the bool to know that a shot is requested
-      shotRequested = true;
-    }
-
-    // Make sure the shooter is at speed before loading a power cell
-    if (shotRequested && shooterSpeedController.isAtSpeed() && !shotInProgress) {
-      // record the start time so we can turn off the indexer after a period of time
-      ballShootStartTime = Timer.getFPGATimestamp();
-
-      // Set the bool to know that the indexer is spinning
-      shotInProgress = true;
-
-      // turn on the indexer and hopper
-      indexerController.intake();
-      hopperController.start();
-    }
-
-    // turn off the indexer after a set amount of time
-    if (shotInProgress && ((Timer.getFPGATimestamp() - ballShootStartTime) > BALL_SHOOT_TIME)) {
-      indexerController.stop();
-      hopperController.stop();
-
-      shotInProgress = false;
-      shotRequested = false;
-    }
   }
 
   @Override
   public void testPeriodic() {
+    teleopCommand.schedule();
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
