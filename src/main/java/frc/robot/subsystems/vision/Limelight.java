@@ -18,17 +18,16 @@ public class Limelight extends SubsystemBase {
 
     private final double KpAIM = 0.005; 
     private final double KpDISTANCE = 0.025; // larger than kpAim in initial
-    private final double DEADBAND_DEGREES = 0;
 
-    public DrivingDeltas calculateDeltas() {
+    public DrivingDeltas calculateDeltas(double DEADBAND) {
         double steeringAdjust = 0;
         double distanceAdjust = 0;
         if(hasValidTarget()) {
-          if(Math.abs(getHorizontalTargetOffset()) > DEADBAND_DEGREES) {
+          if(Math.abs(getHorizontalTargetOffset()) > DEADBAND) {
             steeringAdjust = KpAIM * getHorizontalTargetOffset();
           }
     
-          if(Math.abs(getVerticalTargetOffset()) > DEADBAND_DEGREES) {
+          if(Math.abs(getVerticalTargetOffset()) > DEADBAND) {
             distanceAdjust = KpDISTANCE * getVerticalTargetOffset();
           }
         }

@@ -19,7 +19,6 @@ import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.TurnToTopTargetCommand;
 import frc.robot.io.Controls;
 import frc.robot.io.IO;
 
@@ -41,7 +40,6 @@ public class Robot extends TimedRobot {
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
-  private TurnToTopTargetCommand turnToTopTargetCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
@@ -77,7 +75,6 @@ public class Robot extends TimedRobot {
     this.vision = new Vision(limelight,lights);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
-    this.turnToTopTargetCommand = new TurnToTopTargetCommand(drive, limelight);
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();

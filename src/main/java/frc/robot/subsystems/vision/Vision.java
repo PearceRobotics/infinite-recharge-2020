@@ -9,6 +9,7 @@ package frc.robot.subsystems.vision;
 
 import frc.robot.subsystems.drive.DrivingDeltas;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.Constants;
 import frc.robot.subsystems.Lights;
 
 /**
@@ -29,6 +30,6 @@ public class Vision {
             lights.allBlue();
         }
         
-        return limelight.calculateDeltas();
+        return limelight.calculateDeltas(Constants.TOP_GOAL_DEADBAND);
     }
 }

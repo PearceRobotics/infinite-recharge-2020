@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Limelight;
 
@@ -15,7 +16,6 @@ import frc.robot.subsystems.vision.Limelight;
  * Add your docs here.
  */
 public class TurnToTopTargetCommand extends CommandBase {
-    private final double DEADBAND_DEGREES = 0.5;
     private Drive drive;
     private Limelight limelight;
 
@@ -37,7 +37,7 @@ public class TurnToTopTargetCommand extends CommandBase {
         final double KpAIM = 0.005;
 
         if (limelight.hasValidTarget()) {
-            if (Math.abs(limelight.getHorizontalTargetOffset()) > DEADBAND_DEGREES) {
+            if (Math.abs(limelight.getHorizontalTargetOffset()) > Constants.TOP_GOAL_DEADBAND) {
                 steeringAdjust = KpAIM * limelight.getHorizontalTargetOffset();
                 drive.arcadeDrive(0, steeringAdjust);
             }
@@ -47,7 +47,7 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (limelight.getHorizontalTargetOffset() <= DEADBAND_DEGREES) {
+        if (limelight.getHorizontalTargetOffset() <= Constants.TOP_GOAL_DEADBAND) {
             return true;
         }
         return false;
