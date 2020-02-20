@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
@@ -34,6 +35,11 @@ public class Robot extends TimedRobot {
   private IndexerController indexerController;
 
   private boolean shotRequested = false;
+  private boolean shotInProgress = false;
+
+
+  private final double BALL_SHOOT_TIME = 1.0;
+  private double ballShootStartTime;
 
   private double indexerSpeed;
   private Lights lights;
@@ -175,22 +181,41 @@ public class Robot extends TimedRobot {
       shotRequested = true;
     }
 
+    if(shotRequested)
+    {
+      System.out.println("Shot requested ");
+    }
+
+    // if(controls.getRightBumper())
+    // {
+    //   shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
+    // }
+
+    
+    // System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
+    // System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
+
     // when firing the shooter, make sure it's at speed
-    if (shotRequested && shooterSpeedController.isAtSpeed()) {
-      // Set the bool to know that the shot was fired
-      shotRequested = false;
+    if (shotRequested && shooterSpeedController.isAtSpeed() && !shotInProgress) {
+      // fire the shooter
+      //code to fire shooter
+      System.out.println("*******FIREFIREFIRE******!");
+      ballShootStartTime = Timer.getFPGATimestamp();
 
+      //Set the bool to know that the shot was fired
+      shotInProgress = true;
+      
       indexerController.intake();
-      hopperController.start();
+      hopperController.start();      
+    }
 
-      try {
-        Thread.sleep(1000);
-      } catch (Exception e) {
-
-      }
-
+    if(shotInProgress && ((Timer.getFPGATimestamp() - ballShootStartTime) > BALL_SHOOT_TIME))
+    {
       indexerController.stop();
       hopperController.stop();
+
+      shotInProgress = false;
+      shotRequested = false;
     }
   }
 
