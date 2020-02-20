@@ -33,7 +33,6 @@ public class Robot extends TimedRobot {
   private Lights lights;
   private Gyroscope gyro;
   private IO io;
-
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
@@ -136,10 +135,7 @@ public class Robot extends TimedRobot {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
-
-  /**
-   * This function is called periodically during operator control.
-   */
+ 
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
