@@ -2,6 +2,7 @@ package frc.robot.io;
 
 import frc.robot.commands.GyroTurnCommand;
 import frc.robot.commands.ReorientToFieldCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
@@ -18,6 +19,6 @@ public class IO {
     controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
     controls.getJoystickAButton()
-        .whenPressed(new ShooterCommand(shooter, shooterSpeedController, hopperController, indexController));
+      .whenPressed(new ShooterCommand(shooter, shooterSpeedController, hopperController, indexController));
   }
 }
