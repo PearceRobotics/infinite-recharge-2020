@@ -11,14 +11,11 @@ import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.vision.Vision;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DrivingDeltas;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.commands.LimelightTopTargetCommand;
+import frc.robot.commands.TurnToTopTargetCommand;
 import frc.robot.io.Controls;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -35,7 +32,7 @@ public class Robot extends TimedRobot {
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
-  private LimelightTopTargetCommand limelightTopTargetCommand;
+  private TurnToTopTargetCommand turnToTopTargetCommand;
 
 
   // Constants
@@ -62,7 +59,7 @@ public class Robot extends TimedRobot {
     this.vision = new Vision(limelight,lights);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
-    this.limelightTopTargetCommand = new LimelightTopTargetCommand(drive, limelight);
+    this.turnToTopTargetCommand = new TurnToTopTargetCommand(drive, limelight);
   }
 
   /**
@@ -131,10 +128,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-    DrivingDeltas calculatedDeltas = vision.targetDelta();
-      controls.getXButton().whenPressed(new LimelightTopTargetCommand(drive, limelight));
+      controls.getXJoystickButton().whenPressed(new TurnToTopTargetCommand(drive, limelight));
   }
-
   /**
    * This function is called periodically during test mode.
    */

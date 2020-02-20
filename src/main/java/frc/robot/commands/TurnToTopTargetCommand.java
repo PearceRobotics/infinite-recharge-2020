@@ -14,14 +14,12 @@ import frc.robot.subsystems.vision.Limelight;
 /**
  * Add your docs here.
  */
-public class LimelightTopTargetCommand extends CommandBase {
-    private final double KpAIM = 0.005;
-    private final double DEADBAND_DEGREES = 0;
+public class TurnToTopTargetCommand extends CommandBase {
+    private final double DEADBAND_DEGREES = 0.5;
     private Drive drive;
     private Limelight limelight;
-    private double steeringAdjust = 0;
 
-    public LimelightTopTargetCommand(Drive drive,Limelight limelight) {
+    public TurnToTopTargetCommand(Drive drive,Limelight limelight) {
         this.drive = drive;
         this.limelight = limelight;
     }
@@ -35,19 +33,21 @@ public class LimelightTopTargetCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
+        double steeringAdjust = 0;
+        final double KpAIM = 0.005;
+
         if (limelight.hasValidTarget()) {
             if (Math.abs(limelight.getHorizontalTargetOffset()) > DEADBAND_DEGREES) {
                 steeringAdjust = KpAIM * limelight.getHorizontalTargetOffset();
+                drive.arcadeDrive(0, steeringAdjust);
             }
         }
-
-        drive.arcadeDrive(0, steeringAdjust);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (limelight.getHorizontalTargetOffset() < DEADBAND_DEGREES) {
+        if (limelight.getHorizontalTargetOffset() <= DEADBAND_DEGREES) {
             return true;
         }
         return false;
