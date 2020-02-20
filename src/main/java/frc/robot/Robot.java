@@ -33,12 +33,10 @@ public class Robot extends TimedRobot {
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
 
-
   // Constants
   private final int JOYSTICK_PORT = 1;
 
   private double pValue = 0.2;
-
   private double maxSpeed;
   private double distance;
   /**

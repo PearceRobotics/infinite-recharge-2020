@@ -1,6 +1,5 @@
 package frc.robot.io;
 
-import frc.robot.io.Controls;
 import frc.robot.commands.GyroTurnCommand;
 import frc.robot.commands.ReorientToFieldCommand;
 import frc.robot.subsystems.drive.Drive;

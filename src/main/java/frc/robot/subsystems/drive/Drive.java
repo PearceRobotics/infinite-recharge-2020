@@ -56,17 +56,21 @@ public class Drive {
   }
 
   public void arcadeDrive(double throttle, double turnModifer) {
-    if(turnModifer == 0.0 && throttle != 0.0 ) {
-      if(desiredAngle == Integer.MAX_VALUE) {
-        desiredAngle = gyroscope.getGyroAngle();
+    if(turnModifer == 0.0 && throttle != 0.0) {
+      if(this.desiredAngle == Integer.MAX_VALUE) {
+        this.desiredAngle = gyroscope.getGyroAngle();
       }
-      turnModifer = driveStraightGyro(desiredAngle); 
+      turnModifer = this.getAngularError(desiredAngle); 
     }
     else {
-      desiredAngle = Integer.MAX_VALUE;
+      this.desiredAngle = Integer.MAX_VALUE;
     }
     this.setLeftSpeed(-(throttle - turnModifer));
     this.setRightSpeed(throttle + turnModifer);
+  }
+
+  public double getAngularError(double desiredAngle) {  
+    return  (desiredAngle - gyroscope.getGyroAngle()) * P_VALUE;
   }
 
   public void arcadeDrive(DrivingDeltas drivingDeltas) {
@@ -102,9 +106,5 @@ public class Drive {
     double error = getLeftEncoderDistance() - getRightEncoderDistance();
     double turnPower = error * pValue;
     return turnPower;
-  }
-
-  public double driveStraightGyro(double desiredAngle){  
-    return  (desiredAngle - gyroscope.getGyroAngle()) * P_VALUE;
   }
 }
