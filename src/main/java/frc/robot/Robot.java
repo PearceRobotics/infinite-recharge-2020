@@ -9,12 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Lights;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
+import frc.robot.io.IO;
 
 public class Robot extends TimedRobot {
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -23,6 +26,8 @@ public class Robot extends TimedRobot {
   private Drive drive;
   private Controls controls;
   private Lights lights;
+  private Gyroscope gyro;
+  private IO io;
   
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
@@ -31,9 +36,9 @@ public class Robot extends TimedRobot {
   // Constants
   private final int JOYSTICK_PORT = 1;
 
+  private double pValue = 0.2;
   private double maxSpeed;
   private double distance;
-  private double pValue;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -46,11 +51,15 @@ public class Robot extends TimedRobot {
 
     Logger.configureLoggingAndConfig(this, false);
 
-    this.drive = new Drive();
+    this.gyro = new Gyroscope();
+    this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
+    this.io = new IO(controls, drive, gyro);
 
-    this.lightsCommand = new LightsCommand(lights);
+    this.lightsCommand = new LightsCommand(this.lights);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
+    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
   }
 
   /**
@@ -83,7 +92,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     m_autoSelected = m_chooser.getSelected();
     switch(m_autoSelected) {
       case kCustomAuto:
@@ -97,9 +105,6 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /**
-   * This function is called periodically during autonomous.
-   */
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
@@ -107,23 +112,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    this.teleopCommand = new TeleopCommand(controls, drive, pValue);
-    if (teleopCommand != null) {
-      teleopCommand.schedule();
-    }
+    teleopCommand.schedule();
   }
  
-  /**
-   * This function is called periodically during operator control.
-   */
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
   }
 
-  /**
-   * This function is called periodically during test mode.
-   */
   @Override
   public void testPeriodic() {
   }
