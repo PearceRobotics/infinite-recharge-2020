@@ -9,30 +9,30 @@ public class GyroTurnCommand extends CommandBase {
     private final Gyroscope gyro;
     private final Drive drive;
     // Variables
-    private final double turnAngle;// Angle we want the robot to rotate in degrees
-    private double newAngle;// Angle gyroscope will see new angle as
+    private final double amountToRotate;// Angle we want the robot to rotate in degrees
+    private double desiredAngle;// Angle gyroscope will see new angle as
     // Constants
     private final double P_VALUE = 0.0027 * 2.25;
     private final double MIN_SPEED = 0.15;// minimum speed the robot will drive
     private final double DEADBAND = 1.0;
 
-    public GyroTurnCommand(final Gyroscope gyro, final double turnAngle, final Drive drive) {
+    public GyroTurnCommand(final Gyroscope gyro, final Drive drive, final double amountToRotate) {
         this.gyro = gyro;
-        this.turnAngle = turnAngle;
         this.drive = drive;
+        this.amountToRotate = amountToRotate;
     }
 
     @Override
     public void initialize() {
         final double currentAngle = gyro.getGyroAngle();
-        newAngle = currentAngle + turnAngle;
+        desiredAngle = currentAngle + amountToRotate;
         drive.setBrakeMode();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        double error = newAngle - gyro.getGyroAngle();
+        double error = desiredAngle - gyro.getGyroAngle();
         double speed = -error * P_VALUE;
 
         if(Math.abs(speed) < MIN_SPEED) {
@@ -50,7 +50,7 @@ public class GyroTurnCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (Math.abs(gyro.getGyroAngle() - newAngle) > DEADBAND) {
+        if (Math.abs(gyro.getGyroAngle() - desiredAngle) > DEADBAND) {
             return false;
         } else {
             drive.arcadeDrive(0.0, 0.0);

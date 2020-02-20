@@ -14,7 +14,7 @@ public class ReorientToFieldCommand extends CommandBase {
     private final double MIN_SPEED = 0.1;// minimum speed the robot will drive
     private final double DEADBAND = 1.0;
 
-    public ReorientToFieldCommand(Drive drive, Gyroscope gyro){
+    public ReorientToFieldCommand(Gyroscope gyro, Drive drive){
         this.drive = drive;
         this.gyro = gyro;
     }
