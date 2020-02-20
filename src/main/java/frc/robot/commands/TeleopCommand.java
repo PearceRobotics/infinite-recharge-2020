@@ -7,15 +7,15 @@ import frc.robot.subsystems.drive.Drive;
 public class TeleopCommand extends CommandBase {
 
     private Drive drive;
-    private double pValue;
     private Controls controls;
-    private double DEADZONE = 0.11;
-    private boolean resetEncoders;
+    private double DEADZONE = 0.2;
   
-    public TeleopCommand(Controls controls, Drive drive, double pValue) {
+    public TeleopCommand(Controls controls, Drive drive) {
         this.controls = controls;
         this.drive = drive;
-        this.pValue = pValue;
+
+        addRequirements(controls);
+        addRequirements(drive);
     }
 
     // Called just before this Command runs the first time
@@ -26,15 +26,6 @@ public class TeleopCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        if (controls.getRightX(DEADZONE) == 0.0) {
-            if (resetEncoders == false) {
-                drive.resetEncoders();
-                resetEncoders = true;
-            }
-            drive.arcadeDrive(controls.getLeftY(DEADZONE), -drive.straightTurnPower(pValue));
-        } else {
-            drive.arcadeDrive(-controls.getLeftY(DEADZONE), -controls.getRightX(DEADZONE));
-            resetEncoders = false;
-        }
+        drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
     }
 }
