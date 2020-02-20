@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
   private Lights lights;
   
   private AutonomousCommand autonomousCommand;
-  private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
   private Gyroscope gyro;
   private IO io;
@@ -59,7 +58,7 @@ public class Robot extends TimedRobot {
     this.io = new IO(controls, drive, gyro);
 
     this.lightsCommand = new LightsCommand(this.lights);
-    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
+    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
   }
 
   /**
@@ -92,7 +91,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     m_autoSelected = m_chooser.getSelected();
     switch(m_autoSelected) {
       case kCustomAuto:
