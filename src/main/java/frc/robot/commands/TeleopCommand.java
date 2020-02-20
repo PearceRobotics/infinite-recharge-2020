@@ -13,9 +13,6 @@ public class TeleopCommand extends CommandBase {
     public TeleopCommand(Controls controls, Drive drive) {
         this.controls = controls;
         this.drive = drive;
-
-        addRequirements(controls);
-        addRequirements(drive);
     }
 
     // Called just before this Command runs the first time

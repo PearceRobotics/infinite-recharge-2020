@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-public class Gearbox{
+public class Gearbox {
     private final CANSparkMax frontController;
     private final CANSparkMax backController;
 

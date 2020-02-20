@@ -1,11 +1,10 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 
-public class Gyroscope extends SubsystemBase {
+public class Gyroscope {
     //Classes
     private ADIS16470_IMU imu;
     //variables

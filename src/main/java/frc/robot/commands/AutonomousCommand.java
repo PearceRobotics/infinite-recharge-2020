@@ -15,8 +15,6 @@ public class AutonomousCommand extends CommandBase {
         this.pValue = pValue;
         this.maxSpeed = maxSpeed;
         this.drive = drive;
-
-        addRequirements(drive);
     }
 
     // Called just before this Command runs the first time

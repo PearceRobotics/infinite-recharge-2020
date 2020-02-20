@@ -26,11 +26,13 @@ public class Robot extends TimedRobot {
   private Drive drive;
   private Controls controls;
   private Lights lights;
-  
-  private AutonomousCommand autonomousCommand;
-  private LightsCommand lightsCommand;
   private Gyroscope gyro;
   private IO io;
+  
+  private AutonomousCommand autonomousCommand;
+  private TeleopCommand teleopCommand;
+  private LightsCommand lightsCommand;
+
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -59,6 +61,7 @@ public class Robot extends TimedRobot {
 
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
+    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
   }
 
   /**
@@ -111,7 +114,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drive.setDefaultCommand(new TeleopCommand(controls, drive));
+    teleopCommand.schedule();
   }
  
   @Override
