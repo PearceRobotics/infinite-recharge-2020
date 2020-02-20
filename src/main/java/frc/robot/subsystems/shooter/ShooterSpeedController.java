@@ -9,22 +9,25 @@ public class ShooterSpeedController {
     private final int LEFT_SHOOTER_CAN_ID = 14;
     private final int RIGHT_SHOOTER_CAN_ID = 7;
     private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
-
-    private final double RATIO = (22.0 / 16.0); // gear ratio
-
-    // bang bang variables below
-    private final double WHEEL_DIAMETER = 4.0; // inches
-    private final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI; // inches
-    private final double FULL_SPEED = 1.0; // percent of motor power
-    private final double ACCEPTABLE_DIFFERENCE = 5.0; // inches per second allowable difference for shot to be made
-
     private final CANSparkMax leftController;
     private final CANSparkMax rightController;
 
-    private double setLaunchSpeed; // in inches/second
-    // Pid controller variables below
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+    private final double RATIO = (22.0 / 16.0); // gear ratio
+    private final double WHEEL_DIAMETER = 4.0; // inches
+    private final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI; // inches
+    private final double ACCEPTABLE_DIFFERENCE = 5.0; // inches per second allowable difference for shot to be made
+    private final double SECONDS_PER_MINUTE = 60.0;
 
+    private double setLaunchSpeed; // in inches/second
+
+    // PID coefficients
+    public double kP = 0.000050; // 5e-5;
+    public double kI = 0.0000004; // 4e-7;
+    public double kD = 0.0; // 0.0
+    public double kIz = 0.0; // 0.0
+    public double kFF = 0.0; // 0.0
+    public double kMaxOutput = 1;
+    public double kMinOutput = -1;
 
     // Default Constructor. Set initial launch speed to 0 inches/second.
     public ShooterSpeedController() {
@@ -40,18 +43,6 @@ public class ShooterSpeedController {
          */
         this.leftController.restoreFactoryDefaults();
         this.rightController.restoreFactoryDefaults();
-
-        // PID coefficients
-        kP = 0.000050; //5e-5;
-        kI = 0.0000004; //4e-7;        
-        kD = 0.0; //0.0
-        // kP = 0.25;
-        // kI = 0.0;
-        // kD = 0.025; //0.0
-        kIz = 0.0; //0.0
-        kFF = 0.0; //0.0
-        kMaxOutput = 1;
-        kMinOutput = -1;
 
         // set PID coefficients
         this.leftController.getPIDController().setP(kP);
@@ -78,20 +69,10 @@ public class ShooterSpeedController {
         this.rightController.getPIDController().setReference(rpm, ControlType.kVelocity);
     }
 
-    public void setFullForward() {
-        this.leftController.set(-FULL_SPEED);
-        this.rightController.set(FULL_SPEED);
-    }
-
-    public void setFullReverse() {
-        this.leftController.set(0.0);
-        this.rightController.set(0.0);
-    }
-
     // Set the speed that the shooter speed controller will attempt to get to.
     public void setLaunchSpeed(double speed) {
         this.setLaunchSpeed = speed;
-        setPidSpeed(((speed * 60) / WHEEL_CIRCUMFERENCE)/RATIO);
+        setPidSpeed(((speed * SECONDS_PER_MINUTE) / WHEEL_CIRCUMFERENCE) / RATIO);
     }
 
     // Get the set launch speed in inches/second
@@ -101,17 +82,13 @@ public class ShooterSpeedController {
 
     // Get the current speed of the shooter in inches/second
     public double getCurrentSpeed() {
-        System.out.println("tangential speed "
-                + (((-this.leftController.getEncoder().getVelocity() + this.rightController.getEncoder().getVelocity())
-                        / 2) * WHEEL_CIRCUMFERENCE * RATIO / 60.0));
         // Assuming that the shooter wheel speed is the average of the two motors times
         // wheel circumference and gear ratio
         return (((-this.leftController.getEncoder().getVelocity() + this.rightController.getEncoder().getVelocity())
-                / 2) * WHEEL_CIRCUMFERENCE * RATIO / 60.0);
+                / 2) * WHEEL_CIRCUMFERENCE * RATIO / SECONDS_PER_MINUTE);
     }
 
     public boolean isAtSpeed() {
-        System.out.println("set launch speed " + setLaunchSpeed);
         return (Math.abs(getCurrentSpeed() - setLaunchSpeed) < ACCEPTABLE_DIFFERENCE);
     }
 }

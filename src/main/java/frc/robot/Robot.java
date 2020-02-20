@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
 
   private double indexerSpeed;
   private Lights lights;
-  
+
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
   private double maxSpeed;
   private double distance;
   private double pValue;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -107,15 +108,15 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     m_autoSelected = m_chooser.getSelected();
-    switch(m_autoSelected) {
-      case kCustomAuto:
-        break;
-      case kDefaultAuto:
-        default:
-          if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-          }
-        break;
+    switch (m_autoSelected) {
+    case kCustomAuto:
+      break;
+    case kDefaultAuto:
+    default:
+      if (autonomousCommand != null) {
+        autonomousCommand.schedule();
+      }
+      break;
     }
   }
 
@@ -131,8 +132,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     this.shooterCommand = new ShooterCommand(shooterSpeedController);
     if (shooterCommand != null)
-    shooterCommand.schedule();
-  
+      shooterCommand.schedule();
+
     this.teleopCommand = new TeleopCommand(controls, drive, pValue);
     if (teleopCommand != null) {
       teleopCommand.schedule();
@@ -140,80 +141,54 @@ public class Robot extends TimedRobot {
   }
 
   @Config
-  public void setDistanceToGoal(double distanceToGoal)
-  {
+  public void setDistanceToGoal(double distanceToGoal) {
     this.distanceToGoal = distanceToGoal;
   }
 
   @Config
-  public void setOverrideSpeed(double overrideSpeed)
-  {
+  public void setOverrideSpeed(double overrideSpeed) {
     this.overrideSpeed = overrideSpeed;
   }
- 
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
 
-    //distance 125 
-    //remove
+    // distance 125
+    // remove
     this.distanceToGoal = 125.0;
     CommandScheduler.getInstance().run();
-    // if(controls.getRightTrigger()) {
-    //   System.out.println("indexer triggered");
-    //   indexerController.intake();
-    //   hopperController.start();
-    // }
-    // else {
-    //   indexerController.stop();
-    //   hopperController.stop();
-    // }
-    if(controls.getLeftTrigger()) {
+
+    if (controls.getLeftTrigger()) {
       indexerController.outtake();
     }
-    if(controls.getAButton()) {
+    if (controls.getAButton()) {
       // call shooter.determineLaunchSpeed
       // use it to set the shooterSpeedController
 
       double speed = shooter.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET);
-      shooterSpeedController.setLaunchSpeed(speed); //using a number that should be replaced
+      shooterSpeedController.setLaunchSpeed(speed); // using a number that should be replaced
 
-      //Set the bool to know that a shot is requested
+      // Set the bool to know that a shot is requested
       shotRequested = true;
     }
 
-    // if(controls.getRightBumper())
-    // {
-    //   shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
-    // }
-
-    
-    // System.out.println("current set launch speed " + shooterSpeedController.getLaunchSpeed());
-    // System.out.println("current shooter speed " + shooterSpeedController.getCurrentSpeed());
-
     // when firing the shooter, make sure it's at speed
     if (shotRequested && shooterSpeedController.isAtSpeed()) {
-      // fire the shooter
-      //code to fire shooter
-      System.out.println("*******FIREFIREFIRE******!");
-
-      //Set the bool to know that the shot was fired
+      // Set the bool to know that the shot was fired
       shotRequested = false;
-      
+
       indexerController.intake();
       hopperController.start();
 
-      try
-      {
+      try {
         Thread.sleep(1000);
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
 
       }
-      
+
       indexerController.stop();
       hopperController.stop();
     }
@@ -227,21 +202,22 @@ public class Robot extends TimedRobot {
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
-  public void setIndexerSpeed(double indexerSpeed){
+  public void setIndexerSpeed(double indexerSpeed) {
     this.indexerSpeed = indexerSpeed;
   }
+
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
-  public void setAutonStraightDistance(double distance){
+  public void setAutonStraightDistance(double distance) {
     this.distance = distance;
   }
 
   @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
-  public void setAutonMaxSpeedForDriveStraight(double maxSpeed){
+  public void setAutonMaxSpeedForDriveStraight(double maxSpeed) {
     this.maxSpeed = maxSpeed;
   }
 
   @Config(name = "Constant", defaultValueNumeric = .1)
-  public void setDriveStraightPValue(double pValue){
+  public void setDriveStraightPValue(double pValue) {
     this.pValue = pValue;
-  } 
+  }
 }
