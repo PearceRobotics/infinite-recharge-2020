@@ -50,17 +50,13 @@ public class GyroTurnCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (Math.abs(gyro.getGyroAngle() - desiredAngle) > DEADBAND) {
-            return false;
-        } else {
-            drive.arcadeDrive(0.0, 0.0);
-            return true;
-        }
+        return (Math.abs(gyro.getGyroAngle() - desiredAngle) <= DEADBAND);
     }
 
     // Called once after isFinished returns true
     @Override
     public void end(final boolean interrupted) {
-
+        drive.arcadeDrive(0.0, 0.0);
+        drive.setCoastMode();
     }
 }

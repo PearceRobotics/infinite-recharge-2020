@@ -45,18 +45,13 @@ public class ReorientToFieldCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if((Math.abs(gyro.getGyroAngle()) % 360.0) > DEADBAND){
-            return false;
-        }
-        else {
-            drive.arcadeDrive(0.0, 0.0);
-            return true;
-        }
+        return (Math.abs(gyro.getGyroAngle()) % 360.0) <= DEADBAND;
     }
 
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-
+        drive.arcadeDrive(0.0, 0.0);
+        drive.setCoastMode();
     }    
 }
