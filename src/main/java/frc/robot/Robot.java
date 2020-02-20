@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
-    this.io = new IO(controls, drive, gyro, shooter, shooterSpeedController, hopperController, indexerController);
+    this.io = new IO(controls, drive, gyro, shooter, shooterSpeedController, hopperController, indexerController,limelight);
 
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
@@ -150,7 +150,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-      controls.getXJoystickButton().whenPressed(new TurnToTopTargetCommand(drive, limelight));
       if (controls.getLeftTrigger()) {
         indexerController.outtake();
       }
