@@ -12,9 +12,10 @@ public class ReorientToFieldCommand extends CommandBase{
     private double error; //error the robot is off its original position (from 0 to 360)
     private double speed;//speed the robot turns
     //Constants
-    private double ratio = 0.0027;//ratio to multiply error by to get a number between -1 and 1 for the speed
-    private double minSpeed = 0.1;// minimum speed the robot will drive
-    private double p = 1.0;//p loop constant
+    private final double RATIO = 0.0027;//ratio to multiply error by to get a number between -1 and 1 for the speed
+    private final double MIN_SPEED = 0.1;// minimum speed the robot will drive
+    private final double P = 1.0;//p loop constant
+    private final double DEADBAND = 1.0;
 
 
     public ReorientToFieldCommand(Drive drive, Gyroscope gyro){
@@ -30,27 +31,25 @@ public class ReorientToFieldCommand extends CommandBase{
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-                error = gyro.getGyroAngle() % 360.0;
-                speed = error*(ratio) * p;
-                if(Math.abs(speed) < minSpeed){
-                    if (speed < 0.0){
-                        speed = -minSpeed;
-                    }
-                    else if(speed > 0.0) {
-                        speed = minSpeed;
-                    }
-                    else{
+        error = gyro.getGyroAngle() % 360.0;
+        speed = error*(RATIO) * P;
+        if(Math.abs(speed) < MIN_SPEED){
+            if (speed < 0.0){
+                speed = -MIN_SPEED;
+            }
+            else if(speed > 0.0) {
+                speed = MIN_SPEED;
+            }else{
                         // do nothing
-                    }
-                }
-                drive.arcadeDrive(0.0, speed);
+            }
         }
+        drive.arcadeDrive(0.0, speed);
+    }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if((Math.abs(gyro.getGyroAngle())% 360.0) > 1.0)
-        {
+        if((Math.abs(gyro.getGyroAngle())% 360.0) > DEADBAND){
             return false;
         }
         else{
@@ -62,6 +61,6 @@ public class ReorientToFieldCommand extends CommandBase{
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-     
+
     }    
 }

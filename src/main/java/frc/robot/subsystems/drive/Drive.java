@@ -16,7 +16,6 @@ public class Drive extends SubsystemBase {
 
   //variables
   private double desiredAngle;
-  private double turnModifer;
 
   //constants
   private final double P_VALUE = .0014;

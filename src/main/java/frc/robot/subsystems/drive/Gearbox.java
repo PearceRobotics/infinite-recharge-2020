@@ -3,9 +3,8 @@ package frc.robot.subsystems.drive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax.IdleMode;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Gearbox extends SubsystemBase{
+public class Gearbox{
     private final CANSparkMax frontController;
     private final CANSparkMax backController;
 

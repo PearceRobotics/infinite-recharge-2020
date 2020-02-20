@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive);
-    gyro.resetGyro();
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     switch(m_autoSelected) {
