@@ -7,13 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterMath;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import io.github.oblarg.oblog.annotations.Config;
 
 public class ShooterCommand extends CommandBase {
 
-    private Shooter shooter;
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
     private IndexerController indexerController;
@@ -23,10 +22,9 @@ public class ShooterCommand extends CommandBase {
     private double distanceToGoal = 154.0; // TODO set back to 0 when distance is working
 
     // Constructor.
-    public ShooterCommand(Shooter shooter, ShooterSpeedController shooterSpeedController,
+    public ShooterCommand(ShooterSpeedController shooterSpeedController,
             HopperController hopperController, IndexerController indexerController) {
-        this.shooter = shooter;
-        this.shooterSpeedController = shooterSpeedController;
+         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
     }
@@ -43,7 +41,7 @@ public class ShooterCommand extends CommandBase {
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
         shooterSpeedController
-                .setLaunchSpeed(shooter.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
+                .setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
         
         // Make sure the shooter is at speed before loading a power cell
         if (shooterSpeedController.isAtSpeed()) {

@@ -12,7 +12,6 @@ import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
@@ -30,7 +29,6 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
-  private Shooter shooter;
   private Lights lights;
   private Limelight limelight;
   private Gyroscope gyro;
@@ -67,14 +65,13 @@ public class Robot extends TimedRobot {
     this.gyro = new Gyroscope();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.shooter = new Shooter();
     this.lights = new Lights(9, 60, 50);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
-    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooter, shooterSpeedController, hopperController,
+    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
