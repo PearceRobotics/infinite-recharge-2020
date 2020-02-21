@@ -19,7 +19,15 @@ public class TurnToTopTargetCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
 
-    public TurnToTopTargetCommand(Drive drive,Limelight limelight) {
+    // want to be on target for a 10 count
+    private int count;
+    private final int COUNT_ON_TARGET = 10;
+
+    private final double MAX_SPEED = 1.0;
+    private final double MIN_SPEED = 0.1;    
+    final double KpAIM = 0.025;
+
+    public TurnToTopTargetCommand(Drive drive, Limelight limelight) {
         this.drive = drive;
         this.limelight = limelight;
     }
@@ -27,19 +35,19 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-
+        count = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        double steeringAdjust = 0;
-        final double KpAIM = 0.005;
 
         if (limelight.hasValidTarget()) {
-            if (Math.abs(limelight.getHorizontalTargetOffset()) > Constants.TOP_GOAL_DEADBAND) {
-                steeringAdjust = KpAIM * limelight.getHorizontalTargetOffset();
-                drive.arcadeDrive(0, steeringAdjust);
+            double offset = limelight.getHorizontalTargetOffset();
+            if (Math.abs(offset) > Constants.TOP_GOAL_DEADBAND) {
+                double steeringAdjust = Math
+                        .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);
+                drive.arcadeDrive(0.0, steeringAdjust);
             }
         }
     }
@@ -47,8 +55,12 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (limelight.getHorizontalTargetOffset() <= Constants.TOP_GOAL_DEADBAND) {
-            return true;
+        if (limelight.hasValidTarget()
+                && Math.abs(limelight.getHorizontalTargetOffset()) <= Constants.TOP_GOAL_DEADBAND) {
+            ++count;
+            if (count >= COUNT_ON_TARGET) {
+                return true;
+            }
         }
         return false;
     }

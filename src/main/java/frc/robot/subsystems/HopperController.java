@@ -14,7 +14,7 @@ public class HopperController {
     private CANSparkMax leftController;
     private CANSparkMax rightController;
 
-    private double speed = .3;
+    private double speed = 0.3;
 
     public HopperController() {
         this.leftController = new CANSparkMax(LEFT_CAN_ID, MotorType.kBrushless);

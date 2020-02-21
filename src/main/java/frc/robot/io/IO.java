@@ -22,6 +22,6 @@ public class IO {
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
     controls.getJoystickAButton()
       .whenPressed(new ShooterCommand(shooter, shooterSpeedController, hopperController, indexController));
-      controls.getXJoystickButton().whenPressed(new TurnToTopTargetCommand(drive, limelight));
+      controls.getJoystickYButton().whenPressed(new TurnToTopTargetCommand(drive, limelight));
   }
 }

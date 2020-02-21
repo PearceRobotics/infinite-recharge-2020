@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
   private Gyroscope gyro;
   private IO io;
   private AutonomousCommand autonomousCommand;
-  private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
@@ -82,7 +81,6 @@ public class Robot extends TimedRobot {
 
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
-    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
   }
 
   /**
@@ -135,6 +133,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    drive.setDefaultCommand(new TeleopCommand(controls, drive));
   }
 
   // use this to override the algorithm and just use a speed
@@ -156,7 +155,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    teleopCommand.schedule();
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)

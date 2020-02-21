@@ -20,7 +20,7 @@ public class ShooterCommand extends CommandBase {
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
-    private double distanceToGoal = 123.0; // TODO set back to 0 when distance is working
+    private double distanceToGoal = 154.0; // TODO set back to 0 when distance is working
 
     // Constructor.
     public ShooterCommand(Shooter shooter, ShooterSpeedController shooterSpeedController,

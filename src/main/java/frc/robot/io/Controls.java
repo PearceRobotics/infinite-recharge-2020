@@ -45,10 +45,6 @@ public class Controls {
     public boolean getXButton() {
         return joystick.getRawButton(X_BUTTON_ID);
     }
-    
-    public JoystickButton getXJoystickButton(){
-        return new JoystickButton(joystick, X_BUTTON_ID);
-    }
 
     public JoystickButton getJoystickXButton(){
         return new JoystickButton(joystick, X_BUTTON_ID);
