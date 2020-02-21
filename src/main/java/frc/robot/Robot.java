@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
+  private CurvatureDriveCommand curvatureDriveCommand;
   private LightsCommand lightsCommand;
 
   // Constants
@@ -112,7 +114,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    teleopCommand.schedule();
+    drive.setDefaultCommand(new CurvatureDriveCommand(this.controls,this.drive));
   }
  
   @Override

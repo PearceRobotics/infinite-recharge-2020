@@ -3,15 +3,21 @@ package frc.robot.subsystems.drive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Encoder;
-
-public class Drive {
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+ 
+public class Drive extends SubsystemBase{
 
   private Encoder leftEncoder;
   private Encoder rightEncoder;
   private Gearbox leftGearbox;
   private Gearbox rightGearbox;
+  private SpeedControllerGroup leftGearboxController;
+  private SpeedControllerGroup rightGearboxController;
 
   private Gyroscope gyroscope;
+  private DifferentialDrive differentialDrive;
 
   //variables
   private double desiredAngle;
@@ -32,10 +38,15 @@ public class Drive {
   public Drive(Gyroscope gyroscope) {
     this.gyroscope = gyroscope;
     this.leftGearbox = new Gearbox(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
-        new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
+        new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE),
+        leftGearboxController);
 
     this.rightGearbox = new Gearbox(new CANSparkMax(RIGHT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
-        new CANSparkMax(RIGHT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
+        new CANSparkMax(RIGHT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE),
+        rightGearboxController);
+
+    differentialDrive = new DifferentialDrive(leftGearboxController, rightGearboxController);
+
     this.leftGearbox.setRampRate(1);
     this.rightGearbox.setRampRate(1);
 
@@ -53,6 +64,10 @@ public class Drive {
 
   public void setRightSpeed(double speed) {
     this.rightGearbox.setSpeed(speed);
+  }
+
+  public void curvatureDrive(double throttle, double curvature, boolean isQuickTurn) {
+    differentialDrive.curvatureDrive(throttle, curvature, isQuickTurn);
   }
 
   public void arcadeDrive(double throttle, double turnModifer) {
