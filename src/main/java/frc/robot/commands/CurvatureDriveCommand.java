@@ -31,7 +31,7 @@ public class CurvatureDriveCommand extends CommandBase {
             drive.arcadeDrive(throttle, turn);
         }
         else{
-        drive.curvatureDrive(throttle, turn, false);
+        drive.curvatureDrive(-throttle, turn, false);
         }
     }
 }

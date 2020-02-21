@@ -36,6 +36,9 @@ public class Drive extends SubsystemBase{
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
   public Drive(Gyroscope gyroscope) {
+    leftGearboxController = new SpeedControllerGroup(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
+    rightGearboxController = new SpeedControllerGroup(new CANSparkMax(RIGHT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),  new CANSparkMax(RIGHT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
+    
     this.gyroscope = gyroscope;
     this.leftGearbox = new Gearbox(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
         new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE),

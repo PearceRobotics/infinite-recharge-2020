@@ -14,7 +14,6 @@ public class Gearbox {
         this.frontController = frontController;
         this.backController = backController;
         this.gearbox = gearbox;
-        this.gearbox = new SpeedControllerGroup(frontController, backController);
     }
 
     public void setSpeed(double rate) {
