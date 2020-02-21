@@ -30,7 +30,7 @@ public class CurvatureDriveCommand extends CommandBase {
         if(Math.abs(turn) < DEADZONE || Math.abs(throttle) < DEADZONE){
             drive.arcadeDrive(throttle, turn);
         }
-        else{
+       else{
         drive.curvatureDrive(-throttle, turn, false);
         }
     }
