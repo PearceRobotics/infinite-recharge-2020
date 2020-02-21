@@ -11,10 +11,5 @@ package frc.robot;
  * Add your docs here.
  */
 public class Constants {
-
-    public Constants() {
-        //Empty Constructer
-    }
-    public static final double TOP_GOAL_DEADBAND = 0.5;
-
+    //Put constants in this class using "public static double CONSTANT_NAME"
 }

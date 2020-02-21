@@ -18,13 +18,14 @@ import frc.robot.subsystems.vision.Limelight;
 public class TurnToTopTargetCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
+    public final double TOP_GOAL_DEADBAND = 0.5;
 
     // want to be on target for a COUNT_ON_TARGET count
     private int count;
     private final int COUNT_ON_TARGET = 10;
 
     private final double MAX_SPEED = 1.0;
-    private final double MIN_SPEED = 0.1;    
+    private final double MIN_SPEED = 0.1;
     final double KpAIM = 0.025;
 
     public TurnToTopTargetCommand(Drive drive, Limelight limelight) {
@@ -43,10 +44,11 @@ public class TurnToTopTargetCommand extends CommandBase {
     public void execute() {
 
         if (limelight.hasValidTarget()) {
-            //record offset early because it gets used repeatedly
+            // record offset early because it gets used repeatedly
             double offset = limelight.getHorizontalTargetOffset();
-            if (Math.abs(offset) > Constants.TOP_GOAL_DEADBAND) {
-                //Keep steering adjust between MIN and MAX.  set to abs to determine magnitude, but reuse the sign
+            if (Math.abs(offset) > TOP_GOAL_DEADBAND) {
+                // Keep steering adjust between MIN and MAX. set to abs to determine magnitude,
+                // but reuse the sign
                 double steeringAdjust = Math
                         .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);
                 drive.arcadeDrive(0.0, steeringAdjust);
@@ -57,8 +59,7 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (limelight.hasValidTarget()
-                && Math.abs(limelight.getHorizontalTargetOffset()) <= Constants.TOP_GOAL_DEADBAND) {
+        if (limelight.hasValidTarget() && Math.abs(limelight.getHorizontalTargetOffset()) <= TOP_GOAL_DEADBAND) {
             ++count;
             if (count >= COUNT_ON_TARGET) {
                 return true;

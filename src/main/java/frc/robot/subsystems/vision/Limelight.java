@@ -7,34 +7,14 @@
 
 package frc.robot.subsystems.vision;
 
-import frc.robot.subsystems.drive.DrivingDeltas;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * Add your docs here.
  */
-public class Limelight extends SubsystemBase {
+public class Limelight {
 
-    private final double KpAIM = 0.005; 
-    private final double KpDISTANCE = 0.025; // larger than kpAim in initial
-
-    public DrivingDeltas calculateDeltas(double DEADBAND) {
-        double steeringAdjust = 0;
-        double distanceAdjust = 0;
-        if(hasValidTarget()) {
-          if(Math.abs(getHorizontalTargetOffset()) > DEADBAND) {
-            steeringAdjust = KpAIM * getHorizontalTargetOffset();
-          }
-    
-          if(Math.abs(getVerticalTargetOffset()) > DEADBAND) {
-            distanceAdjust = KpDISTANCE * getVerticalTargetOffset();
-          }
-        }
-        return new DrivingDeltas(-distanceAdjust, steeringAdjust);
-      }
-
-     /*
+  /*
    * Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
    */
   public double getVerticalTargetOffset() {
@@ -56,53 +36,55 @@ public class Limelight extends SubsystemBase {
   }
 
   /*
-   * Results of a 3D position solution, 6 numbers: Translation (x,y,y) Rotation(pitch,yaw,roll)
+   * Results of a 3D position solution, 6 numbers: Translation (x,y,y)
+   * Rotation(pitch,yaw,roll)
    */
   public double get3DInputs() {
-   return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran").getDouble(0.0);
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran").getDouble(0.0);
   }
 
   /*
-   *The pipeline’s latency contribution (ms) Add at least 11ms for image capture latency.
+   * The pipeline’s latency contribution (ms) Add at least 11ms for image capture
+   * latency.
    */
   public double latency() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tl").getDouble(0.0);
-   }
+  }
 
-   /*
-   *Sidelength of shortest side of the fitted bounding box (pixels)
+  /*
+   * Sidelength of shortest side of the fitted bounding box (pixels)
    */
-   public double shortSide() {
+  public double shortSide() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tshort").getDouble(0.0);
-   }
+  }
 
-   /*
+  /*
    * Sidelength of longest side of the fitted bounding box (pixels)
    */
-   public double longSide() {
+  public double longSide() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tlong").getDouble(0.0);
-   }
+  }
 
-   /*
+  /*
    * Horizontal sidelength of the rough bounding box (0 - 320 pixels)
    */
-   public double boundBoxHorizontal() {
+  public double boundBoxHorizontal() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("thor").getDouble(0.0);
-   }
+  }
 
-   /*
+  /*
    * Vertical sidelength of the rough bounding box (0 - 320 pixels)
    */
-   public double boundBoxVertical() {
+  public double boundBoxVertical() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tvert").getDouble(0.0);
-   }
+  }
 
-   /*
-   *True active pipeline index of the camera (0 .. 9)
+  /*
+   * True active pipeline index of the camera (0 ... 9)
    */
-   public double getPipeline() {
+  public double getPipeline() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getDouble(0.0);
-   }
+  }
 
   /*
    * Whether the limelight has any valid targets (0 or 1)
@@ -116,5 +98,12 @@ public class Limelight extends SubsystemBase {
    */
   public double getTargetArea() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
+  }
+
+  /*
+   * Set pipeline index for the camera (0 ... 9)
+   */
+  public void setPipeline(Number pipeline) {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
   }
 }
