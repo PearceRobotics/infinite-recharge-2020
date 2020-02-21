@@ -19,7 +19,7 @@ public class TurnToTopTargetCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
 
-    // want to be on target for a 10 count
+    // want to be on target for a COUNT_ON_TARGET count
     private int count;
     private final int COUNT_ON_TARGET = 10;
 
@@ -43,8 +43,10 @@ public class TurnToTopTargetCommand extends CommandBase {
     public void execute() {
 
         if (limelight.hasValidTarget()) {
+            //record offset early because it gets used repeatedly
             double offset = limelight.getHorizontalTargetOffset();
             if (Math.abs(offset) > Constants.TOP_GOAL_DEADBAND) {
+                //Keep steering adjust between MIN and MAX.  set to abs to determine magnitude, but reuse the sign
                 double steeringAdjust = Math
                         .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);
                 drive.arcadeDrive(0.0, steeringAdjust);
