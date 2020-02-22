@@ -9,6 +9,8 @@ import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.shooter.ShooterMath;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
+import frc.robot.subsystems.vision.DistanceCalculator;
+import frc.robot.subsystems.vision.Limelight;
 import io.github.oblarg.oblog.annotations.Config;
 
 public class ShooterCommand extends CommandBase {
@@ -16,23 +18,27 @@ public class ShooterCommand extends CommandBase {
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
     private IndexerController indexerController;
+    private Limelight limelight;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
+
+    private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
     private double distanceToGoal = 149.0; // TODO set back to 0 when distance is working
 
     // Constructor.
-    public ShooterCommand(ShooterSpeedController shooterSpeedController,
-            HopperController hopperController, IndexerController indexerController) {
-         this.shooterSpeedController = shooterSpeedController;
+    public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
+            IndexerController indexerController, Limelight limelight) {
+        this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
+        this.limelight = limelight;
     }
 
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        //nothing to be initialized at this time
+        // nothing to be initialized at this time
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -40,9 +46,17 @@ public class ShooterCommand extends CommandBase {
     public void execute() {
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
-        shooterSpeedController
-                .setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
-        
+
+        System.out.println("vertical offset degrees " + limelight.getVerticalTargetOffset());
+
+        double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
+        distanceToGoal = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
+
+        System.out.println("Distance to target " + distanceToGoal);
+
+        shooterSpeedController.setLaunchSpeed(ShooterMath
+                .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
+
         // Make sure the shooter is at speed before loading a power cell
         if (shooterSpeedController.isAtSpeed()) {
             // turn on the indexer and hopper
@@ -61,7 +75,7 @@ public class ShooterCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        //TODO this will need to test if a power cell has been launched.  
+        // TODO this will need to test if a power cell has been launched.
         // Need a power cell presence sensor of some type for that.
         return false;
     }

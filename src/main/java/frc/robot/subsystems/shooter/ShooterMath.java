@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import frc.robot.Constants;
 import io.github.oblarg.oblog.annotations.Config;
 
 public class ShooterMath {
@@ -14,7 +15,6 @@ public class ShooterMath {
     private static final double LAUNCHER_DEGREES = 32.0; // launcherDegrees, used for ease of measurement and
                                                          // understanding
     private static final double LAUNCHER_RADIANS = Math.toRadians(LAUNCHER_DEGREES); // radians
-    private static final double GOAL_HEIGHT = 98.0; // inches above ground
     private static final double BALL_DIAMETER = 7.0; // in
     private static final double RHO = 0.00004428; // lbm/in^3, STP air density
     private static final double BALL_SURFACE_AREA = (BALL_DIAMETER / 2.0) * (BALL_DIAMETER / 2.0) * Math.PI; // in^2
@@ -45,19 +45,19 @@ public class ShooterMath {
         // Determine height at target distance
         heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget, launchPower);
 
-        if (heightAtTargetDistance < GOAL_HEIGHT) {
+        if (heightAtTargetDistance < Constants.TARGET_CENTER_HEIGHT) {
             return -1.0;
             // shot not possible at current distance
-        } else if (heightAtTargetDistance == GOAL_HEIGHT) {
+        } else if (heightAtTargetDistance == Constants.TARGET_CENTER_HEIGHT) {
             return MAX_TANGENTIAL_SPEED * launchPower; // percent of max speed we should be going times the max speed
         }
         // iteration
         else {
             for (int i = 0; i < ITERATIONS; ++i) {// binary search...gets close enough to what we want
-                if (heightAtTargetDistance > GOAL_HEIGHT) {// if our current height is greater than our target height
+                if (heightAtTargetDistance > Constants.TARGET_CENTER_HEIGHT) {// if our current height is greater than our target height
                                                            // raise lowerbound
                     launchPower = launchPower - (range / (2.0 * Math.pow(2, i))); // decreases launchPower
-                } else if (heightAtTargetDistance < GOAL_HEIGHT) {
+                } else if (heightAtTargetDistance < Constants.TARGET_CENTER_HEIGHT) {
                     launchPower = launchPower + (range / (2.0 * Math.pow(2, i)));// increases launchPower
                 } else {
                     break;

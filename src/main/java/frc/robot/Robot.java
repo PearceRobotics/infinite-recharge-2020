@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.vision.DistanceCalculator;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
@@ -92,6 +93,8 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
+    System.out.println("dsitance to target " + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
+    
   }
 
   /**

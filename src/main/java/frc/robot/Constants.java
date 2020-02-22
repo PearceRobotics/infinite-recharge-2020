@@ -12,4 +12,6 @@ package frc.robot;
  */
 public class Constants {
     //Put constants in this class using "public static double CONSTANT_NAME"
+    public static final double TARGET_CENTER_HEIGHT = 98.0; // inches above ground
+    
 }
