@@ -25,13 +25,13 @@ public class Drive extends SubsystemBase{
   //constants
   private final double P_VALUE = .0014;
   // left gear box CAN ids
-  private final int LEFT_BACK_CAN_ID = 11;
+  private final int LEFT_BACK_CAN_ID = 5; //11
   // private final int LEFT_MIDDLE_CAN_ID = 13;
-  private final int LEFT_FRONT_CAN_ID = 12;
+  private final int LEFT_FRONT_CAN_ID = 6; //12
   // right gear box CAN ids
-  private final int RIGHT_BACK_CAN_ID = 4;
+  private final int RIGHT_BACK_CAN_ID = 7;//4 for actual robot
   // private final int RIGHT_MIDDLE_CAN_ID = 6;
-  private final int RIGHT_FRONT_CAN_ID = 5;
+  private final int RIGHT_FRONT_CAN_ID = 8;
   
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -62,33 +62,35 @@ public class Drive extends SubsystemBase{
   }
 
   public void setLeftSpeed(double speed) {
-    this.leftGearbox.setSpeed(speed);
+    this.leftGearboxController.set(speed);
   }
 
   public void setRightSpeed(double speed) {
-    this.rightGearbox.setSpeed(speed);
+    this.rightGearboxController.set(speed);
   }
 
   public void curvatureDrive(double throttle, double curvature, boolean isQuickTurn) {
     differentialDrive.curvatureDrive(throttle, curvature, isQuickTurn);
   }
 
-  public void arcadeDrive(double throttle, double turnModifer) {
-    if(turnModifer == 0.0 && throttle != 0.0) {
-      if(this.desiredAngle == Integer.MAX_VALUE) {
-        this.desiredAngle = gyroscope.getGyroAngle();
+  public void arcadeDrive(double throttle, double turnModifer) { //already tested, gyro is getting correct angle
+    if(turnModifer == 0.0 && throttle != 0.0) { //says if straight is zero and turn is not zero
+      if(this.desiredAngle == Integer.MAX_VALUE) { //means robot just started driving straight
+        this.desiredAngle = gyroscope.getGyroAngle(); 
       }
       turnModifer = this.getAngularError(desiredAngle); 
+      System.out.println("Gyro Angle" + gyroscope.getGyroAngle());
+      System.out.println("Gyro driving to" + this.desiredAngle);
     }
     else {
-      this.desiredAngle = Integer.MAX_VALUE;
+      this.desiredAngle = Integer.MAX_VALUE; //if turn is greater than 0 or if robot is still 
     }
     this.setLeftSpeed(-(throttle - turnModifer));
     this.setRightSpeed(throttle + turnModifer);
   }
 
   public double getAngularError(double desiredAngle) {  
-    return  (desiredAngle - gyroscope.getGyroAngle()) * P_VALUE;
+    return  (gyroscope.getGyroAngle() - desiredAngle) * P_VALUE;
   }
 
   public void arcadeDrive(DrivingDeltas drivingDeltas) {

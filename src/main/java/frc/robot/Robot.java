@@ -13,6 +13,7 @@ import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
+import frc.robot.commands.TeleopCommand;
 import frc.robot.io.Controls;
 import frc.robot.io.IO;
 
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   
   private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
+  private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
 
   // Constants
@@ -58,6 +60,7 @@ public class Robot extends TimedRobot {
     this.io = new IO(controls, drive, gyro);
 
     this.lightsCommand = new LightsCommand(this.lights);
+    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
   }

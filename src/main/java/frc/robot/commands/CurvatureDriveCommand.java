@@ -6,9 +6,12 @@ import frc.robot.subsystems.drive.Drive;
 
 public class CurvatureDriveCommand extends CommandBase {
 
+    //classes
     private Drive drive;
     private Controls controls;
-    private double DEADZONE = 0.2;
+    //constants
+    private final double DEADZONE = 0.2;
+    private final double TURN_CONSTANT = 0.5;
   
     public CurvatureDriveCommand(Controls controls, Drive drive) {
         this.controls = controls;
@@ -30,8 +33,8 @@ public class CurvatureDriveCommand extends CommandBase {
         if(Math.abs(turn) < DEADZONE || Math.abs(throttle) < DEADZONE){
             drive.arcadeDrive(throttle, turn);
         }
-       else{
-        drive.curvatureDrive(-throttle, turn, false);
+       else{ 
+        drive.curvatureDrive(-throttle, turn * TURN_CONSTANT, false);
         }
     }
 }
