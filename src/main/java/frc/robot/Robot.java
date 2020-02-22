@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.io.Controls;
-import frc.robot.io.IO;
+import frc.robot.operatorInputs.Controls;
+import frc.robot.operatorInputs.OperatorInputs;
 
 public class Robot extends TimedRobot {
 
@@ -29,10 +29,10 @@ public class Robot extends TimedRobot {
 
   private Drive drive;
   private Controls controls;
-  private Shooter shooter;
   private Lights lights;
+  private Limelight limelight;
   private Gyroscope gyro;
-  private IO io;
+  private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 
   private double pValue = 0.2;
   private double maxSpeed;
-  private double distance;
+  private double distance = 36.0;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -65,13 +65,14 @@ public class Robot extends TimedRobot {
     this.gyro = new Gyroscope();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.shooter = new Shooter();
     this.lights = new Lights(9, 60, 50);
+    this.limelight = new Limelight();
+    this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
-    this.io = new IO(controls, drive, gyro, shooter, shooterSpeedController, hopperController, indexerController);
-
+    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
+        indexerController, limelight);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     this.teleopCommand = new TeleopCommand(this.controls, this.drive);
@@ -109,14 +110,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
     switch (m_autoSelected) {
-    case kCustomAuto:
-      break;
-    case kDefaultAuto:
-    default:
-      if (autonomousCommand != null) {
-        autonomousCommand.schedule();
-      }
-      break;
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+      default:
+        if (autonomousCommand != null) {
+          autonomousCommand.schedule();
+        }
+        break;
     }
   }
 
@@ -127,6 +128,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    if (teleopCommand != null) {
+      teleopCommand.schedule();
+    }
   }
 
   // use this to override the algorithm and just use a speed
@@ -135,19 +139,20 @@ public class Robot extends TimedRobot {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
- 
+
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-
     if (controls.getLeftTrigger()) {
       indexerController.outtake();
     }
   }
 
+  /**
+   * This function is called periodically during test mode.
+   */
   @Override
   public void testPeriodic() {
-    teleopCommand.schedule();
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)

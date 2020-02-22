@@ -10,7 +10,7 @@ public class IndexerController {
 
     private CANSparkMax controller;
 
-    private double speed = 0.3;
+    private double speed = 0.5;
 
     public IndexerController() {
         this.controller = new CANSparkMax(CAN_ID, MotorType.kBrushless);
