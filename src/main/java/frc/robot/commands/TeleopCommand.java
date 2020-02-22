@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.io.Controls;
+import frc.robot.operatorInputs.Controls;
 import frc.robot.subsystems.drive.Drive;
 
 public class TeleopCommand extends CommandBase {
@@ -13,7 +13,6 @@ public class TeleopCommand extends CommandBase {
     public TeleopCommand(Controls controls, Drive drive) {
         this.controls = controls;
         this.drive = drive;
-
         addRequirements(drive);
     }
 

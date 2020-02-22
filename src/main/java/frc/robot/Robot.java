@@ -6,16 +6,20 @@ import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.HopperController;
+import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
-import frc.robot.io.Controls;
-import frc.robot.io.IO;
+import frc.robot.operatorInputs.Controls;
+import frc.robot.operatorInputs.OperatorInputs;
 
 public class Robot extends TimedRobot {
 
@@ -27,20 +31,27 @@ public class Robot extends TimedRobot {
   private Drive drive;
   private Controls controls;
   private Lights lights;
+  private Limelight limelight;
   private Gyroscope gyro;
-  private IO io;
-  
+  private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
+  private ShooterSpeedController shooterSpeedController;
+  private HopperController hopperController;
+  private IndexerController indexerController;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
 
+  private double overrideSpeed = 1330.0;
+  private double indexerSpeed = 0.3;
+
   private double pValue = 0.2;
   private double maxSpeed;
-  private double distance;
+  private double distance = 36.0;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -57,8 +68,13 @@ public class Robot extends TimedRobot {
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
-    this.io = new IO(controls, drive, gyro);
-
+    this.limelight = new Limelight();
+    this.lightsCommand = new LightsCommand(lights);
+    this.shooterSpeedController = new ShooterSpeedController();
+    this.hopperController = new HopperController();
+    this.indexerController = new IndexerController();
+    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
+        indexerController, limelight);
     this.lightsCommand = new LightsCommand(this.lights);
     this.teleopCommand = new TeleopCommand(this.controls, this.drive);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
@@ -96,14 +112,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    switch(m_autoSelected) {
+    switch (m_autoSelected) {
       case kCustomAuto:
         break;
       case kDefaultAuto:
-        default:
-          if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-          }
+      default:
+        if (autonomousCommand != null) {
+          autonomousCommand.schedule();
+        }
         break;
     }
   }
@@ -118,28 +134,50 @@ public class Robot extends TimedRobot {
     curvatureDriveCommand.schedule();
     
   }
- 
+
+  // use this to override the algorithm and just use a speed
+  @Config
+  public void setOverrideSpeed(double overrideSpeed) {
+    this.overrideSpeed = overrideSpeed;
+    shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
+  }
+
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+    if (controls.getLeftTrigger()) {
+      indexerController.outtake();
+    }
   }
 
+  /**
+   * This function is called periodically during test mode.
+   */
   @Override
   public void testPeriodic() {
   }
 
+  @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
+  public void setIndexerSpeed(double indexerSpeed) {
+    this.indexerSpeed = indexerSpeed;
+    this.indexerController.setSpeed(this.indexerSpeed);
+  }
+
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
-  public void setAutonStraightDistance(double distance){
+  public void setAutonStraightDistance(double distance) {
     this.distance = distance;
+    this.autonomousCommand.setDistance(this.distance);
   }
 
   @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
-  public void setAutonMaxSpeedForDriveStraight(double maxSpeed){
+  public void setAutonMaxSpeedForDriveStraight(double maxSpeed) {
     this.maxSpeed = maxSpeed;
+    this.autonomousCommand.setMaxSpeed(this.maxSpeed);
   }
 
   @Config(name = "Constant", defaultValueNumeric = .1)
-  public void setDriveStraightPValue(double pValue){
+  public void setDriveStraightPValue(double pValue) {
     this.pValue = pValue;
-  } 
+    this.autonomousCommand.setPValue(this.pValue);
+  }
 }
