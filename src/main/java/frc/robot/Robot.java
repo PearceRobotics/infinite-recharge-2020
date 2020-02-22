@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 
   private double pValue = 0.2;
   private double maxSpeed;
-  private double distance;
+  private double distance = 36.0;
 
   /**
    * This function is run when the robot is first started up and should be used

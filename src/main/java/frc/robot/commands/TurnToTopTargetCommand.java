@@ -17,7 +17,7 @@ public class TurnToTopTargetCommand extends CommandBase {
     private final int COUNT_ON_TARGET = 10;
 
     private final double MAX_SPEED = 1.0;
-    private final double MIN_SPEED = 0.1;
+    private final double MIN_SPEED = 0.05;
     final double KpAIM = 0.025;
 
     public TurnToTopTargetCommand(Drive drive, Limelight limelight) {
@@ -34,7 +34,6 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-
         if (limelight.hasValidTarget()) {
             // record offset early because it gets used repeatedly
             double offset = limelight.getHorizontalTargetOffset();
@@ -57,12 +56,23 @@ public class TurnToTopTargetCommand extends CommandBase {
                 return true;
             }
         }
+        else if(!limelight.hasValidTarget())
+        {
+            //This is a failed situation, we should cancel the whole command group
+        }
+        else{
+            if(count > 0)
+            {
+                --count;
+            }
+            //do nothing
+        }
         return false;
     }
 
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-
+        drive.arcadeDrive(0.0, 0.0);
     }
 }
