@@ -12,4 +12,8 @@ package frc.robot;
  */
 public class Constants {
     //Put constants in this class using "public static double CONSTANT_NAME"
+    public enum driveType{
+        ARCADEDRIVE,
+        CURVATUREDRIVE;
+    }
 }

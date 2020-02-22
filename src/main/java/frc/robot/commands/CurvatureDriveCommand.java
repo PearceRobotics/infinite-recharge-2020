@@ -9,6 +9,7 @@ public class CurvatureDriveCommand extends CommandBase {
     //classes
     private Drive drive;
     private Controls controls;
+
     //constants
     private final double DEADZONE = 0.2;
     private final double TURN_CONSTANT = 0.5;
@@ -28,13 +29,13 @@ public class CurvatureDriveCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-    double throttle = controls.getLeftY(DEADZONE);
-    double turn = controls.getRightX(DEADZONE);
-        if(Math.abs(turn) < DEADZONE || Math.abs(throttle) < DEADZONE){
-            drive.arcadeDrive(throttle, turn);
-        }
-       else{ 
-        drive.curvatureDrive(-throttle, turn * TURN_CONSTANT, false);
-        }
+           /* double throttle = controls.getLeftY(DEADZONE);
+            double turn = controls.getRightX(DEADZONE);
+            if(Math.abs(turn) < DEADZONE || Math.abs(throttle) < DEADZONE){
+                drive.arcadeDrive(throttle, turn);
+            }
+        else{ 
+            drive.curvatureDrive(-throttle, turn * TURN_CONSTANT, false);
+            }*/
     }
 }

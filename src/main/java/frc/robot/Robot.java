@@ -28,6 +28,11 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private static final String kCurvatureDrive = "Cheesy Boi";
+  private static final String kArcadeDrive = "Arcade Boi";
+  private String m_teleopSelected;
+  private final SendableChooser<String> m_teleopChooser = new SendableChooser<>();
+
   private Drive drive;
   private Controls controls;
   private Lights lights;
@@ -41,6 +46,8 @@ public class Robot extends TimedRobot {
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+
+  private boolean teleopActivated = false;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -62,6 +69,10 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    m_teleopChooser.setDefaultOption("Curvature Drive", kCurvatureDrive);
+    m_teleopChooser.addOption("Arcade Drive", kArcadeDrive);
+    SmartDashboard.putData("Teleop Drive", m_teleopChooser);
+
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
@@ -76,9 +87,9 @@ public class Robot extends TimedRobot {
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight);
     this.lightsCommand = new LightsCommand(this.lights);
-    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
+    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
   }
 
   /**
@@ -113,14 +124,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
     switch (m_autoSelected) {
-      case kCustomAuto:
-        break;
-      case kDefaultAuto:
-      default:
-        if (autonomousCommand != null) {
-          autonomousCommand.schedule();
-        }
-        break;
+    case kCustomAuto:
+      break;
+    case kDefaultAuto:
+    default:
+      if (autonomousCommand != null) {
+        autonomousCommand.schedule();
+      }
+      break;
     }
   }
 
@@ -131,13 +142,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    curvatureDriveCommand.schedule();
-    
+
   }
 
   // use this to override the algorithm and just use a speed
   @Config
-  public void setOverrideSpeed(double overrideSpeed) {
+  public void setOverrideSpeed(final double overrideSpeed) {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
@@ -145,6 +155,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
+    disableCurvature();
     if (controls.getLeftTrigger()) {
       indexerController.outtake();
     }
@@ -158,26 +169,46 @@ public class Robot extends TimedRobot {
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
-  public void setIndexerSpeed(double indexerSpeed) {
+  public void setIndexerSpeed(final double indexerSpeed) {
     this.indexerSpeed = indexerSpeed;
     this.indexerController.setSpeed(this.indexerSpeed);
   }
 
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
-  public void setAutonStraightDistance(double distance) {
+  public void setAutonStraightDistance(final double distance) {
     this.distance = distance;
     this.autonomousCommand.setDistance(this.distance);
   }
 
   @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
-  public void setAutonMaxSpeedForDriveStraight(double maxSpeed) {
+  public void setAutonMaxSpeedForDriveStraight(final double maxSpeed) {
     this.maxSpeed = maxSpeed;
     this.autonomousCommand.setMaxSpeed(this.maxSpeed);
   }
 
   @Config(name = "Constant", defaultValueNumeric = .1)
-  public void setDriveStraightPValue(double pValue) {
+  public void setDriveStraightPValue(final double pValue) {
     this.pValue = pValue;
     this.autonomousCommand.setPValue(this.pValue);
   }
+
+  public void disableCurvature() {
+
+    m_teleopSelected = m_teleopChooser.getSelected();
+    System.out.println("teleop selected " + m_teleopSelected);
+    switch (m_teleopSelected) {
+    case kArcadeDrive:
+      curvatureDriveCommand.end(true);
+      teleopCommand.schedule();
+      break;
+    case kCurvatureDrive:
+      teleopCommand.end(true);
+      curvatureDriveCommand.schedule();
+      break;
+    default:
+      curvatureDriveCommand.schedule();
+      break;
+    }
+  }
+
 }
