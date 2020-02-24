@@ -5,6 +5,7 @@ import frc.robot.subsystems.Lights;
 
 public class LightsCommand extends CommandBase {
     private Lights lights;
+    private boolean setWithinDistance;
 
     public LightsCommand(Lights lights) {
         this.lights = lights;
@@ -12,6 +13,14 @@ public class LightsCommand extends CommandBase {
 
     @Override
     public void execute() {
-        lights.idleAnimation(3);
+        if (this.setWithinDistance) {
+            lights.allLimeGreen();
+        } else {
+            lights.idleAnimation(3);
+        }
+    }
+
+    public void setWithinDistance(boolean setWthinDistance) {
+        this.setWithinDistance = setWthinDistance;
     }
 }
