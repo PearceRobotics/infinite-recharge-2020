@@ -17,7 +17,7 @@ import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
-import frc.robot.commands.TeleopCommand;
+import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
 
   private static final String kCurvatureDrive = "Cheesy Boi";
   private static final String kArcadeDrive = "Arcade Boi";
@@ -41,13 +41,11 @@ public class Robot extends TimedRobot {
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
-  private TeleopCommand teleopCommand;
+  private ArcadeDriveCommand teleopCommand;
   private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
-
-  private boolean teleopActivated = false;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -65,9 +63,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    m_autonChooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_autonChooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_autonChooser);
 
     m_teleopChooser.setDefaultOption("Curvature Drive", kCurvatureDrive);
     m_teleopChooser.addOption("Arcade Drive", kArcadeDrive);
@@ -89,7 +87,7 @@ public class Robot extends TimedRobot {
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
-    this.teleopCommand = new TeleopCommand(this.controls, this.drive);
+    this.teleopCommand = new ArcadeDriveCommand(this.controls, this.drive);
   }
 
   /**
@@ -122,7 +120,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected = m_autonChooser.getSelected();
     switch (m_autoSelected) {
     case kCustomAuto:
       break;
@@ -142,7 +140,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-
+    setDriveMode();
   }
 
   // use this to override the algorithm and just use a speed
@@ -154,8 +152,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    setDriveMode();
     CommandScheduler.getInstance().run();
-    disableCurvature();
     if (controls.getLeftTrigger()) {
       indexerController.outtake();
     }
@@ -192,23 +190,24 @@ public class Robot extends TimedRobot {
     this.autonomousCommand.setPValue(this.pValue);
   }
 
-  public void disableCurvature() {
-
+  public void setDriveMode() {
     m_teleopSelected = m_teleopChooser.getSelected();
-    System.out.println("teleop selected " + m_teleopSelected);
     switch (m_teleopSelected) {
     case kArcadeDrive:
-      curvatureDriveCommand.end(true);
+    if(!(teleopCommand.isScheduled())){
+      curvatureDriveCommand.cancel();
       teleopCommand.schedule();
+    }
       break;
     case kCurvatureDrive:
-      teleopCommand.end(true);
+    if(!(curvatureDriveCommand.isScheduled())){
+      teleopCommand.cancel();
       curvatureDriveCommand.schedule();
+    }
       break;
     default:
       curvatureDriveCommand.schedule();
       break;
     }
   }
-
 }

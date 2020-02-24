@@ -6,10 +6,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.commands.CurvatureDriveCommand;
-import frc.robot.commands.TeleopCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase{
 
@@ -83,8 +79,6 @@ public class Drive extends SubsystemBase{
         this.desiredAngle = gyroscope.getGyroAngle(); 
       }
       turnModifer = this.getAngularError(desiredAngle); 
-      System.out.println("Gyro Angle" + gyroscope.getGyroAngle());
-      System.out.println("Gyro driving to" + this.desiredAngle);
     }
     else {
       this.desiredAngle = Integer.MAX_VALUE; //if turn is greater than 0 or if robot is still 
@@ -131,5 +125,4 @@ public class Drive extends SubsystemBase{
     double turnPower = error * pValue;
     return turnPower;
   }
-
 }
