@@ -5,7 +5,7 @@ import frc.robot.Constants;
 public class DistanceCalculator{
 
     private static final double CAMERA_HEIGHT = 24.0; //inches
-    private static final double CAMERA_ANGLE_DEGREES = 18.0; //degrees 
+    private static final double CAMERA_ANGLE_DEGREES = 26.85; //degrees 
     private static final double CAMERA_ANGLE_RADIANS = Math.toRadians(CAMERA_ANGLE_DEGREES); 
     private static final double VISION_TARGET_HEIGHT = 90.5; //inches 
 

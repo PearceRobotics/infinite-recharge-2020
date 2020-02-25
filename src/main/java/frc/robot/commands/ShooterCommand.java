@@ -19,6 +19,8 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
+    private boolean shooterChoice;
+    
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -35,6 +37,11 @@ public class ShooterCommand extends CommandBase {
         this.limelight = limelight;
     }
 
+    public void setShooterChoice(boolean shooterChoice){
+        this.shooterChoice = shooterChoice;
+    }
+
+
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
@@ -47,7 +54,6 @@ public class ShooterCommand extends CommandBase {
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
 
-        System.out.println("vertical offset degrees " + limelight.getVerticalTargetOffset());
 
         double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
         distanceToGoal = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
