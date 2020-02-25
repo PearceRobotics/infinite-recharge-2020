@@ -17,6 +17,7 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.LightsCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
@@ -25,8 +26,12 @@ public class Robot extends TimedRobot {
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static final String kShooterCamera = "Default";
+  private static final String kShooterDistance = "Distance";
   private String m_autoSelected;
+  private String m_shooterSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private final SendableChooser<String> shooter_chooser = new SendableChooser<>();
 
   private Drive drive;
   private Controls controls;
@@ -35,6 +40,7 @@ public class Robot extends TimedRobot {
   private Gyroscope gyro;
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
+  private ShooterCommand shooterCommand;
   private TeleopCommand teleopCommand;
   private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
@@ -60,6 +66,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    shooter_chooser.setDefaultOption("Shooter Camera", kShooterCamera);
+    shooter_chooser.addOption("Shooter Distance", kShooterDistance);
+    SmartDashboard.putData("Shooter choices", shooter_chooser);
 
     Logger.configureLoggingAndConfig(this, false);
 
@@ -77,6 +86,7 @@ public class Robot extends TimedRobot {
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     this.teleopCommand = new TeleopCommand(this.controls, this.drive);
+    this.shooterCommand = new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight);
   }
 
   /**
@@ -96,6 +106,22 @@ public class Robot extends TimedRobot {
     System.out.println("dsitance to target " + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
     System.out.println("vertical angle " + limelight.getVerticalTargetOffset());
     System.out.println("target area " + limelight.getTargetArea());
+
+
+    //131.5 == -17.3 degrees
+    //235.5 == -6.34
+    // 77.5 == 8.2
+  m_shooterSelected = shooter_chooser.getSelected();
+    switch (m_shooterSelected) {
+      case kShooterDistance:
+        break;
+      case kShooterCamera:
+      default:
+        if (shooterCommand != null) {
+          shooterCommand.schedule();
+        }
+        break;
+    }
   }
 
   /**

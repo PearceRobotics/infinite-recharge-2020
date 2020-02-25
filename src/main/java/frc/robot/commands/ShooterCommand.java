@@ -19,6 +19,8 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
+    private boolean shooterChoice;
+    
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -34,6 +36,11 @@ public class ShooterCommand extends CommandBase {
         this.indexerController = indexerController;
         this.limelight = limelight;
     }
+
+    public void setShooterChoice(boolean shooterChoice){
+        this.shooterChoice = shooterChoice;
+    }
+
 
     // Called just before this Command runs the first time
     @Override
