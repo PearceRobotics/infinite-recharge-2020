@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,6 +22,7 @@ public class Climber extends SubsystemBase{
 
     private CANSparkMax winchController;
     private CANSparkMax elevatorController;
+    CANEncoder elevatorEncoder = new CANEncoder(elevatorController);
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController climbPIDController;
 
@@ -46,8 +48,9 @@ public class Climber extends SubsystemBase{
         climbPIDController.setSetpoint(position);
         climbPIDController.setTolerance(TOLERANCE);
         while(climbPIDController.atSetpoint() == false){
-        climbPIDController.calculate(position);
+        elevatorController.set(climbPIDController.calculate(elevatorEncoder.getPosition(),(climbPIDController.calculate(position))));
         }
+        elevatorController.set(0.0);
     }
 
     public void startWinch(double speed){
