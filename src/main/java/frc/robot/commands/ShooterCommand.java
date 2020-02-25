@@ -47,6 +47,10 @@ public class ShooterCommand extends CommandBase {
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
 
+        // 4.2 129
+        //4.5 132
+        //angle 2.04 distance 163
+        // -2.4 240
         System.out.println("vertical offset degrees " + limelight.getVerticalTargetOffset());
 
         double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
