@@ -19,6 +19,7 @@ import frc.robot.commands.LightsCommand;
 import frc.robot.commands.TeleopCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
+import frc.robot.subsystems.Climber;
 
 public class Robot extends TimedRobot {
 
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   private Lights lights;
   private Limelight limelight;
   private Gyroscope gyro;
+  private Climber climber;
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private TeleopCommand teleopCommand;
@@ -63,6 +65,7 @@ public class Robot extends TimedRobot {
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
+    this.climber = new Climber();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
@@ -128,9 +131,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (teleopCommand != null) {
-      teleopCommand.schedule();
-    }
+  //  if (teleopCommand != null) {
+  //    teleopCommand.schedule();
+  //  }
   }
 
   // use this to override the algorithm and just use a speed
@@ -143,9 +146,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-    if (controls.getLeftTrigger()) {
-      indexerController.outtake();
-    }
   }
 
   /**
@@ -153,6 +153,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    CommandScheduler.getInstance().run();
+    climber.getFlexSensorPosition();
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)

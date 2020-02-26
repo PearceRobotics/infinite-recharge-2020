@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,25 +23,28 @@ public class Climber extends SubsystemBase{
 
     private CANSparkMax winchController;
     private CANSparkMax elevatorController;
-    CANEncoder elevatorEncoder = new CANEncoder(elevatorController);
+    //CANEncoder elevatorEncoder = new CANEncoder(elevatorController);
+    private Encoder elevatorEncoder;
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController climbPIDController;
 
     private final int WINCH_CAN_ID = 12;
     private final int ELEVATOR_CAN_ID = 13;
-    private final int CLIMBING_FLEX_SENSOR_PORT = 1;
+    private final int CLIMBING_FLEX_SENSOR_PORT = 0;
     private final double Kp = 0.5;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
     private final double TOLERANCE = 10;
+    private final double TESTING_CONSTANT = 0.05;
     
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
     public Climber() {
         this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.elevatorController = new CANSparkMax(ELEVATOR_CAN_ID, CLIMBING_MOTOR_TYPE);
-        this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT);
+        this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
+        this.elevatorEncoder = new Encoder(3, 4);
         climbPIDController = new PIDController(Kp, Ki, Kd);
     }
 
@@ -48,7 +52,7 @@ public class Climber extends SubsystemBase{
         climbPIDController.setSetpoint(position);
         climbPIDController.setTolerance(TOLERANCE);
         while(climbPIDController.atSetpoint() == false){
-        elevatorController.set(climbPIDController.calculate(elevatorEncoder.getPosition(),(climbPIDController.calculate(position))));
+        elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
         }
         elevatorController.set(0.0);
     }
@@ -57,8 +61,8 @@ public class Climber extends SubsystemBase{
         winchController.set(speed);
     }
 
-    public double getFlexSensorPosition(){
+    public void getFlexSensorPosition(){
         double flexSensorPosition = climbingFlexSensor.get();
-        return flexSensorPosition;
+        System.out.println("flex Sensor: " + flexSensorPosition);
     }
 }

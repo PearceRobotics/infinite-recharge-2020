@@ -1,6 +1,7 @@
 package frc.robot.operatorInputs;
 
 import frc.robot.commands.GyroTurnCommand;
+import frc.robot.commands.IndexerOutakeCommand;
 import frc.robot.commands.PowerCellScoringCommandGroup;
 import frc.robot.commands.ReorientToFieldCommand;
 import frc.robot.subsystems.HopperController;
@@ -20,5 +21,6 @@ public class OperatorInputs {
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
     controls.getJoystickAButton().whenPressed(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
         hopperController, indexerController));
+    controls.getJoystickYButton().whileHeld(new IndexerOutakeCommand(indexerController));
   }
 }

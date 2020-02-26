@@ -5,7 +5,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import io.github.oblarg.oblog.annotations.Config;
 
-public class IndexerController {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class IndexerController extends SubsystemBase{
     private final int CAN_ID = 8;
 
     private CANSparkMax controller;
