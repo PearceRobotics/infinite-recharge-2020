@@ -24,7 +24,6 @@ public class Climber extends SubsystemBase{
 
     private CANSparkMax winchController;
     private CANSparkMax elevatorController;
-    //CANEncoder elevatorEncoder = new CANEncoder(elevatorController);
     private Encoder elevatorEncoder;
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController climbPIDController;
@@ -47,9 +46,13 @@ public class Climber extends SubsystemBase{
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
         this.elevatorEncoder = new Encoder(4, 5);
+<<<<<<< Updated upstream
         elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2 * Math.PI) / 2048.0);
 
 
+=======
+        this.elevatorEncoder.reset();
+>>>>>>> Stashed changes
         climbPIDController = new PIDController(Kp, Ki, Kd);
     }
 
@@ -61,9 +64,13 @@ public class Climber extends SubsystemBase{
             System.out.println("going to position");
         elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
         }
+<<<<<<< Updated upstream
         elevatorController.setIdleMode(IdleMode.kBrake);
         elevatorController.set(0.0);
+=======
+>>>>>>> Stashed changes
     }
+
 
     public void startWinch(double speed){
         winchController.set(speed);
