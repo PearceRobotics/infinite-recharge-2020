@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     if(controls.getYButton()){
-      climber.gotoElevatorPosition(20, .5);
+      climber.gotoElevatorPosition(2000, .5);
     }
   }
 

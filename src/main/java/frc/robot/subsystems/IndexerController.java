@@ -8,7 +8,9 @@ import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerController extends SubsystemBase{
+    //Constants
     private final int CAN_ID = 15;
+    private final int SPARK_550_MAXAMPS = 30;
 
     private CANSparkMax controller;
 
@@ -16,6 +18,7 @@ public class IndexerController extends SubsystemBase{
 
     public IndexerController() {
         this.controller = new CANSparkMax(CAN_ID, MotorType.kBrushless);
+        controller.setSmartCurrentLimit(SPARK_550_MAXAMPS);
     }
 
     public void intake() {
