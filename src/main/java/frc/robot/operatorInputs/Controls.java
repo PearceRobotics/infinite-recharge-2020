@@ -30,6 +30,10 @@ public class Controls {
         return joystick.getRawButton(B_BUTTON_ID);
     }
 
+    public boolean getYButton(){
+        return joystick.getRawButton(Y_BUTTON_ID);
+    }
+
     public JoystickButton getJoystickBButton(){
         return new JoystickButton(joystick, B_BUTTON_ID);
     }

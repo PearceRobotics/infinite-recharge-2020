@@ -28,14 +28,14 @@ public class Climber extends SubsystemBase{
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController climbPIDController;
 
-    private final int WINCH_CAN_ID = 12;
-    private final int ELEVATOR_CAN_ID = 13;
+    private final int WINCH_CAN_ID = 20;
+    private final int ELEVATOR_CAN_ID = 8;
     private final int CLIMBING_FLEX_SENSOR_PORT = 0;
     private final double Kp = 0.5;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
     private final double TOLERANCE = 10;
-    private final double TESTING_CONSTANT = 0.05;
+    private final double TESTING_CONSTANT = 0.1;
     
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -44,17 +44,20 @@ public class Climber extends SubsystemBase{
         this.elevatorController = new CANSparkMax(ELEVATOR_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
-        this.elevatorEncoder = new Encoder(3, 4);
+        this.elevatorEncoder = new Encoder(4, 5);
         climbPIDController = new PIDController(Kp, Ki, Kd);
     }
 
     public void gotoElevatorPosition(double position, double speed){
+        System.out.println("starting climbing code");
         climbPIDController.setSetpoint(position);
         climbPIDController.setTolerance(TOLERANCE);
         while(climbPIDController.atSetpoint() == false){
+            System.out.println("going to position");
         elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
         }
         elevatorController.set(0.0);
+        System.out.println("done");
     }
 
     public void startWinch(double speed){

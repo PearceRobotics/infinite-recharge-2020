@@ -8,7 +8,7 @@ import io.github.oblarg.oblog.annotations.Config;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerController extends SubsystemBase{
-    private final int CAN_ID = 8;
+    private final int CAN_ID = 15;
 
     private CANSparkMax controller;
 
