@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerController extends SubsystemBase{
     //Constants
-    private final int CAN_ID = 15;
+    private final int CAN_ID = 8;
     private final int SPARK_550_MAXAMPS = 30;
 
     private CANSparkMax controller;

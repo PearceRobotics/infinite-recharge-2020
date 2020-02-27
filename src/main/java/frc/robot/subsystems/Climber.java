@@ -29,7 +29,7 @@ public class Climber extends SubsystemBase{
     private PIDController climbPIDController;
 
     private final int WINCH_CAN_ID = 20;
-    private final int ELEVATOR_CAN_ID = 8;
+    private final int ELEVATOR_CAN_ID = 6;
     private final int CLIMBING_FLEX_SENSOR_PORT = 0;
     private final double Kp = 0.5;
     private final double Ki = 0.0;
