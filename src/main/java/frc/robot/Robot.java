@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
 
   private double pValue = 0.2;
   private double maxSpeed;
+  private double elevatorHeight;
   private double distance = 36.0;
 
   /**
@@ -147,7 +148,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
     if(controls.getYButton()){
-      climber.gotoElevatorPosition(2000, .5);
+      climber.gotoElevatorPosition(elevatorHeight, .5);
     }
   }
 
@@ -158,6 +159,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     CommandScheduler.getInstance().run();
     climber.getFlexSensorPosition();
+  }
+
+  @Config(name = "Elevator Height in", defaultValueNumeric = 24)
+  public void setElevatorHeightInches(double elevatorHeight){
+    this.elevatorHeight = elevatorHeight;
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)

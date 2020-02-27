@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 /**
  * Add your docs here.
@@ -36,6 +37,7 @@ public class Climber extends SubsystemBase{
     private final double Kd = 0.0;
     private final double TOLERANCE = 10;
     private final double TESTING_CONSTANT = 0.1;
+    private final double SPROCKET_RADIUS = 1 ;
     
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -45,6 +47,9 @@ public class Climber extends SubsystemBase{
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
         this.elevatorEncoder = new Encoder(4, 5);
+        elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2 * Math.PI) / 2048.0);
+
+
         climbPIDController = new PIDController(Kp, Ki, Kd);
     }
 
@@ -56,8 +61,8 @@ public class Climber extends SubsystemBase{
             System.out.println("going to position");
         elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
         }
+        elevatorController.setIdleMode(IdleMode.kBrake);
         elevatorController.set(0.0);
-        System.out.println("done");
     }
 
     public void startWinch(double speed){
