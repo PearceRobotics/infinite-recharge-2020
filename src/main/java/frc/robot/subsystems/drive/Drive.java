@@ -23,7 +23,7 @@ public class Drive extends SubsystemBase{
   private double desiredAngle;
 
   //constants
-  private final double P_VALUE = .0014;
+  private final double P_VALUE = .0025;//.0012
   // left gear box CAN ids
   private final int LEFT_BACK_CAN_ID = 11;
   // private final int LEFT_MIDDLE_CAN_ID = 13;
@@ -50,8 +50,8 @@ public class Drive extends SubsystemBase{
 
     differentialDrive = new DifferentialDrive(leftGearboxController, rightGearboxController);
 
-    this.leftGearbox.setRampRate(1);
-    this.rightGearbox.setRampRate(1);
+    this.leftGearbox.setRampRate(.5);
+    this.rightGearbox.setRampRate(.5);
 
     this.leftEncoder = new Encoder(0, 1);
     this.rightEncoder = new Encoder(2, 3);

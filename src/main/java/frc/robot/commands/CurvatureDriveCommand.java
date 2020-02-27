@@ -12,7 +12,7 @@ public class CurvatureDriveCommand extends CommandBase {
 
     //constants
     private final double DEADZONE = 0.2;
-    private final double TURN_CONSTANT = 0.5;
+    private final double TURN_CONSTANT = .5;
   
     public CurvatureDriveCommand(Controls controls, Drive drive) {
         this.controls = controls;
@@ -32,10 +32,10 @@ public class CurvatureDriveCommand extends CommandBase {
             double throttle = controls.getLeftY(DEADZONE);
             double turn = controls.getRightX(DEADZONE);
             if(Math.abs(turn) < DEADZONE || Math.abs(throttle) < DEADZONE){
-                drive.arcadeDrive(throttle, turn);
+                drive.arcadeDrive(throttle*.8, turn *.75);
             }
         else{ 
-            drive.curvatureDrive(-throttle, turn * TURN_CONSTANT, false);
+            drive.curvatureDrive(-(throttle*.8), turn * TURN_CONSTANT, false);
             }
     }
 }

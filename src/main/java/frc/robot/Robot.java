@@ -154,9 +154,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     setDriveMode();
     CommandScheduler.getInstance().run();
-    if (controls.getLeftTrigger()) {
+   /* if (controls.getLeftTrigger()) {
       indexerController.outtake();
-    }
+    }*/
   }
 
   /**
