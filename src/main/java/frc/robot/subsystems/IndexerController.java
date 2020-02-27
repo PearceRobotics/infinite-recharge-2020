@@ -6,6 +6,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import io.github.oblarg.oblog.annotations.Config;
 
 public class IndexerController {
+
+    private final int SPARK_550_MAXAMPS = 30;
+
     private final int CAN_ID = 8;
 
     private CANSparkMax controller;
@@ -14,6 +17,8 @@ public class IndexerController {
 
     public IndexerController() {
         this.controller = new CANSparkMax(CAN_ID, MotorType.kBrushless);
+
+        this.controller.setSmartCurrentLimit(SPARK_550_MAXAMPS);
     }
 
     public void intake() {
