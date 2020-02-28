@@ -48,6 +48,7 @@ public class Climber extends SubsystemBase{
         this.elevatorEncoder = new Encoder(4, 5);
         elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2 * Math.PI) / (4* (2048.0)));
 
+        this.elevatorController.set //FIX THIS
 
         climbPIDController = new PIDController(Kp, Ki, Kd);
     }
@@ -56,10 +57,16 @@ public class Climber extends SubsystemBase{
         System.out.println("starting climbing code");
         setClimberPIDSetpoint(position);
         setClimberPIDTolerance();
-        while(climbPIDController.atSetpoint() == false){
-            System.out.println("going to position");
-            setElevatorSpeed(position);
+        while(elevatorEncoder.getDistance() < position)
+        {
+            this.elevatorController.set
         }
+        // while(climbPIDController.atSetpoint() == false){
+        //     System.out.println("going to position");
+        //     setElevatorSpeed(position);
+        // }
+
+        System.out.println("at position " + this.elevatorEncoder.getDistance());
         elevatorController.setIdleMode(IdleMode.kBrake);
         elevatorController.set(0.0);
     }

@@ -23,6 +23,6 @@ public class OperatorInputs {
     controls.getJoystickAButton().whenPressed(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
         hopperController, indexerController));
      /* controls.getJoystickAButton().whenPressed(new IndexerIntakeCommand(indexerController));*/
-    controls.getJoystickYButton().whileHeld(new IndexerOutakeCommand(indexerController));
+    //controls.getJoystickYButton().whileHeld(new IndexerOutakeCommand(indexerController));
   }
 }
