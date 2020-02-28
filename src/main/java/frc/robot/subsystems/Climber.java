@@ -54,14 +54,25 @@ public class Climber extends SubsystemBase{
 
     public void gotoElevatorPosition(double position, double speed){
         System.out.println("starting climbing code");
-        climbPIDController.setSetpoint(position);
-        climbPIDController.setTolerance(TOLERANCE);
+        setClimberPIDSetpoint(position);
+        setClimberPIDTolerance();
         while(climbPIDController.atSetpoint() == false){
             System.out.println("going to position");
-        elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
+            setElevatorSpeed(position);
         }
         elevatorController.setIdleMode(IdleMode.kBrake);
         elevatorController.set(0.0);
+    }
+    public void setClimberPIDSetpoint(double position){
+        climbPIDController.setSetpoint(position);
+    }
+
+    public void setClimberPIDTolerance(){
+        climbPIDController.setTolerance(TOLERANCE);
+    }
+
+    public void setElevatorSpeed(double position){
+        elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
     }
 
 
