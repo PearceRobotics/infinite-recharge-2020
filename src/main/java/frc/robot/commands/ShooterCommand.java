@@ -38,7 +38,6 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println("In shooterCommand");
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
         shooterSpeedController
@@ -73,7 +72,6 @@ public class ShooterCommand extends CommandBase {
         indexerController.stop();
         hopperController.stop();
         shooterSpeedController.setLaunchSpeed(0.0);
-        System.out.println("shooterInterrupted");
     }
 
     // Use this for the speed finding algorithm
