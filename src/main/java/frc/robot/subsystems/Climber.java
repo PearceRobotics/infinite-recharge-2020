@@ -36,7 +36,7 @@ public class Climber extends SubsystemBase{
     private final double Kd = 0.0;
     private final double TOLERANCE = 10;
     private final double TESTING_CONSTANT = 0.1;
-    private final double SPROCKET_RADIUS = 1 ;
+    private final double SPROCKET_RADIUS = .6 ;
     
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -46,7 +46,7 @@ public class Climber extends SubsystemBase{
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
         this.elevatorEncoder = new Encoder(4, 5);
-        elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2 * Math.PI) / 2048.0);
+        elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2 * Math.PI) / (4* (2048.0)));
 
 
         climbPIDController = new PIDController(Kp, Ki, Kd);
