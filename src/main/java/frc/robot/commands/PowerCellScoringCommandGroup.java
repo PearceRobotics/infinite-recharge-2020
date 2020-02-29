@@ -5,7 +5,6 @@ import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
-import frc.robot.subsystems.vision.Limelight;
 
 /**
  * A complex scoring command that drives forward, aims the robot to the target
@@ -13,9 +12,9 @@ import frc.robot.subsystems.vision.Limelight;
  */
 public class PowerCellScoringCommandGroup extends SequentialCommandGroup {
 
-    public PowerCellScoringCommandGroup(Drive drive, Limelight limelight, ShooterSpeedController shooterSpeedController,
+    public PowerCellScoringCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController,
             HopperController hopperController, IndexerController indexerController) {
-        addCommands(new TurnToTopTargetCommand(drive, limelight),
+        addCommands(new TurnToTopTargetCommand(drive),
                 new ShooterCommand(shooterSpeedController, hopperController, indexerController));
         addRequirements(drive);
     }

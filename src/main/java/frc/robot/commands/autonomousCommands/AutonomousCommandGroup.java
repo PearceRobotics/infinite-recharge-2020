@@ -8,6 +8,9 @@
 package frc.robot.commands.autonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.TurnToTopTargetCommand;
+import frc.robot.subsystems.HopperController;
+import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 
@@ -16,10 +19,11 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
  */
 public class AutonomousCommandGroup extends SequentialCommandGroup {
 
-    public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooter, double distance, double maxSpeed, double pValue){
-        addCommands(new AutonomousShooterCommand(drive, shooter),
-                new DriveForwardCommand(distance, maxSpeed, drive, pValue));
+    public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, IndexerController indexerController, double distance, double maxSpeed){
+        addCommands( new TurnToTopTargetCommand(drive),
+                new AutonomousShooterCommand(drive, shooterSpeedController, hopperController, indexerController),
+                new DriveForwardCommand(distance, maxSpeed, drive));
+                
         addRequirements(drive);
-
     }
 }

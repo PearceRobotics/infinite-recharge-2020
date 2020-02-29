@@ -14,12 +14,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
-import frc.robot.commands.autonomousCommands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
+
+import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 
 public class Robot extends TimedRobot {
 
@@ -39,13 +40,14 @@ public class Robot extends TimedRobot {
   private Limelight limelight;
   private Gyroscope gyro;
   private OperatorInputs operatorInputs;
-  private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
   private ArcadeDriveCommand teleopCommand;
   private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+
+  private AutonomousCommandGroup autonomousCommandGroup;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -85,9 +87,10 @@ public class Robot extends TimedRobot {
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight);
     this.lightsCommand = new LightsCommand(this.lights);
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
     this.teleopCommand = new ArcadeDriveCommand(this.controls, this.drive);
+
+    this.autonomousCommandGroup = new AutonomousCommandGroup();
   }
 
   /**
@@ -127,7 +130,6 @@ public class Robot extends TimedRobot {
     case kDefaultAuto:
     default:
       if (autonomousCommand != null) {
-        autonomousCommand.schedule();
       }
       break;
     }

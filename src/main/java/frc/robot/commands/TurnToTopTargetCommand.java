@@ -20,9 +20,8 @@ public class TurnToTopTargetCommand extends CommandBase {
     private final double MIN_SPEED = 0.05;
     final double KpAIM = 0.025;
 
-    public TurnToTopTargetCommand(Drive drive, Limelight limelight) {
+    public TurnToTopTargetCommand(Drive drive) {
         this.drive = drive;
-        this.limelight = limelight;
     }
 
     // Called just before this Command runs the first time
