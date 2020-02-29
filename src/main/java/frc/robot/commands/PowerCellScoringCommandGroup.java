@@ -15,8 +15,8 @@ public class PowerCellScoringCommandGroup extends SequentialCommandGroup {
 
     public PowerCellScoringCommandGroup(Drive drive, Limelight limelight, ShooterSpeedController shooterSpeedController,
             HopperController hopperController, IndexerController indexerController) {
-     /*   addCommands(new TurnToTopTargetCommand(drive, limelight),
-                new ShooterCommand(shooterSpeedController, hopperController, indexerController));
-        addRequirements(drive);*/
+        addCommands(new TurnToTopTargetCommand(drive, limelight),
+                new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
+        addRequirements(drive);
     }
 }

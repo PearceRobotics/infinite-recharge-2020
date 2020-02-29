@@ -9,31 +9,32 @@ package frc.robot.commands.climbingCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
+
 /**
  * Add your docs here.
  */
-public class elevatorCommand extends CommandBase{
+public class ElevatorMidpointCommand extends CommandBase {
 
     private Climber climber;
-    private double position;
 
-    public elevatorCommand(Climber climber, Double position){
+    public ElevatorMidpointCommand(Climber climber) {
         this.climber = climber;
-        this.position = position;
 
         addRequirements(climber);
     }
+
     @Override
     public void initialize() {
-        climber.setClimberPIDSetpoint(position);
-        climber.setClimberPIDTolerance();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-    climber.setElevatorSpeed(position);
+        this.climber.gotoElevatorMidpoint();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return this.climber.isElevatorAtSetPoint();
     }
 }
-
-

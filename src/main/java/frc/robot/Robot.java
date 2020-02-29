@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight);
+        indexerController, limelight, climber);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
@@ -128,14 +128,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_autonChooser.getSelected();
     switch (m_autoSelected) {
-    case kCustomAuto:
-      break;
-    case kDefaultAuto:
-    default:
-      if (autonomousCommand != null) {
-        autonomousCommand.schedule();
-      }
-      break;
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+      default:
+        if (autonomousCommand != null) {
+          autonomousCommand.schedule();
+        }
+        break;
     }
   }
 
@@ -206,21 +206,21 @@ public class Robot extends TimedRobot {
   public void setDriveMode() {
     m_teleopSelected = m_teleopChooser.getSelected();
     switch (m_teleopSelected) {
-    case kArcadeDrive:
-    if(!(teleopCommand.isScheduled())){
-      curvatureDriveCommand.cancel();
-      teleopCommand.schedule();
-    }
-      break;
-    case kCurvatureDrive:
-    if(!(curvatureDriveCommand.isScheduled())){
-      teleopCommand.cancel();
-      curvatureDriveCommand.schedule();
-    }
-      break;
-    default:
-      curvatureDriveCommand.schedule();
-      break;
+      case kArcadeDrive:
+        if (!(teleopCommand.isScheduled())) {
+          curvatureDriveCommand.cancel();
+          teleopCommand.schedule();
+        }
+        break;
+      case kCurvatureDrive:
+        if (!(curvatureDriveCommand.isScheduled())) {
+          teleopCommand.cancel();
+          curvatureDriveCommand.schedule();
+        }
+        break;
+      default:
+        curvatureDriveCommand.schedule();
+        break;
     }
   }
 }
