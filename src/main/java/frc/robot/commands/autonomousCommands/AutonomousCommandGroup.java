@@ -8,7 +8,7 @@
 package frc.robot.commands.autonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.TurnToTopTargetCommand;
+import frc.robot.commands.powerCellScoringCommands.TurnToTopTargetCommand;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
@@ -23,7 +23,7 @@ public class AutonomousCommandGroup extends SequentialCommandGroup {
         addCommands( new TurnToTopTargetCommand(drive),
                 new AutonomousShooterCommand(drive, shooterSpeedController, hopperController, indexerController),
                 new DriveForwardCommand(distance, maxSpeed, drive));
-                
+
         addRequirements(drive);
     }
 }

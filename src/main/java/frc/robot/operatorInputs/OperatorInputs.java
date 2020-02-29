@@ -1,8 +1,8 @@
 package frc.robot.operatorInputs;
 
-import frc.robot.commands.GyroTurnCommand;
-import frc.robot.commands.PowerCellScoringCommandGroup;
-import frc.robot.commands.ReorientToFieldCommand;
+import frc.robot.commands.drivingCommands.GyroTurnCommand;
+import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
+import frc.robot.commands.drivingCommands.ReorientToFieldCommand;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;

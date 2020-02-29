@@ -12,7 +12,6 @@ import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
-import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.shooter.ShooterMath;
 
 /**
@@ -20,7 +19,6 @@ import frc.robot.subsystems.shooter.ShooterMath;
  */
 public class AutonomousShooterCommand extends CommandBase{
 
-    private Limelight limelight;
     private Drive drive;
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
