@@ -20,7 +20,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 /**
  * Add your docs here.
  */
-public class Climber extends SubsystemBase{
+public class Climber extends SubsystemBase {
 
     private CANSparkMax winchController;
     private CANSparkMax elevatorController;
@@ -34,10 +34,10 @@ public class Climber extends SubsystemBase{
     private final double Kp = 0.5;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
-    private final double TOLERANCE = 10;
+    private final double TOLERANCE = 10.0; // in pulses? TODO
     private final double TESTING_CONSTANT = 0.1;
-    private final double SPROCKET_RADIUS = .6 ;
-    
+    private final double SPROCKET_RADIUS = 0.6;
+
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
     public Climber() {
@@ -46,48 +46,47 @@ public class Climber extends SubsystemBase{
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
         this.elevatorEncoder = new Encoder(4, 5);
-        elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2 * Math.PI) / (4* (2048.0)));
-
-        this.elevatorController.set //FIX THIS
+        this.elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2.0 * Math.PI) / 2048.0);
 
         climbPIDController = new PIDController(Kp, Ki, Kd);
     }
 
-    public void gotoElevatorPosition(double position, double speed){
+    public void gotoElevatorPosition(double position) {
         System.out.println("starting climbing code");
+
+        System.out.println("elevator is at " + elevatorEncoder.getDistance());
+
         setClimberPIDSetpoint(position);
         setClimberPIDTolerance();
-        while(elevatorEncoder.getDistance() < position)
-        {
-            this.elevatorController.set
+        while (elevatorEncoder.getDistance() < position) {
+            System.out.println("going to position " + position);
+            double speed = TESTING_CONSTANT * (climbPIDController.calculate(elevatorEncoder.getDistance(),
+                    (climbPIDController.calculate(position))));
+            System.out.println("at speed " + speed);
+            setElevatorSpeed(speed);
         }
-        // while(climbPIDController.atSetpoint() == false){
-        //     System.out.println("going to position");
-        //     setElevatorSpeed(position);
-        // }
 
-        System.out.println("at position " + this.elevatorEncoder.getDistance());
         elevatorController.setIdleMode(IdleMode.kBrake);
         elevatorController.set(0.0);
     }
-    public void setClimberPIDSetpoint(double position){
+
+    public void setClimberPIDSetpoint(double position) {
         climbPIDController.setSetpoint(position);
     }
 
-    public void setClimberPIDTolerance(){
+    public void setClimberPIDTolerance() {
         climbPIDController.setTolerance(TOLERANCE);
     }
 
-    public void setElevatorSpeed(double position){
-        elevatorController.set(TESTING_CONSTANT*(climbPIDController.calculate(elevatorEncoder.getDistance(),(climbPIDController.calculate(position)))));
+    public void setElevatorSpeed(double speed) {
+        elevatorController.set(speed);
     }
 
-
-    public void startWinch(double speed){
+    public void startWinch(double speed) {
         winchController.set(speed);
     }
 
-    public void getFlexSensorPosition(){
+    public void getFlexSensorPosition() {
         double flexSensorPosition = climbingFlexSensor.get();
         System.out.println("flex Sensor: " + flexSensorPosition);
     }

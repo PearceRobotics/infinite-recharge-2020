@@ -50,8 +50,10 @@ public class Robot extends TimedRobot {
 
   private double pValue = 0.2;
   private double maxSpeed;
-  private double elevatorHeight;
   private double distance = 36.0;
+
+  //
+  private double elevatorHeight = 10.0; // height for elevator to move to, in inches
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -132,9 +134,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-  //  if (teleopCommand != null) {
-  //    teleopCommand.schedule();
-  //  }
+    // if (teleopCommand != null) {
+    // teleopCommand.schedule();
+    // }
   }
 
   // use this to override the algorithm and just use a speed
@@ -147,8 +149,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     CommandScheduler.getInstance().run();
-    if(controls.getYButton()){
-      climber.gotoElevatorPosition(elevatorHeight, .5);
+    if (controls.getYButton()) {
+      climber.gotoElevatorPosition(elevatorHeight);
     }
   }
 
@@ -161,8 +163,8 @@ public class Robot extends TimedRobot {
     climber.getFlexSensorPosition();
   }
 
-  @Config(name = "Elevator Height in", defaultValueNumeric = 24)
-  public void setElevatorHeightInches(double elevatorHeight){
+  @Config(name = "Elevator Height", defaultValueNumeric = 10.0)
+  public void setElevatorHeightInches(double elevatorHeight) {
     this.elevatorHeight = elevatorHeight;
   }
 
