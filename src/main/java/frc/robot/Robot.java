@@ -67,13 +67,12 @@ public class Robot extends TimedRobot {
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
     this.limelight = new Limelight();
-    this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight);
-    this.lightsCommand = new LightsCommand(this.lights);
+    this.lightsCommand = new LightsCommand(this.lights, this.limelight);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
     this.teleopCommand = new TeleopCommand(this.controls, this.drive);
   }
