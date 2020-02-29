@@ -24,13 +24,14 @@ public class ElevatorUpCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() {        
+        this.climber.gotoElevatorUppoint();
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        this.climber.gotoElevatorUppoint();
+        //do nothing
     }
 
     @Override

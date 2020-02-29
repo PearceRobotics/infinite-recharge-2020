@@ -56,11 +56,11 @@ public class Robot extends TimedRobot {
   private double indexerSpeed = 0.3;
 
   private double pValue = 0.2;
-  private double maxSpeed;
+  private double maxSpeed = 0.75;
   private double distance = 36.0;
 
   //
-  private double elevatorHeight = 10.0; // height for elevator to move to, in inches
+  private double elevatorHeight = 19.0; // height for elevator to move to, in inches
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
   }
 
   // use this to override the algorithm and just use a speed
-  @Config
+  @Config(name = "Override Speed", defaultValueNumeric = 1330.0)
   public void setOverrideSpeed(final double overrideSpeed) {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
@@ -160,9 +160,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     setDriveMode();
     CommandScheduler.getInstance().run();
-    if (controls.getYButton()) {
-      climber.gotoElevatorPosition(elevatorHeight);
-    }
+    // if (controls.getYButton()) {
+    //   System.out.println("Y button pressed");
+    //   climber.gotoElevatorPosition(elevatorHeight);
+    // }
   }
 
   /**
@@ -174,7 +175,7 @@ public class Robot extends TimedRobot {
     climber.getFlexSensorPosition();
   }
 
-  @Config(name = "Elevator Height", defaultValueNumeric = 10.0)
+  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
   public void setElevatorHeightInches(double elevatorHeight) {
     this.elevatorHeight = elevatorHeight;
   }

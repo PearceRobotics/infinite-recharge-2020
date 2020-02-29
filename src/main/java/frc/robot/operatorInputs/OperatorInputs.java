@@ -4,6 +4,7 @@ import frc.robot.commands.GyroTurnCommand;
 import frc.robot.commands.PowerCellScoringCommandGroup;
 import frc.robot.commands.ReorientToFieldCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
+import frc.robot.commands.climbingCommands.ElevatorUpCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
@@ -22,8 +23,7 @@ public class OperatorInputs {
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
     controls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
         hopperController, indexerController));
-    // controls.getJoystickYButton().whenPressed(new ElevatorUpCommand(climber));
-    // //TODO reenable
+    controls.getJoystickYButton().whenPressed(new ElevatorUpCommand(climber));
     // controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
     // //TODO reenable
   }
