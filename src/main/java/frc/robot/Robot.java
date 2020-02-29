@@ -90,10 +90,10 @@ public class Robot extends TimedRobot {
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
     this.teleopCommand = new ArcadeDriveCommand(this.controls, this.drive);
 
-    this.autonomousCommandGroup = new AutonomousCommandGroup();
+    this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController, indexerController, distance, maxSpeed);
   }
 
-  /**
+  /** 
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
    * teleoperated and test.
@@ -129,7 +129,8 @@ public class Robot extends TimedRobot {
       break;
     case kDefaultAuto:
     default:
-      if (autonomousCommand != null) {
+      if (autonomousCommandGroup != null) {
+        autonomousCommandGroup.schedule();
       }
       break;
     }
@@ -177,19 +178,11 @@ public class Robot extends TimedRobot {
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
   public void setAutonStraightDistance(final double distance) {
     this.distance = distance;
-    this.autonomousCommand.setDistance(this.distance);
   }
 
   @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
   public void setAutonMaxSpeedForDriveStraight(final double maxSpeed) {
     this.maxSpeed = maxSpeed;
-    this.autonomousCommand.setMaxSpeed(this.maxSpeed);
-  }
-
-  @Config(name = "Constant", defaultValueNumeric = .1)
-  public void setDriveStraightPValue(final double pValue) {
-    this.pValue = pValue;
-    this.autonomousCommand.setPValue(this.pValue);
   }
 
   public void setDriveMode() {

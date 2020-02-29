@@ -18,7 +18,7 @@ public class OperatorInputs {
     controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
     controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
-    controls.getJoystickAButton().whenPressed(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
+    controls.getJoystickAButton().whenPressed(new PowerCellScoringCommandGroup(drive, shooterSpeedController,
         hopperController, indexerController));
   }
 }
