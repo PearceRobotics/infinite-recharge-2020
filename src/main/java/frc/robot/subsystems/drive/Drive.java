@@ -73,6 +73,10 @@ public class Drive extends SubsystemBase{
     differentialDrive.curvatureDrive(throttle, curvature, isQuickTurn);
   }
 
+  public void notStraightArcade(double throttle, double turnModifier){
+    differentialDrive.arcadeDrive(throttle, turnModifier);
+  }
+
   public void arcadeDrive(double throttle, double turnModifer) { //already tested, gyro is getting correct angle
     if(turnModifer == 0.0 && throttle != 0.0) { //says if straight is zero and turn is not zero
       if(this.desiredAngle == Integer.MAX_VALUE) { //means robot just started driving straight
