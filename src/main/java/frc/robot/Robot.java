@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
 
     m_teleopChooser.setDefaultOption("Curvature Drive", kCurvatureDrive);
     m_teleopChooser.addOption("Arcade Drive", kArcadeDrive);
+    m_teleopChooser.addOption("UrNotStraight", kNotStraightArcadeDrive);
     SmartDashboard.putData("Teleop Drive", m_teleopChooser);
 
     Logger.configureLoggingAndConfig(this, false);
