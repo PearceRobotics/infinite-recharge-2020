@@ -13,8 +13,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
 /**
@@ -28,31 +30,32 @@ public class Climber extends SubsystemBase {
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController elevatorPIDController;
 
-    private final int WINCH_CAN_ID = 20;
+    private final int WINCH_CAN_ID = 16;
     private final int ELEVATOR_CAN_ID = 15;
     private final int CLIMBING_FLEX_SENSOR_PORT = 0;
     private final double Kp = 0.1;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
     private final double TOLERANCE = 0.5; // in pulses? TODO
-    private final double TESTING_CONSTANT = 0.25;
+    private final double SLOWING_CONSTANT = -0.25;
     private final double SPROCKET_DIAMETER = 1.273;
 
-    private final double MIDPOINT_POSITION = 5.0;
-    private final double UP_POSITION = 15.0;
-    private final double DOWN_POSITION = 0.0;
+    private final double MIDPOINT_POSITION = 12.0;
+    private final double UP_POSITION = 17.0;
+    private final double DOWN_POSITION = 3.0;
 
     private final int SPARK_550_MAXAMPS = 30;
 
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
     public Climber() {
-        //this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
+        // this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.elevatorController = new CANSparkMax(ELEVATOR_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
         elevatorController.setIdleMode(IdleMode.kBrake);
         this.elevatorEncoder = new Encoder(4, 5);
+        this.elevatorEncoder.setReverseDirection(true);
 
         this.elevatorEncoder.setDistancePerPulse((SPROCKET_DIAMETER * Math.PI) / 2048.0);
 
@@ -60,47 +63,33 @@ public class Climber extends SubsystemBase {
 
         elevatorPIDController = new PIDController(Kp, Ki, Kd);
         elevatorController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
+        setElevatorPIDTolerance();
     }
 
     public void gotoElevatorMidpoint() {
-        gotoElevatorPosition(MIDPOINT_POSITION);
+        setElevatorPIDSetpoint(MIDPOINT_POSITION);
+
     }
 
     public void gotoElevatorUppoint() {
-        gotoElevatorPosition(UP_POSITION);
+        setElevatorPIDSetpoint(UP_POSITION);
     }
 
     public void gotoElevatorDownpoint() {
-        gotoElevatorPosition(DOWN_POSITION);
+        setElevatorPIDSetpoint(DOWN_POSITION);
     }
 
-    public void gotoElevatorPosition(double position) {
-        System.out.println("starting climbing code");
+    @Override
+    public void periodic() {
+        double speed = SLOWING_CONSTANT * elevatorPIDController.calculate(elevatorEncoder.getDistance());
 
-
-        setElevatorPIDSetpoint(position);
-        setElevatorPIDTolerance();
-        
-        System.out.println("going to position " + position);
-        System.out.println("at distance " + elevatorEncoder.getDistance());
-
-        double speed = elevatorPIDController.calculate(elevatorEncoder.getDistance());
-
-System.out.println("calculated first speed " + speed);
-
-int count = 0;
-
-        while (elevatorEncoder.getDistance() < position) {
-            speed = -1.0 * Math.max(0.1, Math.min(1.0, elevatorPIDController.calculate(elevatorEncoder.getDistance())));
-            setElevatorSpeed(speed);
+        if (Math.abs(speed) < 0.15) {
+            speed = speed * 5.0;
         }
 
+        speed = Math.min(0.15, speed);
+        setElevatorSpeed(speed);
 
-
-        System.out.println("elevator speed is at: " + elevatorController.get());
-        System.out.println("got to position " + elevatorEncoder.getDistance());
-
-        setElevatorSpeed(0.0);
     }
 
     public void setElevatorPIDSetpoint(double position) {
@@ -113,6 +102,10 @@ int count = 0;
 
     public boolean isElevatorAtSetPoint() {
         return this.elevatorPIDController.atSetpoint();
+    }
+
+    public boolean isElevatorAtDistance() {
+        return Math.abs(this.elevatorEncoder.getDistance() - this.elevatorPIDController.getSetpoint()) < TOLERANCE;
     }
 
     public void setElevatorPIDTolerance() {
@@ -129,6 +122,5 @@ int count = 0;
 
     public void getFlexSensorPosition() {
         double flexSensorPosition = climbingFlexSensor.get();
-        System.out.println("flex Sensor: " + flexSensorPosition);
     }
 }

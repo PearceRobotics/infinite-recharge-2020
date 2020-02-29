@@ -133,4 +133,12 @@ public class Controls {
     public boolean getLeftTrigger() {
         return joystick.getRawAxis(LEFT_TRIGGER_ID) > 0;
     }
+
+    public JoystickButton getLeftStick(){
+        return leftStickJoystickButton;
+    }
+
+    public JoystickButton getRightStick(){
+        return rightStickJoystickButton;
+    }
 }

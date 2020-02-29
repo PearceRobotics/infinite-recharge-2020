@@ -7,6 +7,7 @@
 
 package frc.robot.commands.climbingCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
@@ -16,6 +17,8 @@ import frc.robot.subsystems.Climber;
 public class ElevatorUpCommand extends CommandBase {
 
     private Climber climber;
+    private double startTime = 0.0;
+    private final double delayTime = 1.0;
 
     public ElevatorUpCommand(Climber climber) {
         this.climber = climber;
@@ -26,6 +29,7 @@ public class ElevatorUpCommand extends CommandBase {
     @Override
     public void initialize() {        
         this.climber.gotoElevatorUppoint();
+        startTime = Timer.getFPGATimestamp();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -36,6 +40,6 @@ public class ElevatorUpCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return this.climber.isElevatorAtSetPoint();
+        return(this.climber.isElevatorAtSetPoint() && (Timer.getFPGATimestamp() - startTime) > delayTime);
     }
 }

@@ -10,7 +10,7 @@ import frc.robot.subsystems.Climber;
 public class ClimbingCommandGroup extends SequentialCommandGroup {
 
     public ClimbingCommandGroup(Climber climber) {
-        addCommands(new ElevatorMidpointCommand(climber)); //, new winchCommand(climber));
+        addCommands(new ElevatorUpCommand(climber), new ElevatorDownCommand(climber)); //, new winchCommand(climber));
         addRequirements(climber);
     }
 }
