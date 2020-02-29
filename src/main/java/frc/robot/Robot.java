@@ -23,15 +23,21 @@ import frc.robot.operatorInputs.OperatorInputs;
 
 public class Robot extends TimedRobot {
 
+  //Pick Autonomous
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
-
+  //Pick Teleoperated
   private static final String kCurvatureDrive = "Cheesy Boi";
   private static final String kArcadeDrive = "Arcade Boi";
   private String m_teleopSelected;
   private final SendableChooser<String> m_teleopChooser = new SendableChooser<>();
+  //Pick Limelight Pipeline
+  private static final String kHighGoal = "High Goal";
+  private static final String kLowGoal = "Low Goal";
+  private String m_pipelineSelected;
+  private final SendableChooser<String> m_pipelineChooser = new SendableChooser<>();
 
   private Drive drive;
   private Controls controls;
@@ -207,6 +213,34 @@ public class Robot extends TimedRobot {
       break;
     default:
       curvatureDriveCommand.schedule();
+      break;
+    }
+  }
+
+  public void setLimelightPipeline() {
+    boolean isHighGoal =true; //default value
+    m_pipelineSelected = m_pipelineChooser.getSelected();
+    switch (m_pipelineSelected) {
+    case kHighGoal:
+      if(!(isHighGoal)){
+
+      }
+      else{
+        //do nothing
+      }
+      isHighGoal = true;
+        break;
+    case kLowGoal:
+    if(isHighGoal){
+
+    }
+    else{
+      //do nothing
+    }
+    isHighGoal = false;
+      break;
+    default:
+     //do nothing
       break;
     }
   }
