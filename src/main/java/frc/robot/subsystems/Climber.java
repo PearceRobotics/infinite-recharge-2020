@@ -33,11 +33,11 @@ public class Climber extends SubsystemBase {
     private final int WINCH_CAN_ID = 16;
     private final int ELEVATOR_CAN_ID = 15;
     private final int CLIMBING_FLEX_SENSOR_PORT = 0;
-    private final double Kp = 0.1;
+    private final double Kp = 0.15;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
     private final double TOLERANCE = 0.5; // in pulses? TODO
-    private final double SLOWING_CONSTANT = -0.25;
+    private final double SLOWING_CONSTANT = -0.35;
     private final double SPROCKET_DIAMETER = 1.273;
 
     private final double MIDPOINT_POSITION = 12.0;
