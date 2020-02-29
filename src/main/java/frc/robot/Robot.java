@@ -17,6 +17,7 @@ import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
+import frc.robot.commands.NotStraightArcadeDriveCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
 
   private static final String kCurvatureDrive = "Cheesy Boi";
   private static final String kArcadeDrive = "Arcade Boi";
+  private static final String kNotStraightArcadeDrive = "UrNotStraight";
   private String m_teleopSelected;
   private final SendableChooser<String> m_teleopChooser = new SendableChooser<>();
 
@@ -41,7 +43,8 @@ public class Robot extends TimedRobot {
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
-  private ArcadeDriveCommand teleopCommand;
+  private ArcadeDriveCommand arcadeDriveCommand;
+  private NotStraightArcadeDriveCommand notStraightArcadeDriveCommand;
   private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
@@ -69,6 +72,7 @@ public class Robot extends TimedRobot {
 
     m_teleopChooser.setDefaultOption("Curvature Drive", kCurvatureDrive);
     m_teleopChooser.addOption("Arcade Drive", kArcadeDrive);
+    m_teleopChooser.addOption("UrNotStraight", kNotStraightArcadeDrive);
     SmartDashboard.putData("Teleop Drive", m_teleopChooser);
 
     Logger.configureLoggingAndConfig(this, false);
@@ -87,7 +91,8 @@ public class Robot extends TimedRobot {
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
-    this.teleopCommand = new ArcadeDriveCommand(this.controls, this.drive);
+    this.notStraightArcadeDriveCommand = new NotStraightArcadeDriveCommand(controls, drive);
+    this.arcadeDriveCommand = new ArcadeDriveCommand(this.controls, this.drive);
   }
 
   /**
@@ -194,15 +199,24 @@ public class Robot extends TimedRobot {
     m_teleopSelected = m_teleopChooser.getSelected();
     switch (m_teleopSelected) {
     case kArcadeDrive:
-    if(!(teleopCommand.isScheduled())){
+    if(!(arcadeDriveCommand.isScheduled())){
       curvatureDriveCommand.cancel();
-      teleopCommand.schedule();
+      notStraightArcadeDriveCommand.cancel();
+      arcadeDriveCommand.schedule();
     }
       break;
     case kCurvatureDrive:
     if(!(curvatureDriveCommand.isScheduled())){
-      teleopCommand.cancel();
+      arcadeDriveCommand.cancel();
+      notStraightArcadeDriveCommand.cancel();
       curvatureDriveCommand.schedule();
+    }
+      break;
+    case kNotStraightArcadeDrive:
+    if(!(notStraightArcadeDriveCommand.isScheduled())){
+      curvatureDriveCommand.cancel();
+      arcadeDriveCommand.cancel();
+      notStraightArcadeDriveCommand.schedule();
     }
       break;
     default:
