@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.subsystems.drive.Drive;
 
-public class TeleopCommand extends CommandBase {
+public class ArcadeDriveCommand extends CommandBase {
 
     private Drive drive;
     private Controls controls;
     private double DEADZONE = 0.2;
   
-    public TeleopCommand(Controls controls, Drive drive) {
+    public ArcadeDriveCommand(Controls controls, Drive drive) {
         this.controls = controls;
         this.drive = drive;
         addRequirements(drive);
