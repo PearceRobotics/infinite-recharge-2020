@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
-import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.autonomousCommands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.ArcadeDriveCommand;
