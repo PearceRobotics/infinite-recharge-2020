@@ -68,7 +68,8 @@ public class AutonomousShooterCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        if(ballsShot == 5) {
+        if(ballsShot == 3) {
+            System.out.println("is finished");
             return true;
         }
         return false;
