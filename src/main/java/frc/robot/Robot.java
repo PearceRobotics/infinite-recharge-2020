@@ -21,6 +21,7 @@ import frc.robot.commands.NotStraightArcadeDriveCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
+import frc.robot.subsystems.Climber;
 
 public class Robot extends TimedRobot {
 
@@ -40,6 +41,7 @@ public class Robot extends TimedRobot {
   private Lights lights;
   private Limelight limelight;
   private Gyroscope gyro;
+  private Climber climber;
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
@@ -57,8 +59,11 @@ public class Robot extends TimedRobot {
   private double indexerSpeed = 0.3;
 
   private double pValue = 0.2;
-  private double maxSpeed;
+  private double maxSpeed = 0.75;
   private double distance = 36.0;
+
+  //
+  private double elevatorHeight = 19.0; // height for elevator to move to, in inches
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -78,6 +83,7 @@ public class Robot extends TimedRobot {
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
+    this.climber = new Climber();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
@@ -87,7 +93,7 @@ public class Robot extends TimedRobot {
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight);
+        indexerController, limelight, climber);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
@@ -127,14 +133,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_autonChooser.getSelected();
     switch (m_autoSelected) {
-    case kCustomAuto:
-      break;
-    case kDefaultAuto:
-    default:
-      if (autonomousCommand != null) {
-        autonomousCommand.schedule();
-      }
-      break;
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+      default:
+        if (autonomousCommand != null) {
+          autonomousCommand.schedule();
+        }
+        break;
     }
   }
 
@@ -149,7 +155,7 @@ public class Robot extends TimedRobot {
   }
 
   // use this to override the algorithm and just use a speed
-  @Config
+  @Config(name = "Override Speed", defaultValueNumeric = 1330.0)
   public void setOverrideSpeed(final double overrideSpeed) {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
@@ -159,9 +165,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     setDriveMode();
     CommandScheduler.getInstance().run();
-    if (controls.getLeftTrigger()) {
-      indexerController.outtake();
-    }
+    // if (controls.getYButton()) {
+    //   System.out.println("Y button pressed");
+    //   climber.gotoElevatorPosition(elevatorHeight);
+    // }
   }
 
   /**
@@ -169,6 +176,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    CommandScheduler.getInstance().run();
+    climber.getFlexSensorPosition();
+  }
+
+  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
+  public void setElevatorHeightInches(double elevatorHeight) {
+    this.elevatorHeight = elevatorHeight;
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
