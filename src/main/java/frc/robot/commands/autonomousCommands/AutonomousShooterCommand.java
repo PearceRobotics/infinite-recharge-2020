@@ -61,6 +61,7 @@ public class AutonomousShooterCommand extends CommandBase{
             else{
             this.indexerController.intake();
             this.hopperController.start();
+            }
         }
 
         // turn off the indexer and hopper
