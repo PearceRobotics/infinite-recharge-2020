@@ -4,6 +4,9 @@ Source code for 2020 FRC season - Infinite Recharge
 
 [![Build Status](https://travis-ci.org/PearceRobotics/infinite-recharge-2020.svg?branch=master)](https://travis-ci.org/PearceRobotics/infinite-recharge-2020)
 
+### Controls
+![controls](images/controls.png)
+
 ### Getting Started
 - Install [GitHub desktop](https://desktop.github.com/) to push and pull from GitHub
 - Install [Java JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html) and ensure `java -version` shows you are using JDK 11 (note you *will* need to set your java path to JDK 11)

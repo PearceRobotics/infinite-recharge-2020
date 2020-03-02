@@ -17,6 +17,18 @@ public class AutonomousCommand extends CommandBase {
         this.drive = drive;
     }
 
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public void setPValue(double pValue) {
+        this.pValue = pValue;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
