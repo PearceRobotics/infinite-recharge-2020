@@ -26,6 +26,7 @@ public class AutonomousShooterCommand extends CommandBase{
     //variables
     private double ballsShot = 0;
     private double distanceToGoal = 149.0; 
+    private boolean hasBall = false;
     //constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -53,6 +54,11 @@ public class AutonomousShooterCommand extends CommandBase{
          if (shooterSpeedController.isAtSpeed()) {
              System.out.println("Shot Balls" + ballsShot);
             // turn on the indexer and hopper
+            if(hasBall){
+                this.indexerController.intake();
+                this.hopperController.stop();
+            }
+            else{
             this.indexerController.intake();
             this.hopperController.start();
         }
