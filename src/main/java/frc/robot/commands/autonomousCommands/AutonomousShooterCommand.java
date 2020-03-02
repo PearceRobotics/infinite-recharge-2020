@@ -41,7 +41,7 @@ public class AutonomousShooterCommand extends CommandBase{
 
     @Override
     public void initialize(){
-
+        System.out.println("Shooter initialized");
     }
 
     @Override
@@ -51,6 +51,7 @@ public class AutonomousShooterCommand extends CommandBase{
         for(int ballsShot = 0 ; ballsShot < 3 ; ballsShot ++){
          // Make sure the shooter is at speed before loading a power cell
          if (shooterSpeedController.isAtSpeed()) {
+             System.out.println("Shot Balls" + ballsShot);
             // turn on the indexer and hopper
             this.indexerController.intake();
             this.hopperController.start();

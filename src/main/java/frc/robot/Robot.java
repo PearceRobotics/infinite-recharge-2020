@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
     this.teleopCommand = new ArcadeDriveCommand(this.controls, this.drive);
 
-    this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController, indexerController, distance, maxSpeed);
+    this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController, indexerController, limelight, distance, maxSpeed);
   }
 
   /** 

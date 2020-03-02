@@ -12,6 +12,7 @@ import frc.robot.commands.powerCellScoringCommands.TurnToTopTargetCommand;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 
 /**
@@ -19,8 +20,8 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
  */
 public class AutonomousCommandGroup extends SequentialCommandGroup {
 
-    public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, IndexerController indexerController, double distance, double maxSpeed){
-        addCommands( new TurnToTopTargetCommand(drive),
+    public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, IndexerController indexerController, Limelight limelight, double distance, double maxSpeed){
+        addCommands( new TurnToTopTargetCommand(drive, limelight),
                 new AutonomousShooterCommand(drive, shooterSpeedController, hopperController, indexerController),
                 new DriveForwardCommand(distance, maxSpeed, drive));
 

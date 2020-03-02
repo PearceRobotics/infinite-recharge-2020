@@ -26,6 +26,7 @@ public class DriveForwardCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
+        System.out.println("driving forward");
         drive.setBrakeMode();
         drive.resetEncoders();
     }

@@ -20,13 +20,15 @@ public class TurnToTopTargetCommand extends CommandBase {
     private final double MIN_SPEED = 0.05;
     final double KpAIM = 0.025;
 
-    public TurnToTopTargetCommand(Drive drive) {
+    public TurnToTopTargetCommand(Drive drive, Limelight limelight) {
         this.drive = drive;
+        this.limelight = limelight;
     }
 
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
+        System.out.println("turning to top target");
         count = 0;
     }
 
@@ -52,6 +54,7 @@ public class TurnToTopTargetCommand extends CommandBase {
         if (limelight.hasValidTarget() && Math.abs(limelight.getHorizontalTargetOffset()) <= TOP_GOAL_DEADBAND) {
             ++count;
             if (count >= COUNT_ON_TARGET) {
+                System.out.println("Has turned to top target");
                 return true;
             }
         }
