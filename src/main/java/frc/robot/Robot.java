@@ -15,7 +15,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
-import frc.robot.commands.DistanceSensorDetectorCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.NotStraightArcadeDriveCommand;
@@ -23,6 +22,7 @@ import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DistanceSensorDetector;
 
 public class Robot extends TimedRobot {
 
@@ -49,10 +49,10 @@ public class Robot extends TimedRobot {
   private ArcadeDriveCommand arcadeDriveCommand;
   private NotStraightArcadeDriveCommand notStraightArcadeDriveCommand;
   private LightsCommand lightsCommand;
-  private DistanceSensorDetectorCommand distanceSensorDetectorCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+  private DistanceSensorDetector distanceSensorDetector;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -91,12 +91,11 @@ public class Robot extends TimedRobot {
     this.lights = new Lights(9, 60, 50);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
-    this.distanceSensorDetectorCommand = new DistanceSensorDetectorCommand();
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber);
+        indexerController, limelight, climber, distanceSensorDetector);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
@@ -118,7 +117,6 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
-    distanceSensorDetectorCommand.schedule();
   }
 
   /**

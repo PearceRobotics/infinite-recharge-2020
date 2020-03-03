@@ -12,7 +12,7 @@ public class CurvatureDriveCommand extends CommandBase {
 
     //constants
     private final double DEADZONE = 0.2;
-    private final double TURN_CONSTANT = .5;
+    private final double TURN_CONSTANT = 0.5;
   
     public CurvatureDriveCommand(Controls controls, Drive drive) {
         this.controls = controls;
