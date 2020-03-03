@@ -53,7 +53,8 @@ public class Robot extends TimedRobot {
   private IndexerController indexerController;
 
   // Constants
-  private final int JOYSTICK_PORT = 1;
+  private final int DRIVE_JOYSTICK_PORT = 1;
+  private final int OPERATOR_JOYSTICK_PORT = 2;
 
   private double overrideSpeed = 1330.0;
   private double indexerSpeed = 0.3;
@@ -85,7 +86,7 @@ public class Robot extends TimedRobot {
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
-    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+    this.controls = new Controls(new Joystick(DRIVE_JOYSTICK_PORT), new Joystick(OPERATOR_JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);

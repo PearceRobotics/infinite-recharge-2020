@@ -24,6 +24,6 @@ public class ArcadeDriveCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        drive.arcadeDrive(controls.getLeftY(DEADZONE), controls.getRightX(DEADZONE));
+        drive.arcadeDrive(controls.getDriveLeftY(DEADZONE), controls.getDriveRightX(DEADZONE));
     }
 }

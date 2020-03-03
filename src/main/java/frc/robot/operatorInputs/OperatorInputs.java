@@ -18,14 +18,14 @@ public class OperatorInputs {
 
   public OperatorInputs(Controls controls, Drive drive, Gyroscope gyro, ShooterSpeedController shooterSpeedController,
       HopperController hopperController, IndexerController indexerController, Limelight limelight, Climber climber) {
-    controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
-    controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
-    controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
-    controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
-    controls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
+    controls.getDriveJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
+    controls.getDriveRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
+    controls.getDriveLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
+    controls.getDriveJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
+    controls.getOperatorJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
         hopperController, indexerController));
-    controls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
-    controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
+    controls.getOperatorJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
+    controls.getOperatorLeftStick().whenPressed(new ClimbingCommandGroup(climber));
     // //TODO reenable
   }
 }
