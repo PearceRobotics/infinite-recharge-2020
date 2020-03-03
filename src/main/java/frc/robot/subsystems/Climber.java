@@ -13,8 +13,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
 /**
@@ -28,19 +30,21 @@ public class Climber extends SubsystemBase {
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController elevatorPIDController;
 
-    private final int WINCH_CAN_ID = 20;
-    private final int ELEVATOR_CAN_ID = 6;
+    private final int WINCH_CAN_ID = 16;
+    private final int ELEVATOR_CAN_ID = 15;
     private final int CLIMBING_FLEX_SENSOR_PORT = 0;
-    private final double Kp = 0.5;
+    private final double Kp = 0.15;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
-    private final double TOLERANCE = 10.0; // in pulses? TODO
-    private final double TESTING_CONSTANT = 0.1;
-    private final double SPROCKET_RADIUS = 0.6;
+    private final double TOLERANCE = 0.5; // in pulses? TODO
+    private final double SLOWING_CONSTANT = -0.35;
+    private final double SPROCKET_DIAMETER = 1.273;
 
-    private final double MIDPOINT_POSITION = 5.0;
-    private final double UP_POSITION = 10.0;
-    private final double DOWN_POSITION = 0.0;
+    private final double MIDPOINT_POSITION = 12.0;
+    private final double UP_POSITION = 17.0;
+    private final double DOWN_POSITION = 3.0;
+
+    private final int SPARK_550_MAXAMPS = 30;
 
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -98,6 +102,10 @@ public class Climber extends SubsystemBase {
         return this.elevatorPIDController.atSetpoint();
     }
 
+    public boolean isElevatorAtDistance() {
+        return Math.abs(this.elevatorEncoder.getDistance() - this.elevatorPIDController.getSetpoint()) < TOLERANCE;
+    }
+
     public void setElevatorPIDTolerance() {
         elevatorPIDController.setTolerance(TOLERANCE);
     }
@@ -112,6 +120,5 @@ public class Climber extends SubsystemBase {
 
     public void getFlexSensorPosition() {
         double flexSensorPosition = climbingFlexSensor.get();
-        System.out.println("flex Sensor: " + flexSensorPosition);
     }
 }
