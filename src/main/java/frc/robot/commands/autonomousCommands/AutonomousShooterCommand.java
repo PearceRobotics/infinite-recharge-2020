@@ -24,11 +24,14 @@ public class AutonomousShooterCommand extends CommandBase{
     private HopperController hopperController;
     private IndexerController indexerController;
     //variables
-    private double ballsShot = 0;
-    private double distanceToGoal = 149.0; 
+    private double distanceToGoal = 149.0;
     private boolean hasBall = false;
+    private double startTime = -1.0;
+    private int ballsShot = 0;
     //constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
+    private final double LAUNCH_TIME = 0.5;
+    private final double AUTONOMOUS_SPEED = .6;
 
     public AutonomousShooterCommand(Drive drive, ShooterSpeedController shooterSpeedController,
     HopperController hopperController, IndexerController indexerController){
@@ -47,11 +50,10 @@ public class AutonomousShooterCommand extends CommandBase{
 
     @Override
     public void execute(){
-        shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
-
-        for(int ballsShot = 0 ; ballsShot < 3 ; ballsShot ++){
+      //  shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
+      shooterSpeedController.setLaunchSpeed(AUTONOMOUS_SPEED);
          // Make sure the shooter is at speed before loading a power cell
-         if (shooterSpeedController.isAtSpeed()) {
+         if (shooterSpeedController.isAtSpeed()){
              System.out.println("Shot Balls" + ballsShot);
             // turn on the indexer and hopper
             if(hasBall){
@@ -62,20 +64,19 @@ public class AutonomousShooterCommand extends CommandBase{
             this.indexerController.intake();
             this.hopperController.start();
             }
-        }
 
         // turn off the indexer and hopper
-        else {
+        }else{
             // turn off the indexer and hopper
             indexerController.stop();
             hopperController.stop();
         }
-        }
+    
     }
 
     @Override
     public boolean isFinished() {
-        if(ballsShot == 3) {
+        if(ballsShot >= 3) {
             System.out.println("is finished");
             return true;
         }
@@ -85,6 +86,7 @@ public class AutonomousShooterCommand extends CommandBase{
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-
+        indexerController.stop();
+        hopperController.stop();
     }
 }

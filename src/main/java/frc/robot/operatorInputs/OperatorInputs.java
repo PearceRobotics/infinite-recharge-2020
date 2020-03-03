@@ -1,8 +1,8 @@
 package frc.robot.operatorInputs;
 
-import frc.robot.commands.GyroTurnCommand;
-import frc.robot.commands.PowerCellScoringCommandGroup;
-import frc.robot.commands.ReorientToFieldCommand;
+import frc.robot.commands.drivingCommands.GyroTurnCommand;
+import frc.robot.commands.drivingCommands.ReorientToFieldCommand;
+import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
 import frc.robot.commands.climbingCommands.ElevatorUpCommand;

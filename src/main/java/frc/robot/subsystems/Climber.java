@@ -54,8 +54,8 @@ public class Climber extends SubsystemBase {
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
         this.elevatorEncoder = new Encoder(4, 5);
-        this.elevatorEncoder.setDistancePerPulse((SPROCKET_RADIUS * 2.0 * Math.PI) / 2048.0);
-
+        this.elevatorEncoder.setDistancePerPulse((SPROCKET_DIAMETER * Math.PI) / 2048.0);
+        this.elevatorController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
         elevatorPIDController = new PIDController(Kp, Ki, Kd);
     }
 
@@ -81,7 +81,7 @@ public class Climber extends SubsystemBase {
 
         while (elevatorEncoder.getDistance() < position) {
             System.out.println("going to position " + position);
-            double speed = TESTING_CONSTANT * (elevatorPIDController.calculate(elevatorEncoder.getDistance(),
+            double speed = (elevatorPIDController.calculate(elevatorEncoder.getDistance(),
                     (elevatorPIDController.calculate(position))));
             System.out.println("at speed " + speed);
             setElevatorSpeed(speed);
