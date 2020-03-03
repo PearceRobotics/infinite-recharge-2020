@@ -92,6 +92,7 @@ public class Robot extends TimedRobot {
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
+    this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
