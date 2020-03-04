@@ -33,6 +33,11 @@ public class IndexerController extends SubsystemBase{
         this.controller.set(-speed);
     }
 
+    public void getSpeed(){
+        this.controller.get();
+    })
+    
+
     @Config
     public void setSpeed(double speed){
         this.speed = speed;

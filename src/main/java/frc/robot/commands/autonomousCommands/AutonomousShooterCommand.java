@@ -28,9 +28,6 @@ public class AutonomousShooterCommand extends CommandBase{
     private IndexerController indexerController;
     private DistanceSensorDetector distanceSensor;
 
-    //Commands
-    private IndexerIntakeCommand indexerIntakeCommand;
-
     //variables
     private double ballsShot = 0;
     private double startTime = 0;
@@ -44,18 +41,17 @@ public class AutonomousShooterCommand extends CommandBase{
     private final double AUTONOMOUS_SPEED = .6;
 
     public AutonomousShooterCommand(Drive drive, ShooterSpeedController shooterSpeedController,
-    HopperController hopperController, IndexerIntakeCommand indexerIntakeCommand){
+    HopperController hopperController, IndexerController indexerController){
         this.drive = drive;
+        this.indexerController = indexerController;
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
-        this.indexerIntakeCommand = indexerIntakeCommand;
 
         addRequirements(drive);
     }
 
     @Override
     public void initialize(){
-        System.out.println("Shooter initialized");
     }
 
     @Override
@@ -63,22 +59,22 @@ public class AutonomousShooterCommand extends CommandBase{
         shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
 
         if(shooterSpeedController.isAtSpeed() && Timer.getFPGATimestamp() - startTime > LAUNCH_TIME ){// if the shooter is at speed and has given time for last ball to shoot
-            indexerIntakeCommand.schedule();
-            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer == false)
+            indexerController.intake();
+            if(!(distanceSensor.isPowerCellLoaded()) && !(ballinIndexer))
             {
                 hopperController.start();
-            }
-            if(distanceSensor.isPowerCellLoaded() && !(ballinIndexer == false)){ // if ball is loaded first time
-                hopperController.stop();
                 ballinIndexer = true;
             }
-            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer == true){ //if ball is no longer visible first time
+            if(distanceSensor.isPowerCellLoaded() && ballinIndexer){
+                hopperController.stop();
+            }
+            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer){ //if ball is no longer visible first time
                 startTime = Timer.getFPGATimestamp();
                 ballsShot ++;
                 ballinIndexer = false;
             }
         }else{
-            indexerIntakeCommand.cancel();
+            indexerController.stop();
             hopperController.stop();
         }
     }
@@ -86,7 +82,6 @@ public class AutonomousShooterCommand extends CommandBase{
     @Override
     public boolean isFinished() {
         if(ballsShot >= 3) {
-            System.out.println("is finished");
             indexerController.stop();
             hopperController.stop();
             return true;

@@ -28,14 +28,12 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        System.out.println("turning to top target");
         count = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println("turning to target");
         if (limelight.hasValidTarget()) {
             // record offset early because it gets used repeatedly
             double offset = limelight.getHorizontalTargetOffset();
@@ -55,7 +53,6 @@ public class TurnToTopTargetCommand extends CommandBase {
         if (limelight.hasValidTarget() && Math.abs(limelight.getHorizontalTargetOffset()) <= TOP_GOAL_DEADBAND) {
             ++count;
             if (count >= COUNT_ON_TARGET) {
-                System.out.println("Has turned to top target");
                 return true;
             }
         }
