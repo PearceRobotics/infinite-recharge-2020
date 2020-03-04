@@ -64,16 +64,18 @@ public class AutonomousShooterCommand extends CommandBase{
 
         if(shooterSpeedController.isAtSpeed() && Timer.getFPGATimestamp() - startTime > LAUNCH_TIME ){// if the shooter is at speed and has given time for last ball to shoot
             indexerIntakeCommand.schedule();
-            if(distanceSensor.isPowerCellLoaded() && !(ballinIndexer == false)){
+            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer == false)
+            {
+                hopperController.start();
+            }
+            if(distanceSensor.isPowerCellLoaded() && !(ballinIndexer == false)){ // if ball is loaded first time
                 hopperController.stop();
                 ballinIndexer = true;
             }
-            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer == true){
+            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer == true){ //if ball is no longer visible first time
                 startTime = Timer.getFPGATimestamp();
                 ballsShot ++;
                 ballinIndexer = false;
-            }else{
-                hopperController.start();
             }
         }else{
             indexerIntakeCommand.cancel();
