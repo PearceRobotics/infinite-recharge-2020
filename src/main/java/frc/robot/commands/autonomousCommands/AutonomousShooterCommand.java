@@ -14,6 +14,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.shooter.ShooterMath;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.DistanceSensorDetector;
 
 /**
  * Add your docs here.
@@ -24,13 +25,13 @@ public class AutonomousShooterCommand extends CommandBase{
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
     private IndexerController indexerController;
+    private DistanceSensorDetector distanceSensor;
     //variables
     private double ballsShot = 0;
     private boolean ballShot = false;
     private double startTime;
     private boolean ballDetected = false;
     private double distanceToGoal = 149.0; 
-    private boolean hasBall = false;
 
     //constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
@@ -58,10 +59,10 @@ public class AutonomousShooterCommand extends CommandBase{
 
             while(ballShot == false){
                 if(shooterSpeedController.isAtSpeed()){
-                if(distanceSensor.get){
+                if(distanceSensor.isPowerCellLoaded()){
                     indexerController.intake();
                     hopperController.stop();
-                    while(ballDetected == true){
+                    while(distanceSensor.isPowerCellLoaded()){
                         //keep running indexer
                     }
                     startTime = Timer.getFPGATimestamp();
