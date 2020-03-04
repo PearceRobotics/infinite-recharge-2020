@@ -15,6 +15,7 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.shooter.ShooterMath;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.DistanceSensorDetector;
+import frc.robot.commands.IndexerIntakeCommand;
 
 /**
  * Add your docs here.
@@ -26,12 +27,16 @@ public class AutonomousShooterCommand extends CommandBase{
     private HopperController hopperController;
     private IndexerController indexerController;
     private DistanceSensorDetector distanceSensor;
+
+    //Commands
+    private IndexerIntakeCommand indexerIntakeCommand;
+
     //variables
     private double ballsShot = 0;
-    private boolean ballShot = false;
-    private double startTime;
-    private boolean ballDetected = false;
+    private double startTime = 0;
+    private boolean ballinIndexer = false;
     private double distanceToGoal = 149.0; 
+
 
     //constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
@@ -39,11 +44,11 @@ public class AutonomousShooterCommand extends CommandBase{
     private final double AUTONOMOUS_SPEED = .6;
 
     public AutonomousShooterCommand(Drive drive, ShooterSpeedController shooterSpeedController,
-    HopperController hopperController, IndexerController indexerController){
+    HopperController hopperController, IndexerIntakeCommand indexerIntakeCommand){
         this.drive = drive;
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
-        this.indexerController = indexerController;
+        this.indexerIntakeCommand = indexerIntakeCommand;
 
         addRequirements(drive);
     }
@@ -57,27 +62,24 @@ public class AutonomousShooterCommand extends CommandBase{
     public void execute(){
         shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
 
-            while(ballShot == false){
-                if(shooterSpeedController.isAtSpeed()){
-                if(distanceSensor.isPowerCellLoaded()){
-                    indexerController.intake();
-                    hopperController.stop();
-                    while(distanceSensor.isPowerCellLoaded()){
-                        //keep running indexer
-                    }
-                    startTime = Timer.getFPGATimestamp();
-                    while(Timer.getFPGATimestamp()< startTime + 1.0){
-                        //keep indexer running for one second
-                    }
-                    ballsShot ++;
-                }
-                else{
-                    indexerController.intake();
-                    hopperController.start();
-                }
-                }
+        if(shooterSpeedController.isAtSpeed() && Timer.getFPGATimestamp() - startTime > LAUNCH_TIME ){// if the shooter is at speed and has given time for last ball to shoot
+            indexerIntakeCommand.schedule();
+            if(distanceSensor.isPowerCellLoaded() && !(ballinIndexer == false)){
+                hopperController.stop();
+                ballinIndexer = true;
             }
+            if(!(distanceSensor.isPowerCellLoaded()) && ballinIndexer == true){
+                startTime = Timer.getFPGATimestamp();
+                ballsShot ++;
+                ballinIndexer = false;
+            }else{
+                hopperController.start();
+            }
+        }else{
+            indexerIntakeCommand.cancel();
+            hopperController.stop();
         }
+    }
 
     @Override
     public boolean isFinished() {
