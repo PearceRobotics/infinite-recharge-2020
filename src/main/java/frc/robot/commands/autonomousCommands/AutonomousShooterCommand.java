@@ -31,8 +31,7 @@ public class AutonomousShooterCommand extends CommandBase{
     private boolean ballDetected = false;
     private double distanceToGoal = 149.0; 
     private boolean hasBall = false;
-    private double startTime = -1.0;
-    private int ballsShot = 0;
+
     //constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
     private final double LAUNCH_TIME = 0.5;
@@ -57,17 +56,16 @@ public class AutonomousShooterCommand extends CommandBase{
     public void execute(){
         shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
 
-        while(ballsShot < 3){
             while(ballShot == false){
                 if(shooterSpeedController.isAtSpeed()){
-                if(ballDetected == true){
+                if(distanceSensor.get){
                     indexerController.intake();
                     hopperController.stop();
                     while(ballDetected == true){
                         //keep running indexer
                     }
                     startTime = Timer.getFPGATimestamp();
-                    while(Timer.getFPGATimestamp()< startTime + 2.0){
+                    while(Timer.getFPGATimestamp()< startTime + 1.0){
                         //keep indexer running for one second
                     }
                     ballsShot ++;
@@ -79,12 +77,13 @@ public class AutonomousShooterCommand extends CommandBase{
                 }
             }
         }
-    }
 
     @Override
     public boolean isFinished() {
         if(ballsShot >= 3) {
             System.out.println("is finished");
+            indexerController.stop();
+            hopperController.stop();
             return true;
         }
         return false;
