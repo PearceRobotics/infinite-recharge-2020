@@ -38,7 +38,7 @@ public class TurnToTopTargetCommand extends CommandBase {
             // record offset early because it gets used repeatedly
             double offset = limelight.getHorizontalTargetOffset();
             if (Math.abs(offset) > TOP_GOAL_DEADBAND) {
-                // Keep steering adjust between MIN and MAX. set to abs to determine magnitude,
+                                // Keep steering adjust between MIN and MAX. set to abs to determine magnitude,
                 // but reuse the sign
                 double steeringAdjust = Math
                         .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);
