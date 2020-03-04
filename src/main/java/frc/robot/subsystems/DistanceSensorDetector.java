@@ -22,6 +22,7 @@ public class DistanceSensorDetector extends SubsystemBase{
     private Rev2mDistanceSensor distOnboard; 
     private final double DISTANCE_RANGE = 0.25;
     private double distance;
+    private boolean isPowerCellLoaded;
     public DistanceSensorDetector()
     {
         distOnboard = new Rev2mDistanceSensor(Port.kOnboard);
@@ -33,12 +34,20 @@ public class DistanceSensorDetector extends SubsystemBase{
     @Override
     public void periodic() {
         if(distOnboard.isRangeValid()) {
-            distance = Double.valueOf(distOnboard.getRange());
+            distance = Double.valueOf(distOnboard.getRange(Unit.kInches));
             SmartDashboard.putNumber("Range Onboard", distance);
             SmartDashboard.putNumber("Timestamp Onboard", distOnboard.getTimestamp());
         }
-        if(Math.abs(distOnboard.getRange(Unit.kInches) - 0.25) <= DISTANCE_RANGE){
-            System.out.println("Is a ball");
+        if(Math.abs(distOnboard.getRange(Unit.kInches) - 1.0) <= DISTANCE_RANGE){
+            isPowerCellLoaded = true;
         }
+        else
+        {
+            isPowerCellLoaded = false;
+        }
+        isPowerCellLoaded();
+    }
+    public boolean isPowerCellLoaded(){
+        return isPowerCellLoaded;
     }
 }
