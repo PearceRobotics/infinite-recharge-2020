@@ -32,7 +32,7 @@ public class Drive extends SubsystemBase{
   private final int RIGHT_BACK_CAN_ID = 4;
   // private final int RIGHT_MIDDLE_CAN_ID = 6;
   private final int RIGHT_FRONT_CAN_ID = 5;
-  
+  private final double RAMP_RATE = 0.5;
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
   public Drive(Gyroscope gyroscope) {
@@ -50,8 +50,8 @@ public class Drive extends SubsystemBase{
 
     differentialDrive = new DifferentialDrive(leftGearboxController, rightGearboxController);
 
-    this.leftGearbox.setRampRate(.5);
-    this.rightGearbox.setRampRate(.5);
+    this.leftGearbox.setRampRate(RAMP_RATE);
+    this.rightGearbox.setRampRate(RAMP_RATE);
 
     this.leftEncoder = new Encoder(0, 1);
     this.rightEncoder = new Encoder(2, 3);

@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,7 @@ import frc.robot.commands.NotStraightArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DistanceSensorDetector;
 
 import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 
@@ -52,6 +54,7 @@ public class Robot extends TimedRobot {
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+  private DistanceSensorDetector distanceSensorDetector;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
@@ -62,6 +65,10 @@ public class Robot extends TimedRobot {
   private double indexerSpeed = 0.3;
 
   private double pValue = 0.2;
+
+  @Log
+  private boolean isPowerCellLoaded;
+
   private double maxSpeed = 0.75;
   private double distance = 36.0;
 
@@ -93,10 +100,11 @@ public class Robot extends TimedRobot {
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
+    this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber);
+        indexerController, limelight, climber, distanceSensorDetector);
     this.lightsCommand = new LightsCommand(this.lights);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController, indexerController, limelight, distance, maxSpeed);
@@ -117,6 +125,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
+    isPowerCellLoaded();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
   }
@@ -164,7 +173,6 @@ public class Robot extends TimedRobot {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
-
   @Override
   public void teleopPeriodic() {
     setDriveMode();
@@ -182,6 +190,12 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     CommandScheduler.getInstance().run();
     climber.getFlexSensorPosition();
+  }
+
+  public boolean isPowerCellLoaded(){
+    isPowerCellLoaded = distanceSensorDetector.isPowerCellLoaded();
+    System.out.println("sensing ball" + isPowerCellLoaded);
+    return isPowerCellLoaded;
   }
 
   @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
