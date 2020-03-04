@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Logger.updateEntries();
     isPowerCellLoaded();
+    isLimelightLockedOn();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
   }
