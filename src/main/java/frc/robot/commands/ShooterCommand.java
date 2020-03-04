@@ -11,6 +11,7 @@ import frc.robot.subsystems.shooter.ShooterMath;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.vision.DistanceCalculator;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.DistanceSensorDetector;
 import io.github.oblarg.oblog.annotations.Config;
 import frc.robot.Constants;
 
@@ -21,6 +22,7 @@ public class ShooterCommand extends CommandBase {
     private IndexerController indexerController;
     private Limelight limelight;
     private Constants.ShooterChoice shooterChoice;
+    private DistanceSensorDetector distanceSensorDetector;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -30,11 +32,13 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-            IndexerController indexerController, Limelight limelight) {
+        IndexerController indexerController, Limelight limelight, DistanceSensorDetector distanceSensorDetector){
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
         this.limelight = limelight;
+        this.distanceSensorDetector = distanceSensorDetector;
+        addRequirements(distanceSensorDetector);
     }
 
     public void setShooterChoice(Constants.ShooterChoice shooterChoice) {
