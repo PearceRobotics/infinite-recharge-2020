@@ -35,11 +35,13 @@ public class TurnToTopTargetCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
+        System.out.println("turning to target");
         if (limelight.hasValidTarget()) {
             // record offset early because it gets used repeatedly
             double offset = limelight.getHorizontalTargetOffset();
             if (Math.abs(offset) > TOP_GOAL_DEADBAND) {
-                // Keep steering adjust between MIN and MAX. set to abs to determine magnitude,
+                System.out.println("offset is " + offset);
+                                // Keep steering adjust between MIN and MAX. set to abs to determine magnitude,
                 // but reuse the sign
                 double steeringAdjust = Math
                         .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);

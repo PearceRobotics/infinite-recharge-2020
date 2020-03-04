@@ -13,9 +13,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -49,47 +49,49 @@ public class Climber extends SubsystemBase {
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
     public Climber() {
-        this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
+        // this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.elevatorController = new CANSparkMax(ELEVATOR_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
+        elevatorController.setIdleMode(IdleMode.kBrake);
         this.elevatorEncoder = new Encoder(4, 5);
+        this.elevatorEncoder.setReverseDirection(true);
+
         this.elevatorEncoder.setDistancePerPulse((SPROCKET_DIAMETER * Math.PI) / 2048.0);
-        this.elevatorController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
+
+        this.elevatorEncoder.reset();
+
         elevatorPIDController = new PIDController(Kp, Ki, Kd);
+        elevatorController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
+        setElevatorPIDTolerance();
     }
 
     public void gotoElevatorMidpoint() {
-        gotoElevatorPosition(MIDPOINT_POSITION);
+        setElevatorPIDSetpoint(MIDPOINT_POSITION);
+
     }
 
     public void gotoElevatorUppoint() {
-        gotoElevatorPosition(UP_POSITION);
+        setElevatorPIDSetpoint(UP_POSITION);
     }
 
     public void gotoElevatorDownpoint() {
-        gotoElevatorPosition(DOWN_POSITION);
+        setElevatorPIDSetpoint(DOWN_POSITION);
     }
 
-    public void gotoElevatorPosition(double position) {
-        System.out.println("starting climbing code");
+    @Override
+    public void periodic() {
+        double speed = SLOWING_CONSTANT * elevatorPIDController.calculate(elevatorEncoder.getDistance());
 
-        System.out.println("elevator is at " + elevatorEncoder.getDistance());
-
-        setElevatorPIDSetpoint(position);
-        setElevatorPIDTolerance();
-
-        while (elevatorEncoder.getDistance() < position) {
-            System.out.println("going to position " + position);
-            double speed = (elevatorPIDController.calculate(elevatorEncoder.getDistance(),
-                    (elevatorPIDController.calculate(position))));
-            System.out.println("at speed " + speed);
-            setElevatorSpeed(speed);
+        if (Math.abs(speed) < 0.15) {
+            speed = speed * 5.0;
         }
 
-        elevatorController.setIdleMode(IdleMode.kBrake);
-        setElevatorSpeed(0.0);
+        speed = Math.min(0.15, speed);
+        setElevatorSpeed(speed);
+
     }
+
     public void setElevatorPIDSetpoint(double position) {
         elevatorPIDController.setSetpoint(position);
     }

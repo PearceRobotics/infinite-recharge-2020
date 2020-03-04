@@ -13,6 +13,7 @@ import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.shooter.ShooterMath;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * Add your docs here.
@@ -24,7 +25,11 @@ public class AutonomousShooterCommand extends CommandBase{
     private HopperController hopperController;
     private IndexerController indexerController;
     //variables
-    private double distanceToGoal = 149.0;
+    private double ballsShot = 0;
+    private boolean ballShot = false;
+    private double startTime;
+    private boolean ballDetected = false;
+    private double distanceToGoal = 149.0; 
     private boolean hasBall = false;
     private double startTime = -1.0;
     private int ballsShot = 0;
@@ -50,28 +55,30 @@ public class AutonomousShooterCommand extends CommandBase{
 
     @Override
     public void execute(){
-      //  shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
-      shooterSpeedController.setLaunchSpeed(AUTONOMOUS_SPEED);
-         // Make sure the shooter is at speed before loading a power cell
-         if (shooterSpeedController.isAtSpeed()){
-             System.out.println("Shot Balls" + ballsShot);
-            // turn on the indexer and hopper
-            if(hasBall){
-                this.indexerController.intake();
-                this.hopperController.stop();
-            }
-            else{
-            this.indexerController.intake();
-            this.hopperController.start();
-            }
+        shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
 
-        // turn off the indexer and hopper
-        }else{
-            // turn off the indexer and hopper
-            indexerController.stop();
-            hopperController.stop();
+        while(ballsShot < 3){
+            while(ballShot == false){
+                if(shooterSpeedController.isAtSpeed()){
+                if(ballDetected == true){
+                    indexerController.intake();
+                    hopperController.stop();
+                    while(ballDetected == true){
+                        //keep running indexer
+                    }
+                    startTime = Timer.getFPGATimestamp();
+                    while(Timer.getFPGATimestamp()< startTime + 2.0){
+                        //keep indexer running for one second
+                    }
+                    ballsShot ++;
+                }
+                else{
+                    indexerController.intake();
+                    hopperController.start();
+                }
+                }
+            }
         }
-    
     }
 
     @Override

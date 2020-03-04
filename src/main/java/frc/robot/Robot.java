@@ -18,7 +18,7 @@ import frc.robot.commands.drivingCommands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.drivingCommands.ArcadeDriveCommand;
 import frc.robot.commands.NotStraightArcadeDriveCommand;
-import frc.robot.commands.drivingCommands.ArcadeDriveCommand;
+
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
@@ -99,11 +99,10 @@ public class Robot extends TimedRobot {
         indexerController, limelight, climber);
     this.lightsCommand = new LightsCommand(this.lights);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
-    this.arcadeDriveCommand = new ArcadeDriveCommand(this.controls, this.drive);
-
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController, indexerController, limelight, distance, maxSpeed);
     this.notStraightArcadeDriveCommand = new NotStraightArcadeDriveCommand(controls, drive);
     this.arcadeDriveCommand = new ArcadeDriveCommand(this.controls, this.drive);
+
   }
 
   /** 
