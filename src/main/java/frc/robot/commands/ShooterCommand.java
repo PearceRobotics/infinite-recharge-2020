@@ -37,8 +37,6 @@ public class ShooterCommand extends CommandBase {
         this.indexerController = indexerController;
         this.limelight = limelight;
         this.distanceSensorDetector = distanceSensorDetector;
-
-        addRequirements(shooterSpeedController);
         addRequirements(distanceSensorDetector);
     }
 
