@@ -12,6 +12,7 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.vision.DistanceCalculator;
 import frc.robot.subsystems.vision.Limelight;
 import io.github.oblarg.oblog.annotations.Config;
+import frc.robot.Constants;
 
 public class ShooterCommand extends CommandBase {
 
@@ -19,8 +20,7 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
-    private boolean shooterChoice;
-    
+    private Constants.ShooterChoice shooterChoice;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -37,10 +37,9 @@ public class ShooterCommand extends CommandBase {
         this.limelight = limelight;
     }
 
-    public void setShooterChoice(boolean shooterChoice){
+    public void setShooterChoice(Constants.ShooterChoice shooterChoice) {
         this.shooterChoice = shooterChoice;
     }
-
 
     // Called just before this Command runs the first time
     @Override
@@ -51,18 +50,9 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        double distance = this.distanceToGoal;
-        // TODO Change distanceToGoal to be a call to the limelight.
-        // TODO Limelight might take inner distance into account, revisit this
-
-        // 4.2 129
-        //4.5 132
-        //angle 2.04 distance 163
-        // -2.4 240
         System.out.println("vertical offset degrees " + limelight.getVerticalTargetOffset());
 
-        double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
-        distanceToGoal = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
+        distanceToGoal = DistanceCalculator.getDistanceFromTarget(limelight.getVerticalTargetOffset());
 
         System.out.println("Distance to target " + distanceToGoal);
 

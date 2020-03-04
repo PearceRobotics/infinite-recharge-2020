@@ -50,7 +50,6 @@ public class Robot extends TimedRobot {
   private Climber climber;
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
-  private ShooterCommand shooterCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
   private ArcadeDriveCommand arcadeDriveCommand;
   private NotStraightArcadeDriveCommand notStraightArcadeDriveCommand;
@@ -69,17 +68,14 @@ public class Robot extends TimedRobot {
   private double maxSpeed = 0.75;
   private double distance = 36.0;
 
-  //
-  private double elevatorHeight = 19.0; // height for elevator to move to, in inches
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
-    shooter_chooser.setDefaultOption("Shooter Camera", kShooterCamera);
-    shooter_chooser.addOption("Shooter Distance", kShooterDistance);
+    shooter_chooser.setDefaultOption("Shooter Automatic", kShooterCamera);
+    shooter_chooser.addOption("Shooter Manual", kShooterDistance);
     SmartDashboard.putData("Shooter choices", shooter_chooser);
     m_autonChooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_autonChooser.addOption("My Auto", kCustomAuto);
@@ -106,7 +102,6 @@ public class Robot extends TimedRobot {
         indexerController, limelight, climber);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
-    this.shooterCommand = new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
     this.notStraightArcadeDriveCommand = new NotStraightArcadeDriveCommand(controls, drive);
@@ -127,25 +122,9 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
-    System.out.println("dsitance to target " + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
+    System.out.println("dsitance to target "
+        + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
     System.out.println("vertical angle " + limelight.getVerticalTargetOffset());
-    System.out.println("target area " + limelight.getTargetArea());
-
-
-    //131.5 == -17.3 degrees
-    //235.5 == -6.34
-    // 77.5 == 8.2
-  m_shooterSelected = shooter_chooser.getSelected();
-    switch (m_shooterSelected) {
-      case kShooterDistance:
-        break;
-      case kShooterCamera:
-      default:
-        if (shooterCommand != null) {
-          shooterCommand.schedule();
-        }
-        break;
-    }
   }
 
   /**
@@ -195,11 +174,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     setDriveMode();
+    setShooterMode();
     CommandScheduler.getInstance().run();
-    // if (controls.getYButton()) {
-    //   System.out.println("Y button pressed");
-    //   climber.gotoElevatorPosition(elevatorHeight);
-    // }
+
   }
 
   /**
@@ -209,11 +186,6 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     CommandScheduler.getInstance().run();
     climber.getFlexSensorPosition();
-  }
-
-  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
-  public void setElevatorHeightInches(double elevatorHeight) {
-    this.elevatorHeight = elevatorHeight;
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
@@ -243,30 +215,45 @@ public class Robot extends TimedRobot {
   public void setDriveMode() {
     m_teleopSelected = m_teleopChooser.getSelected();
     switch (m_teleopSelected) {
-    case kArcadeDrive:
-    if(!(arcadeDriveCommand.isScheduled())){
-      curvatureDriveCommand.cancel();
-      notStraightArcadeDriveCommand.cancel();
-      arcadeDriveCommand.schedule();
+      case kArcadeDrive:
+        if (!(arcadeDriveCommand.isScheduled())) {
+          curvatureDriveCommand.cancel();
+          notStraightArcadeDriveCommand.cancel();
+          arcadeDriveCommand.schedule();
+        }
+        break;
+      case kCurvatureDrive:
+        if (!(curvatureDriveCommand.isScheduled())) {
+          arcadeDriveCommand.cancel();
+          notStraightArcadeDriveCommand.cancel();
+          curvatureDriveCommand.schedule();
+        }
+        break;
+      case kNotStraightArcadeDrive:
+        if (!(notStraightArcadeDriveCommand.isScheduled())) {
+          curvatureDriveCommand.cancel();
+          arcadeDriveCommand.cancel();
+          notStraightArcadeDriveCommand.schedule();
+        }
+        break;
+      default:
+        curvatureDriveCommand.schedule();
+        break;
     }
-      break;
-    case kCurvatureDrive:
-    if(!(curvatureDriveCommand.isScheduled())){
-      arcadeDriveCommand.cancel();
-      notStraightArcadeDriveCommand.cancel();
-      curvatureDriveCommand.schedule();
-    }
-      break;
-    case kNotStraightArcadeDrive:
-    if(!(notStraightArcadeDriveCommand.isScheduled())){
-      curvatureDriveCommand.cancel();
-      arcadeDriveCommand.cancel();
-      notStraightArcadeDriveCommand.schedule();
-    }
-      break;
-    default:
-      curvatureDriveCommand.schedule();
-      break;
+  }
+
+  public void setShooterMode() {
+    m_shooterSelected = shooter_chooser.getSelected();
+    switch (m_shooterSelected) {
+      case kShooterCamera: {
+        break;
+      }
+      case kShooterDistance: {
+        break;
+      }
+      default: {
+
+      }
     }
   }
 }
