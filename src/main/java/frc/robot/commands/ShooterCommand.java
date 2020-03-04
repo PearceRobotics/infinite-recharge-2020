@@ -51,6 +51,7 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
+        double distance = this.distanceToGoal;
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
 

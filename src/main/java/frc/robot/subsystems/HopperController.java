@@ -8,6 +8,9 @@ import io.github.oblarg.oblog.annotations.Config;
 
 public class HopperController {
 
+    //constants
+    private final int SPARK_550_MAXAMPS = 30;
+
     private final int LEFT_CAN_ID = 9;
     private final int RIGHT_CAN_ID = 10;
 
@@ -20,6 +23,9 @@ public class HopperController {
         this.leftController = new CANSparkMax(LEFT_CAN_ID, MotorType.kBrushless);
         this.rightController = new CANSparkMax(RIGHT_CAN_ID, MotorType.kBrushless);
         this.setMasterSlave();
+
+        leftController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
+        rightController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
     }
 
     public void setMasterSlave() {
