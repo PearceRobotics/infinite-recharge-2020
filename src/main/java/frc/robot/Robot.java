@@ -203,11 +203,6 @@ public class Robot extends TimedRobot {
     return isPowerCellLoaded;
   }
 
-  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
-  public void setElevatorHeightInches(double elevatorHeight) {
-    this.elevatorHeight = elevatorHeight;
-  }
-
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
   public void setIndexerSpeed(final double indexerSpeed) {
     this.indexerSpeed = indexerSpeed;
