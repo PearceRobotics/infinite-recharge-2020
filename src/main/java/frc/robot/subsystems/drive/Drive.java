@@ -31,7 +31,7 @@ public class Drive extends SubsystemBase{
 
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
-  private boolean gyroEnabled = true;
+  private boolean gyroDisabled = false;
 
   public Drive(Gyroscope gyroscope) {
     this.leftGearbox = new Gearbox(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
@@ -69,7 +69,7 @@ public class Drive extends SubsystemBase{
   }
 
   public void curvatureDrive(double throttle, double curvature) {
-    if(throttle != 0.0 && curvature == 0.0 && gyroEnabled) { //says if straight is zero and turn is not zero
+    if(throttle != 0.0 && curvature == 0.0 && !gyroDisabled) { //says if straight is zero and turn is not zero
       if(this.desiredAngle == Integer.MAX_VALUE) { //means robot just started driving straight
         this.desiredAngle = gyroscope.getGyroAngle(); 
       }
@@ -118,7 +118,7 @@ public class Drive extends SubsystemBase{
     return turnPower;
   }
 
-  public void enableOrDisableGyro() {
-    this.gyroEnabled = !this.gyroEnabled;
+  public void gyroDisabled(boolean gyroDisabled) {
+    this.gyroDisabled = gyroDisabled;
   }
 }

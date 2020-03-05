@@ -1,5 +1,6 @@
 package frc.robot.operatorInputs;
 
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.GyroTurnCommand;
 import frc.robot.commands.PowerCellScoringCommandGroup;
 import frc.robot.commands.ReorientToFieldCommand;
@@ -17,8 +18,10 @@ import frc.robot.subsystems.vision.Limelight;
 
 public class OperatorInputs {
 
+  private final double JOYSTICK_DEADZONE = 0.2;
   public OperatorInputs(Controls controls, Drive drive, Gyroscope gyro, ShooterSpeedController shooterSpeedController,
-      HopperController hopperController, IndexerController indexerController, Limelight limelight, Climber climber, DistanceSensorDetector distanceSensorDetector) {
+      HopperController hopperController, IndexerController indexerController, 
+      Limelight limelight, Climber climber, DistanceSensorDetector distanceSensorDetector) {
     controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
     controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
     controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
@@ -27,6 +30,8 @@ public class OperatorInputs {
         hopperController, indexerController,distanceSensorDetector));
     controls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
     controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
-    // //TODO reenable
+    drive.setDefaultCommand(new RunCommand(() -> {
+      drive.curvatureDrive(controls.getLeftY(JOYSTICK_DEADZONE), controls.getRightX(JOYSTICK_DEADZONE));
+    }));
   }
 }
