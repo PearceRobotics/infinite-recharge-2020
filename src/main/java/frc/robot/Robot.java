@@ -67,6 +67,9 @@ public class Robot extends TimedRobot {
   @Log
   private boolean isPowerCellLoaded;
 
+  @Log
+  private boolean isLimelightLockedOn;
+
   private double maxSpeed = 0.75;
   private double distance = 36.0;
 
@@ -187,6 +190,11 @@ public class Robot extends TimedRobot {
   public boolean isPowerCellLoaded(){
     isPowerCellLoaded = distanceSensorDetector.isPowerCellLoaded();
     return isPowerCellLoaded;
+  }
+
+  public boolean isLimelightLockedOn(){
+    isLimelightLockedOn = limelight.hasValidTarget();
+    return isLimelightLockedOn;
   }
 
   @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
