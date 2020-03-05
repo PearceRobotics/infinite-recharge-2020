@@ -266,7 +266,7 @@ public class Robot extends TimedRobot {
     switch (m_pipelineSelected) {
     case kHighGoal:
       if(!(isHighGoal)){
-
+        limelight.setPipeline(1);
       }
       else{
         //do nothing
@@ -275,7 +275,7 @@ public class Robot extends TimedRobot {
         break;
     case kLowGoal:
     if(isHighGoal){
-
+      limelight.setPipeline(0);
     }
     else{
       //do nothing
