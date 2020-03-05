@@ -29,18 +29,13 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-        IndexerController indexerController, Limelight limelight) {
+        IndexerController indexerController, Limelight limelight, boolean shooterChoice) {
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
         this.limelight = limelight;
-    }
-
-    public void setShooterChoice(boolean shooterChoice){
         this.shooterChoice = shooterChoice;
     }
-
-
     // Called just before this Command runs the first time
     @Override
     public void initialize() {

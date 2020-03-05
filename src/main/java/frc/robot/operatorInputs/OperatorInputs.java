@@ -17,17 +17,24 @@ import frc.robot.subsystems.vision.Limelight;
 
 public class OperatorInputs {
 
+  private boolean shooterChoice;
+
   public OperatorInputs(Controls controls, Drive drive, Gyroscope gyro, ShooterSpeedController shooterSpeedController,
-      HopperController hopperController, IndexerController indexerController, Limelight limelight, Climber climber) {
-    controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
+      HopperController hopperController, IndexerController indexerController, Limelight limelight, Climber climber, boolean shooterChoice) {
+    shooterChoice = this.shooterChoice;
+        controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
     controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
     controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
     controls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
-        hopperController, indexerController));
+        hopperController, indexerController,shooterChoice));
     controls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
     controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
-    controls.getRightStick().whenPressed(new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
+    controls.getRightStick().whenPressed(new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight, shooterChoice));
     // //TODO reenable
   }
+  public void shooterOverrideDistance(boolean shooterChoice){
+    this.shooterChoice = shooterChoice;
+  }
+
 }

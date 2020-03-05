@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber);
+        indexerController, limelight, climber,shooterChoice);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
@@ -185,7 +185,6 @@ public class Robot extends TimedRobot {
   @Config(name = "Shooter Override Status", defaultValueBoolean = false)
   public void setShooterOverride(boolean shooterChoice){
     this.shooterChoice = shooterChoice;
-    ShooterCommand.setShooterChoice(shooterChoice);
   }
 
   @Config(name = "Elevator Height", defaultValueNumeric = 19.0)

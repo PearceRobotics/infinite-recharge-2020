@@ -14,9 +14,9 @@ import frc.robot.subsystems.vision.Limelight;
 public class PowerCellScoringCommandGroup extends SequentialCommandGroup {
 
     public PowerCellScoringCommandGroup(Drive drive, Limelight limelight, ShooterSpeedController shooterSpeedController,
-            HopperController hopperController, IndexerController indexerController) {
+            HopperController hopperController, IndexerController indexerController, boolean shooterChoice) {
         addCommands(new TurnToTopTargetCommand(drive, limelight),
-                new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
+                new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight,shooterChoice));
         addRequirements(drive);
     }
 }
