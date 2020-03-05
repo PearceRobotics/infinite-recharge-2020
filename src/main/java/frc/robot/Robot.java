@@ -9,15 +9,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
-import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
+import frc.robot.subsystems.lights.Lights;
+import frc.robot.subsystems.lights.LightsController;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
-import frc.robot.commands.LightsCommand;
 import frc.robot.commands.NotStraightArcadeDriveCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
@@ -49,7 +50,7 @@ public class Robot extends TimedRobot {
   private CurvatureDriveCommand curvatureDriveCommand;
   private ArcadeDriveCommand arcadeDriveCommand;
   private NotStraightArcadeDriveCommand notStraightArcadeDriveCommand;
-  private LightsCommand lightsCommand;
+  private LightsController lightsController;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
@@ -101,11 +102,13 @@ public class Robot extends TimedRobot {
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight, climber, distanceSensorDetector);
-    this.lightsCommand = new LightsCommand(this.lights, this.limelight);
+    this.lightsController = new LightsController(this.lights, this.limelight);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
     this.notStraightArcadeDriveCommand = new NotStraightArcadeDriveCommand(controls, drive);
     this.arcadeDriveCommand = new ArcadeDriveCommand(this.controls, this.drive);
+
+    new RunCommand(() -> lightsController.checkTargetLock());
   }
 
   /**
@@ -120,9 +123,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
-    isPowerCellLoaded();
     CommandScheduler.getInstance().run();
-    lightsCommand.schedule();
   }
 
   /**
@@ -172,10 +173,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     setDriveMode();
     CommandScheduler.getInstance().run();
-    // if (controls.getYButton()) {
-    //   System.out.println("Y button pressed");
-    //   climber.gotoElevatorPosition(elevatorHeight);
-    // }
   }
 
   /**

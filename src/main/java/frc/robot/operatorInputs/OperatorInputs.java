@@ -24,7 +24,7 @@ public class OperatorInputs {
     controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
     controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
     controls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
-        hopperController, indexerController,distanceSensorDetector));
+        hopperController, indexerController, distanceSensorDetector));
     controls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
     controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
     // //TODO reenable

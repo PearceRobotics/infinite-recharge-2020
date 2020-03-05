@@ -16,14 +16,12 @@ import frc.robot.subsystems.drive.Drive;
  */
 public class NotStraightArcadeDriveCommand extends CommandBase{
 
-    
     //classes
     private Drive drive;
     private Controls controls;
 
     //constants
     private final double DEADZONE = 0.2;
-    private final double TURN_CONSTANT = 0.5;
   
     public NotStraightArcadeDriveCommand(Controls controls, Drive drive) {
         this.controls = controls;

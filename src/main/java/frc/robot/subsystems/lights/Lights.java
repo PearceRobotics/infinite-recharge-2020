@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.lights;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
