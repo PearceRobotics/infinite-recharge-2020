@@ -189,7 +189,6 @@ public class Robot extends TimedRobot {
 
   public boolean isPowerCellLoaded(){
     isPowerCellLoaded = distanceSensorDetector.isPowerCellLoaded();
-    System.out.println("sensing ball" + isPowerCellLoaded);
     return isPowerCellLoaded;
   }
 

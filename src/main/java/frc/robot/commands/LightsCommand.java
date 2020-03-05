@@ -7,7 +7,7 @@ import frc.robot.subsystems.vision.Limelight;
 public class LightsCommand extends CommandBase {
     private Lights lights;
     private Limelight limelight;
-    private final double DEADZONE = 27;
+    boolean isIdle = false;
 
     public LightsCommand(Lights lights, Limelight limelight) {
         this.lights = lights;
@@ -16,14 +16,12 @@ public class LightsCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (limelight.hasValidTarget()) {
-            if(Math.abs(limelight.getHorizontalTargetOffset()) < DEADZONE){
-                lights.allLimeGreen();
-            }else{
-                lights.idleAnimation(3);
-            }
-        } else {
+        if (limelight.hasValidTarget() && !isIdle) {
+            lights.allLimeGreen();
+            isIdle = true;
+        } else if(!limelight.hasValidTarget() && isIdle){
             lights.idleAnimation(3);
+            isIdle = false;
         }
     }
 }
