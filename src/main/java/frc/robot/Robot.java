@@ -18,6 +18,7 @@ import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
 import frc.robot.commands.NotStraightArcadeDriveCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
@@ -64,6 +65,7 @@ public class Robot extends TimedRobot {
 
   //
   private double elevatorHeight = 19.0; // height for elevator to move to, in inches
+  private boolean shooterChoice = false;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -115,6 +117,7 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
+    setShooterOverride(shooterChoice);
   }
 
   /**
@@ -178,6 +181,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     CommandScheduler.getInstance().run();
     climber.getFlexSensorPosition();
+  }
+  @Config(name = "Shooter Override Status", defaultValueBoolean = false)
+  public void setShooterOverride(boolean shooterChoice){
+    this.shooterChoice = shooterChoice;
+    ShooterCommand.setShooterChoice(shooterChoice);
   }
 
   @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
