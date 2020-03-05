@@ -23,16 +23,16 @@ public class Drive extends SubsystemBase{
   private double desiredAngle;
 
   //constants
-  private final double P_VALUE = .0014;
+  private final double P_VALUE = .0025;//.0012
   // left gear box CAN ids
-  private final int LEFT_BACK_CAN_ID = 11;
+  private final int LEFT_BACK_CAN_ID =11; 
   // private final int LEFT_MIDDLE_CAN_ID = 13;
   private final int LEFT_FRONT_CAN_ID = 12;
   // right gear box CAN ids
   private final int RIGHT_BACK_CAN_ID = 4;
   // private final int RIGHT_MIDDLE_CAN_ID = 6;
   private final int RIGHT_FRONT_CAN_ID = 5;
-  
+  private final double RAMP_RATE = 0.5;
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
   public Drive(Gyroscope gyroscope) {
@@ -50,8 +50,8 @@ public class Drive extends SubsystemBase{
 
     differentialDrive = new DifferentialDrive(leftGearboxController, rightGearboxController);
 
-    this.leftGearbox.setRampRate(1);
-    this.rightGearbox.setRampRate(1);
+    this.leftGearbox.setRampRate(RAMP_RATE);
+    this.rightGearbox.setRampRate(RAMP_RATE);
 
     this.leftEncoder = new Encoder(0, 1);
     this.rightEncoder = new Encoder(2, 3);
@@ -71,6 +71,10 @@ public class Drive extends SubsystemBase{
 
   public void curvatureDrive(double throttle, double curvature, boolean isQuickTurn) {
     differentialDrive.curvatureDrive(throttle, curvature, isQuickTurn);
+  }
+
+  public void notStraightArcade(double throttle, double turnModifier){
+    differentialDrive.arcadeDrive(throttle, turnModifier);
   }
 
   public void arcadeDrive(double throttle, double turnModifer) { //already tested, gyro is getting correct angle

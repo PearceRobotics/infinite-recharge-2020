@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,9 +18,12 @@ import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.CurvatureDriveCommand;
 import frc.robot.commands.LightsCommand;
+import frc.robot.commands.NotStraightArcadeDriveCommand;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DistanceSensorDetector;
 
 public class Robot extends TimedRobot {
 
@@ -31,6 +35,7 @@ public class Robot extends TimedRobot {
   //Pick Teleoperated
   private static final String kCurvatureDrive = "Cheesy Boi";
   private static final String kArcadeDrive = "Arcade Boi";
+  private static final String kNotStraightArcadeDrive = "UrNotStraight";
   private String m_teleopSelected;
   private final SendableChooser<String> m_teleopChooser = new SendableChooser<>();
   //Pick Limelight Pipeline
@@ -44,14 +49,17 @@ public class Robot extends TimedRobot {
   private Lights lights;
   private Limelight limelight;
   private Gyroscope gyro;
+  private Climber climber;
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
   private CurvatureDriveCommand curvatureDriveCommand;
-  private ArcadeDriveCommand teleopCommand;
+  private ArcadeDriveCommand arcadeDriveCommand;
+  private NotStraightArcadeDriveCommand notStraightArcadeDriveCommand;
   private LightsCommand lightsCommand;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+  private DistanceSensorDetector distanceSensorDetector;
 
   // Constants
   private final int JOYSTICK_PORT = 1;
@@ -60,8 +68,15 @@ public class Robot extends TimedRobot {
   private double indexerSpeed = 0.3;
 
   private double pValue = 0.2;
-  private double maxSpeed;
+
+  @Log
+  private boolean isPowerCellLoaded;
+
+  private double maxSpeed = 0.75;
   private double distance = 36.0;
+
+  //
+  private double elevatorHeight = 19.0; // height for elevator to move to, in inches
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -75,25 +90,29 @@ public class Robot extends TimedRobot {
 
     m_teleopChooser.setDefaultOption("Curvature Drive", kCurvatureDrive);
     m_teleopChooser.addOption("Arcade Drive", kArcadeDrive);
+    m_teleopChooser.addOption("UrNotStraight", kNotStraightArcadeDrive);
     SmartDashboard.putData("Teleop Drive", m_teleopChooser);
 
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
+    this.climber = new Climber();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 60, 50);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
+    this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight);
+        indexerController, limelight, climber, distanceSensorDetector);
     this.lightsCommand = new LightsCommand(this.lights);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
     this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
-    this.teleopCommand = new ArcadeDriveCommand(this.controls, this.drive);
+    this.notStraightArcadeDriveCommand = new NotStraightArcadeDriveCommand(controls, drive);
+    this.arcadeDriveCommand = new ArcadeDriveCommand(this.controls, this.drive);
   }
 
   /**
@@ -109,6 +128,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Logger.updateEntries();
     setLimelightPipeline();
+    isPowerCellLoaded();
     CommandScheduler.getInstance().run();
     lightsCommand.schedule();
   }
@@ -129,14 +149,14 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_autonChooser.getSelected();
     switch (m_autoSelected) {
-    case kCustomAuto:
-      break;
-    case kDefaultAuto:
-    default:
-      if (autonomousCommand != null) {
-        autonomousCommand.schedule();
-      }
-      break;
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+      default:
+        if (autonomousCommand != null) {
+          autonomousCommand.schedule();
+        }
+        break;
     }
   }
 
@@ -151,19 +171,19 @@ public class Robot extends TimedRobot {
   }
 
   // use this to override the algorithm and just use a speed
-  @Config
+  @Config(name = "Override Speed", defaultValueNumeric = 1330.0)
   public void setOverrideSpeed(final double overrideSpeed) {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
-
   @Override
   public void teleopPeriodic() {
     setDriveMode();
     CommandScheduler.getInstance().run();
-    if (controls.getLeftTrigger()) {
-      indexerController.outtake();
-    }
+    // if (controls.getYButton()) {
+    //   System.out.println("Y button pressed");
+    //   climber.gotoElevatorPosition(elevatorHeight);
+    // }
   }
 
   /**
@@ -171,6 +191,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    CommandScheduler.getInstance().run();
+    climber.getFlexSensorPosition();
+  }
+
+  public boolean isPowerCellLoaded(){
+    isPowerCellLoaded = distanceSensorDetector.isPowerCellLoaded();
+    System.out.println("sensing ball" + isPowerCellLoaded);
+    return isPowerCellLoaded;
+  }
+
+  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
+  public void setElevatorHeightInches(double elevatorHeight) {
+    this.elevatorHeight = elevatorHeight;
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
@@ -201,15 +234,24 @@ public class Robot extends TimedRobot {
     m_teleopSelected = m_teleopChooser.getSelected();
     switch (m_teleopSelected) {
     case kArcadeDrive:
-    if(!(teleopCommand.isScheduled())){
+    if(!(arcadeDriveCommand.isScheduled())){
       curvatureDriveCommand.cancel();
-      teleopCommand.schedule();
+      notStraightArcadeDriveCommand.cancel();
+      arcadeDriveCommand.schedule();
     }
       break;
     case kCurvatureDrive:
     if(!(curvatureDriveCommand.isScheduled())){
-      teleopCommand.cancel();
+      arcadeDriveCommand.cancel();
+      notStraightArcadeDriveCommand.cancel();
       curvatureDriveCommand.schedule();
+    }
+      break;
+    case kNotStraightArcadeDrive:
+    if(!(notStraightArcadeDriveCommand.isScheduled())){
+      curvatureDriveCommand.cancel();
+      arcadeDriveCommand.cancel();
+      notStraightArcadeDriveCommand.schedule();
     }
       break;
     default:
