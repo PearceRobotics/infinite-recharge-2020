@@ -93,6 +93,10 @@ public class Robot extends TimedRobot {
     m_teleopChooser.addOption("UrNotStraight", kNotStraightArcadeDrive);
     SmartDashboard.putData("Teleop Drive", m_teleopChooser);
 
+    m_autonChooser.setDefaultOption("High Goal", kHighGoal);
+    m_autonChooser.addOption("Low Goal", kLowGoal);
+    SmartDashboard.putData("LimelightPipeline", m_pipelineChooser);
+
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
@@ -283,6 +287,7 @@ public class Robot extends TimedRobot {
     isHighGoal = false;
       break;
     default:
+    limelight.setPipeline(0);
      //do nothing
       break;
     }
