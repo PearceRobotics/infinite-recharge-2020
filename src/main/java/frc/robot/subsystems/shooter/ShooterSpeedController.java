@@ -3,8 +3,9 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ShooterSpeedController {
+public class ShooterSpeedController extends SubsystemBase{
 
     private final int LEFT_SHOOTER_CAN_ID = 14;
     private final int RIGHT_SHOOTER_CAN_ID = 7;
