@@ -1,8 +1,9 @@
 package frc.robot.subsystems.lights;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.Limelight;
 
-public class LightsController {
+public class LightsController extends SubsystemBase {
     private Lights lights;
     private Limelight limelight;
     boolean isIdle = false;
