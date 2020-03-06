@@ -20,6 +20,7 @@ import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
+import edu.wpi.first.cameraserver.CameraServer;
 
 public class Robot extends TimedRobot {
 
@@ -67,6 +68,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    CameraServer.getInstance().startAutomaticCapture();
+
     m_autonChooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_autonChooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_autonChooser);
