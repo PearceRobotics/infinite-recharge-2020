@@ -28,8 +28,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
 
   private Drive drive;
-  private Controls driverControls;
-  private Controls operatorControls;
+  private Controls controls;
   private Lights lights;
   private Limelight limelight;
   private Gyroscope gyro;
@@ -43,8 +42,7 @@ public class Robot extends TimedRobot {
   private AutonomousCommandGroup autonomousCommandGroup;
 
   // Constants
-  private final int JOYSTICK_PORT_DRIVER = 1;
-  private final int JOYSTICK_PORT_OPERATOR = 2;
+  private final int JOYSTICK_PORT = 1;
 
   private double overrideSpeed = 1330.0;
   private double indexerSpeed = 0.3;
@@ -59,6 +57,9 @@ public class Robot extends TimedRobot {
 
   private double maxSpeed = 0.75;
   private double distance = 36.0;
+
+  //
+  private double elevatorHeight = 19.0; // height for elevator to move to, in inches
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -75,16 +76,15 @@ public class Robot extends TimedRobot {
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
-    this.driverControls = new Controls(new Joystick(JOYSTICK_PORT_DRIVER));
-    this.operatorControls = new Controls(new Joystick(JOYSTICK_PORT_OPERATOR));
+    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 82, 50);
     this.limelight = new Limelight();
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
-    this.operatorInputs = new OperatorInputs(driverControls, operatorControls, drive, gyro, shooterSpeedController,
-        hopperController, indexerController, limelight, climber, lightsController);
+    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
+        indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
         indexerController, limelight, distance, maxSpeed);
 
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
    * make sure to add them to the chooser code above as well.
    */
   @Override
-  public void autonomousInit() {
+  public void autonomousInit() {  
     autonomousCommandGroup.schedule();
   }
 
@@ -151,6 +151,11 @@ public class Robot extends TimedRobot {
   public boolean isLimelightLockedOn() {
     isLimelightLockedOn = limelight.hasValidTarget();
     return isLimelightLockedOn;
+  }
+
+  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
+  public void setElevatorHeightInches(double elevatorHeight) {
+    this.elevatorHeight = elevatorHeight;
   }
 
   @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
