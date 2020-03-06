@@ -25,16 +25,10 @@ import frc.robot.subsystems.DistanceSensorDetector;
 
 public class Robot extends TimedRobot {
 
-  //Pick Autonomous
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
-  //Pick Limelight Pipeline
-  private static final String kHighGoal = "High Goal";
-  private static final String kLowGoal = "Low Goal";
-  private String m_pipelineSelected;
-  private final SendableChooser<String> m_pipelineChooser = new SendableChooser<>();
 
   private Drive drive;
   private Controls controls;
@@ -79,11 +73,6 @@ public class Robot extends TimedRobot {
     m_autonChooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_autonChooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_autonChooser);
-
-
-    m_autonChooser.setDefaultOption("High Goal", kHighGoal);
-    m_autonChooser.addOption("Low Goal", kLowGoal);
-    SmartDashboard.putData("LimelightPipeline", m_pipelineChooser);
 
     Logger.configureLoggingAndConfig(this, false);
 
