@@ -62,7 +62,7 @@ public class ShooterCommand extends CommandBase {
 
         distanceToGoal = DistanceCalculator.getDistanceFromTarget(limelight.getVerticalTargetOffset());
 
-        System.out.println("Distance to target " + distanceToGoal);
+        //System.out.println("Distance to target " + distance);
 
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));

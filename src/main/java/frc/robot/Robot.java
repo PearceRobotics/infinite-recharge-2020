@@ -26,6 +26,7 @@ import frc.robot.subsystems.DistanceSensorDetector;
 
 public class Robot extends TimedRobot {
 
+  //Pick Autonomous
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private static final String kShooterCamera = "Default";
@@ -34,6 +35,11 @@ public class Robot extends TimedRobot {
   private String m_shooterSelected;
   private final SendableChooser<String> shooter_chooser = new SendableChooser<>();
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
+  //Pick Limelight Pipeline
+  private static final String kHighGoal = "High Goal";
+  private static final String kLowGoal = "Low Goal";
+  private String m_pipelineSelected;
+  private final SendableChooser<String> m_pipelineChooser = new SendableChooser<>();
 
   private Drive drive;
   private Controls controls;
@@ -81,6 +87,11 @@ public class Robot extends TimedRobot {
     m_autonChooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_autonChooser);
 
+
+    m_autonChooser.setDefaultOption("High Goal", kHighGoal);
+    m_autonChooser.addOption("Low Goal", kLowGoal);
+    SmartDashboard.putData("LimelightPipeline", m_pipelineChooser);
+
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
@@ -111,6 +122,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
+    setLimelightPipeline();
+    isPowerCellLoaded();
     CommandScheduler.getInstance().run();
     System.out.println("dsitance to target "
         + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
@@ -224,6 +237,35 @@ public class Robot extends TimedRobot {
       default: {
 
       }
+    }
+  }
+
+  public void setLimelightPipeline() {
+    boolean isHighGoal =true; //default value
+    m_pipelineSelected = m_pipelineChooser.getSelected();
+    switch (m_pipelineSelected) {
+    case kHighGoal:
+      if(!(isHighGoal)){
+        limelight.setPipeline(1);
+      }
+      else{
+        //do nothing
+      }
+      isHighGoal = true;
+        break;
+    case kLowGoal:
+    if(isHighGoal){
+      limelight.setPipeline(0);
+    }
+    else{
+      //do nothing
+    }
+    isHighGoal = false;
+      break;
+    default:
+    limelight.setPipeline(0);
+     //do nothing
+      break;
     }
   }
 }

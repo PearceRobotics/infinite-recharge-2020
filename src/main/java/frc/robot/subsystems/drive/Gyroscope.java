@@ -34,7 +34,7 @@ public class Gyroscope {
         try{
             Thread.sleep(1000);
         } catch(Exception e) {
-            System.out.println("Exception caught when sleeping for gyro calibration: "+ e.getMessage());
+           // System.out.println("Exception caught when sleeping for gyro calibration: "+ e.getMessage());
         }
         this.driftPerSecond = (imu.getAngle() - startAngle)/(Timer.getFPGATimestamp() - startTime);
     }
