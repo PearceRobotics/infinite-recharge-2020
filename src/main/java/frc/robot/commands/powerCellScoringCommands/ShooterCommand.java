@@ -20,7 +20,7 @@ public class ShooterCommand extends CommandBase {
     private IndexerController indexerController;
     private Limelight limelight;
     private boolean shooterChoice;
-    public final double TOP_GOAL_DEADBAND = 5;
+    public final double TOP_GOAL_DEADBAND = 2;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
