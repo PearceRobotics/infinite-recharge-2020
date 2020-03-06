@@ -11,7 +11,7 @@ public class HopperController {
     //constants
     private final int SPARK_550_MAXAMPS = 30;
 
-    private final int LEFT_CAN_ID = 9;
+    private final int LEFT_CAN_ID = 16;
     private final int RIGHT_CAN_ID = 10;
 
     private CANSparkMax leftController;
