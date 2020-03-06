@@ -44,7 +44,7 @@ public class Climber extends SubsystemBase {
     private final double UP_POSITION = 19.0;
     private final double DOWN_POSITION = 1.0;
 
-    private final int SPARK_550_MAXAMPS = 30;
+    private final int SPARK_550_MAXAMPS = 20;
 
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
