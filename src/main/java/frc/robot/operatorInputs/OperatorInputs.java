@@ -7,6 +7,7 @@ import frc.robot.commands.ReorientToFieldCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
 import frc.robot.commands.climbingCommands.ElevatorUpCommand;
+import frc.robot.commands.climbingCommands.WinchCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensorDetector;
 import frc.robot.subsystems.HopperController;
@@ -31,6 +32,8 @@ public class OperatorInputs {
         hopperController, indexerController, distanceSensorDetector));
     controls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
     controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
+    controls.getRightStick().whenPressed(new WinchCommand(climber));
+    
     drive.setDefaultCommand(new RunCommand(() -> {
       drive.curvatureDrive(controls.getLeftY(JOYSTICK_DEADZONE), controls.getRightX(JOYSTICK_DEADZONE));
     }, drive));

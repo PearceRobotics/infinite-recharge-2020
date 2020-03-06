@@ -41,7 +41,7 @@ public class Climber extends SubsystemBase {
     private final double SPROCKET_DIAMETER = 1.273;
 
     private final double MIDPOINT_POSITION = 12.0;
-    private final double UP_POSITION = 21.0;
+    private final double UP_POSITION = 18.0;
     private final double DOWN_POSITION = 3.0;
 
     private final int SPARK_550_MAXAMPS = 30;
@@ -49,7 +49,7 @@ public class Climber extends SubsystemBase {
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
     public Climber() {
-        // this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
+        this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.elevatorController = new CANSparkMax(ELEVATOR_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.climbingFlexSensor = new AnalogPotentiometer(CLIMBING_FLEX_SENSOR_PORT, 180, 90);
 
@@ -83,12 +83,14 @@ public class Climber extends SubsystemBase {
     public void periodic() {
         double speed = SLOWING_CONSTANT * elevatorPIDController.calculate(elevatorEncoder.getDistance());
 
-        if (Math.abs(speed) < 0.15) {
-            speed = speed * 5.0;
+        if (speed < 0.0 && speed > -0.3) {
+            speed *= 5.0;
         }
 
-        speed = Math.min(0.15, speed);
+        speed = Math.min(0.3, speed);
         setElevatorSpeed(speed);
+
+        System.out.println("elevator position " + this.elevatorEncoder.getDistance());
 
     }
 
