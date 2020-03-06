@@ -30,7 +30,7 @@ public class Climber extends SubsystemBase {
     private AnalogPotentiometer climbingFlexSensor;
     private PIDController elevatorPIDController;
 
-    private final int WINCH_CAN_ID = 16;
+    private final int WINCH_CAN_ID = 9;
     private final int ELEVATOR_CAN_ID = 15;
     private final int CLIMBING_FLEX_SENSOR_PORT = 0;
     private final double Kp = 0.15;
