@@ -26,7 +26,7 @@ public class ShooterCommand extends CommandBase {
 
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
-    private final double FIXED_GOAL_DISTANCE = 149.0;
+    private double fixedGoalDistance = 149.0;
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
@@ -52,7 +52,7 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        double distance = FIXED_GOAL_DISTANCE;
+        double distance = fixedGoalDistance;
         if (shooterChoice) {
             double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
             distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
@@ -96,6 +96,6 @@ public class ShooterCommand extends CommandBase {
     // Use this for the speed finding algorithm
     @Config
     public void setDistanceToGoal(double distanceToGoal) {
-        this.distanceToGoal = distanceToGoal;
+        this.fixedGoalDistance = distanceToGoal;
     }
 }
