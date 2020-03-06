@@ -21,7 +21,7 @@ public class ShooterCommand extends CommandBase {
     private Limelight limelight;
     private boolean shooterChoice;
     private DistanceSensorDetector distanceSensorDetector;
-    public final double TOP_GOAL_DEADBAND = 0.5;
+    public final double TOP_GOAL_DEADBAND = 2;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 

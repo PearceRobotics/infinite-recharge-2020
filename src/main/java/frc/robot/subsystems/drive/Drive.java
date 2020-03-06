@@ -20,10 +20,10 @@ public class Drive extends SubsystemBase{
 
   //constants
   private final double P_VALUE = .0025;
-  private final double RAMP_RATE = 0.5;
-  private final double QUICK_TURN_THROTTLE_DEADZONE = 0.2;
+  private final double RAMP_RATE = 1;
+  private final double QUICK_TURN_THROTTLE_DEADZONE = 0.1;
   // left gear box CAN ids
-  private final int LEFT_BACK_CAN_ID =11; 
+  private final int LEFT_BACK_CAN_ID = 11; 
   private final int LEFT_FRONT_CAN_ID = 12;
   private final int LEFT_MIDDLE_CAN_ID = 13;
   // right gear box CAN ids

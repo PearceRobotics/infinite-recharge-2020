@@ -11,16 +11,18 @@ public class AimCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
 
-    private final double MAX_SPEED = 1.0;
-    private final double MIN_SPEED = 0.05;
-    final double KpAIM = 0.025;
+    private final double DEADBAND_DEGREES = 2;
+    private final double MAX_SPEED = .4;
+    private final double MIN_SPEED = 0.2;
+    private final double KpAIM = 0.09;
 
     public AimCommand(Drive drive, Limelight limelight) {
         this.drive = drive;
         this.limelight = limelight;
+        addRequirements(drive);
     }
 
-    // Called just before this Command runs the first time
+    // Called just before this Command runs the first time  
     @Override
     public void initialize() {
     }
@@ -35,7 +37,10 @@ public class AimCommand extends CommandBase {
                 // but reuse the sign
                 double steeringAdjust = Math
                         .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);
-                drive.arcadeDrive(0.0, steeringAdjust);
+                //if(Math.abs(limelight.getHorizontalTargetOffset()) > DEADBAND_DEGREES) {
+                    //double steeringAdjust = -KpAIM * limelight.getHorizontalTargetOffset();
+                    drive.arcadeDrive(0.0, steeringAdjust);
+                //}
 
         }
     }

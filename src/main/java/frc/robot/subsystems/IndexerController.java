@@ -30,7 +30,7 @@ public class IndexerController extends SubsystemBase{
     }
 
     public void outtake() {
-        this.controller.set(-speed);
+        this.controller.set(-speed/2);
     }
 
     @Config
