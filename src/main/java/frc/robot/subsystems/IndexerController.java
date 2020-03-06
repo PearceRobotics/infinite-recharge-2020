@@ -35,7 +35,7 @@ public class IndexerController extends SubsystemBase{
 
     public void getSpeed(){
         this.controller.get();
-    })
+    }
     
 
     @Config
