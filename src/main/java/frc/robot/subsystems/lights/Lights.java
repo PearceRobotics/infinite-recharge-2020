@@ -12,6 +12,10 @@ public class Lights {
     private AddressableLEDBuffer ledBuffer;
     private long delay;
 
+    private final Color8Bit PURPLE = new Color8Bit(255, 0, 255);
+    private final Color8Bit ORANGE = new Color8Bit(255, 165, 0);
+    private final Color8Bit CYAN = new Color8Bit(13, 240, 203);
+    private final Color8Bit YELLOW = new Color8Bit(255, 255, 0);
     private final Color8Bit RED = new Color8Bit(255, 0, 0);
     private final Color8Bit BLUE = new Color8Bit(0, 0, 139);
     private final Color8Bit LIME_GREEN = new Color8Bit(0, 255, 0);
@@ -30,6 +34,22 @@ public class Lights {
 
     public void allBlue() {
         this.setColor(BLUE);
+    }
+
+    public void allOrange(){
+        this.setColor(ORANGE);
+    }
+
+    public void allPurple() {
+        this.setColor(PURPLE);
+    }
+
+    public void allYellow() {
+        this.setColor(YELLOW);
+    }
+
+    public void allCyan() {
+        this.setColor(CYAN);
     }
 
     public void allLimeGreen() {
