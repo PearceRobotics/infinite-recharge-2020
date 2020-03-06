@@ -25,10 +25,16 @@ import frc.robot.subsystems.DistanceSensorDetector;
 
 public class Robot extends TimedRobot {
 
+  //Pick Autonomous
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
+  //Pick Limelight Pipeline
+  private static final String kHighGoal = "High Goal";
+  private static final String kLowGoal = "Low Goal";
+  private String m_pipelineSelected;
+  private final SendableChooser<String> m_pipelineChooser = new SendableChooser<>();
 
   private Drive drive;
   private Controls controls;
@@ -74,6 +80,11 @@ public class Robot extends TimedRobot {
     m_autonChooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_autonChooser);
 
+
+    m_autonChooser.setDefaultOption("High Goal", kHighGoal);
+    m_autonChooser.addOption("Low Goal", kLowGoal);
+    SmartDashboard.putData("LimelightPipeline", m_pipelineChooser);
+
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
@@ -104,6 +115,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
+    setLimelightPipeline();
+    isPowerCellLoaded();
     CommandScheduler.getInstance().run();
   }
 
@@ -201,5 +214,34 @@ public class Robot extends TimedRobot {
   @Config(name = "DISABLE GYRO", defaultValueBoolean = false) 
   private void disableEnableGyro(boolean gyroDisabled) {
     this.drive.gyroDisabled(gyroDisabled);
+  }
+
+  public void setLimelightPipeline() {
+    boolean isHighGoal =true; //default value
+    m_pipelineSelected = m_pipelineChooser.getSelected();
+    switch (m_pipelineSelected) {
+    case kHighGoal:
+      if(!(isHighGoal)){
+        limelight.setPipeline(1);
+      }
+      else{
+        //do nothing
+      }
+      isHighGoal = true;
+        break;
+    case kLowGoal:
+    if(isHighGoal){
+      limelight.setPipeline(0);
+    }
+    else{
+      //do nothing
+    }
+    isHighGoal = false;
+      break;
+    default:
+    limelight.setPipeline(0);
+     //do nothing
+      break;
+    }
   }
 }
