@@ -19,6 +19,6 @@ public class LoadingPortCommandGroup extends ParallelCommandGroup{
 
     public LoadingPortCommandGroup(Drive drive, Limelight limelight, Controls controls) {
         addCommands(new AimCommand(drive, limelight),
-                new curvatureDrive(drive, controls));
+                new CurvatureDriveCommand(drive, controls));
     }
 }

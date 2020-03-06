@@ -18,13 +18,15 @@ public class CurvatureDriveCommand extends CommandBase {
 
     private Drive drive;
     private Controls controls;
+    //constants
+    private final double JOYSTICK_DEADZONE = .15;
 
     public CurvatureDriveCommand(Drive drive, Controls controls){
         this.drive = drive;
     }
 
     @Override
-    public void initalize(){
+    public void initialize(){
 
     }
 
