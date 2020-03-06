@@ -1,13 +1,11 @@
 package frc.robot.operatorInputs;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.GyroTurnCommand;
 import frc.robot.commands.IndexerOutakeCommand;
-import frc.robot.commands.PowerCellScoringCommandGroup;
-import frc.robot.commands.ReorientToFieldCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
 import frc.robot.commands.climbingCommands.ElevatorUpCommand;
+import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensorDetector;
 import frc.robot.subsystems.HopperController;

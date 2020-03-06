@@ -2,7 +2,7 @@
 /* Copyright (c) 2020 1745 JJ Pearce Robotics. All Rights Reserved.           */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.powerCellScoringCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperController;
