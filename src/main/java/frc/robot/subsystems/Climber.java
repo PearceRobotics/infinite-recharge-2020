@@ -41,7 +41,7 @@ public class Climber extends SubsystemBase {
     private final double SPROCKET_DIAMETER = 1.273;
 
     private final double MIDPOINT_POSITION = 12.0;
-    private final double UP_POSITION = 17.0;
+    private final double UP_POSITION = 21.0;
     private final double DOWN_POSITION = 3.0;
 
     private final int SPARK_550_MAXAMPS = 30;

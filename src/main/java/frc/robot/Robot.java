@@ -66,6 +66,8 @@ public class Robot extends TimedRobot {
   private double maxSpeed = 0.75;
   private double distance = 36.0;
 
+  private double elevatorHeight = 19.0;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
