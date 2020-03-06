@@ -11,13 +11,14 @@ public class AimCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
 
-    private final double MAX_SPEED = 1.0;
-    private final double MIN_SPEED = 0.05;
-    final double KpAIM = 0.025;
+    private final double MAX_SPEED = .4;
+    private final double MIN_SPEED = 0.2;
+    final double KpAIM = 0.009;
 
     public AimCommand(Drive drive, Limelight limelight) {
         this.drive = drive;
         this.limelight = limelight;
+        addRequirements(drive);
     }
 
     // Called just before this Command runs the first time
