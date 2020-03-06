@@ -1,6 +1,6 @@
 package frc.robot.commands.powerCellScoringCommands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.DistanceSensorDetector;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
@@ -13,11 +13,11 @@ import frc.robot.subsystems.DistanceSensorDetector;
  * A complex scoring command that drives forward, aims the robot to the target
  * then Launches up to five power cells at the inner zone
  */
-public class PowerCellScoringCommandGroup extends SequentialCommandGroup {
+public class PowerCellScoringCommandGroup extends ParallelCommandGroup {
 
     public PowerCellScoringCommandGroup(Drive drive, Limelight limelight, ShooterSpeedController shooterSpeedController,
             HopperController hopperController, IndexerController indexerController, DistanceSensorDetector distanceSensorDetector) {
-        addCommands(new TurnToTopTargetCommand(drive, limelight),
+        addCommands(new AimCommand(drive, limelight),
                 new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight, distanceSensorDetector));
         addRequirements(drive);
     }

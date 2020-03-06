@@ -9,23 +9,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
-import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
-import frc.robot.commands.drivingCommands.CurvatureDriveCommand;
-import frc.robot.commands.LightsCommand;
-import frc.robot.commands.drivingCommands.ArcadeDriveCommand;
-import frc.robot.commands.NotStraightArcadeDriveCommand;
-
+import frc.robot.subsystems.lights.Lights;
+import frc.robot.subsystems.lights.LightsController;
+import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DistanceSensorDetector;
-
-import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 
 public class Robot extends TimedRobot {
 
@@ -34,12 +30,6 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
 
-  private static final String kCurvatureDrive = "Cheesy Boi";
-  private static final String kArcadeDrive = "Arcade Boi";
-  private static final String kNotStraightArcadeDrive = "UrNotStraight";
-  private String m_teleopSelected;
-  private final SendableChooser<String> m_teleopChooser = new SendableChooser<>();
-
   private Drive drive;
   private Controls controls;
   private Lights lights;
@@ -47,10 +37,8 @@ public class Robot extends TimedRobot {
   private Gyroscope gyro;
   private Climber climber;
   private OperatorInputs operatorInputs;
-  private CurvatureDriveCommand curvatureDriveCommand;
-  private ArcadeDriveCommand arcadeDriveCommand;
-  private NotStraightArcadeDriveCommand notStraightArcadeDriveCommand;
-  private LightsCommand lightsCommand;
+  private AutonomousCommandGroup autonomousCommand;
+  private LightsController lightsController;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
@@ -69,6 +57,9 @@ public class Robot extends TimedRobot {
   @Log
   private boolean isPowerCellLoaded;
 
+  @Log
+  private boolean isLimelightLockedOn;
+
   private double maxSpeed = 0.75;
   private double distance = 36.0;
 
@@ -85,35 +76,27 @@ public class Robot extends TimedRobot {
     m_autonChooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_autonChooser);
 
-    m_teleopChooser.setDefaultOption("Curvature Drive", kCurvatureDrive);
-    m_teleopChooser.addOption("Arcade Drive", kArcadeDrive);
-    m_teleopChooser.addOption("UrNotStraight", kNotStraightArcadeDrive);
-    SmartDashboard.putData("Teleop Drive", m_teleopChooser);
-
     Logger.configureLoggingAndConfig(this, false);
 
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.lights = new Lights(9, 60, 50);
+    this.lights = new Lights(9, 82, 50);
     this.limelight = new Limelight();
-    this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
     this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
+    this.lightsController = new LightsController(this.lights, this.limelight);
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber, distanceSensorDetector);
-    this.lightsCommand = new LightsCommand(this.lights);
-    this.curvatureDriveCommand = new CurvatureDriveCommand(this.controls, this.drive);
-    this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController, indexerController, limelight, distance, maxSpeed);
-    this.notStraightArcadeDriveCommand = new NotStraightArcadeDriveCommand(controls, drive);
-    this.arcadeDriveCommand = new ArcadeDriveCommand(this.controls, this.drive);
+        indexerController, limelight, climber, distanceSensorDetector, lightsController);
+    this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
+        indexerController, limelight, distance, maxSpeed);
 
   }
 
-  /** 
+  /**
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
    * teleoperated and test.
@@ -125,9 +108,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
-    isPowerCellLoaded();
     CommandScheduler.getInstance().run();
-    lightsCommand.schedule();
   }
 
   /**
@@ -146,25 +127,23 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_autonChooser.getSelected();
     switch (m_autoSelected) {
-    case kCustomAuto:
-      break;
-    case kDefaultAuto:
-    default:
-      if (autonomousCommandGroup != null) {
-        autonomousCommandGroup.schedule();
-      }
-      break;
+      case kCustomAuto:
+        break;
+      case kDefaultAuto:
+      default:
+        if (autonomousCommandGroup != null) {
+          autonomousCommandGroup.schedule();
+        }
+        break;
     }
   }
 
   @Override
   public void autonomousPeriodic() {
-    CommandScheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit() {
-    setDriveMode();
   }
 
   // use this to override the algorithm and just use a speed
@@ -173,14 +152,9 @@ public class Robot extends TimedRobot {
     this.overrideSpeed = overrideSpeed;
     shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
+
   @Override
   public void teleopPeriodic() {
-    setDriveMode();
-    CommandScheduler.getInstance().run();
-    // if (controls.getYButton()) {
-    //   System.out.println("Y button pressed");
-    //   climber.gotoElevatorPosition(elevatorHeight);
-    // }
   }
 
   /**
@@ -188,14 +162,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    CommandScheduler.getInstance().run();
-    climber.getFlexSensorPosition();
   }
 
-  public boolean isPowerCellLoaded(){
+  public boolean isPowerCellLoaded() {
     isPowerCellLoaded = distanceSensorDetector.isPowerCellLoaded();
-    System.out.println("sensing ball" + isPowerCellLoaded);
     return isPowerCellLoaded;
+  }
+
+  public boolean isLimelightLockedOn() {
+    isLimelightLockedOn = limelight.hasValidTarget();
+    return isLimelightLockedOn;
   }
 
   @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
@@ -219,33 +195,8 @@ public class Robot extends TimedRobot {
     this.maxSpeed = maxSpeed;
   }
 
-  public void setDriveMode() {
-    m_teleopSelected = m_teleopChooser.getSelected();
-    switch (m_teleopSelected) {
-    case kArcadeDrive:
-    if(!(arcadeDriveCommand.isScheduled())){
-      curvatureDriveCommand.cancel();
-      notStraightArcadeDriveCommand.cancel();
-      arcadeDriveCommand.schedule();
-    }
-      break;
-    case kCurvatureDrive:
-    if(!(curvatureDriveCommand.isScheduled())){
-      arcadeDriveCommand.cancel();
-      notStraightArcadeDriveCommand.cancel();
-      curvatureDriveCommand.schedule();
-    }
-      break;
-    case kNotStraightArcadeDrive:
-    if(!(notStraightArcadeDriveCommand.isScheduled())){
-      curvatureDriveCommand.cancel();
-      arcadeDriveCommand.cancel();
-      notStraightArcadeDriveCommand.schedule();
-    }
-      break;
-    default:
-      curvatureDriveCommand.schedule();
-      break;
-    }
+  @Config(name = "DISABLE GYRO", defaultValueBoolean = false)
+  private void disableEnableGyro(boolean gyroDisabled) {
+    this.drive.gyroDisabled(gyroDisabled);
   }
 }

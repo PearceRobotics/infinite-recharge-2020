@@ -37,7 +37,7 @@ public class Limelight {
   }
 
   /*
-   * Results of a 3D position solution, 6 numbers: Translation (x,y,y)
+   * Results of a 3D position solution, 6 numbers: Translation (x,y,z)
    * Rotation(pitch,yaw,roll)
    */
   public double get3DInputs() {

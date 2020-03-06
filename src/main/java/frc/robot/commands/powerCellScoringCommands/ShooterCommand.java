@@ -21,7 +21,7 @@ public class ShooterCommand extends CommandBase {
     private Limelight limelight;
     private boolean shooterChoice;
     private DistanceSensorDetector distanceSensorDetector;
-    
+    public final double TOP_GOAL_DEADBAND = 0.5;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -37,6 +37,8 @@ public class ShooterCommand extends CommandBase {
         this.indexerController = indexerController;
         this.limelight = limelight;
         this.distanceSensorDetector = distanceSensorDetector;
+
+        addRequirements(shooterSpeedController);
         addRequirements(distanceSensorDetector);
     }
 
@@ -63,14 +65,13 @@ public class ShooterCommand extends CommandBase {
         //distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
         distance = 100;
         }
-
-        System.out.println("Distance to target " + distance);
-
+        
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
+        double offset = limelight.getHorizontalTargetOffset();
         // Make sure the shooter is at speed before loading a power cell
-        if (shooterSpeedController.isAtSpeed()) {
+        if (shooterSpeedController.isAtSpeed() && Math.abs(offset) <= TOP_GOAL_DEADBAND) {
             // turn on the indexer and hopper
             this.indexerController.intake();
             this.hopperController.start();

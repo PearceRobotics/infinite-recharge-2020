@@ -42,8 +42,7 @@ public class DriveForwardCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         if (drive.getLeftEncoderDistance() <= -distance && drive.getRightEncoderDistance() <= -distance) {
-            drive.setRightSpeed(0);
-            drive.setLeftSpeed(0);
+            drive.arcadeDrive(0.0, 0.0);
             return true;
         }
         return false;
