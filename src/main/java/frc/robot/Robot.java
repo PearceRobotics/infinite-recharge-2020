@@ -55,6 +55,8 @@ public class Robot extends TimedRobot {
   @Log
   private boolean isLimelightLockedOn;
 
+  private boolean limelightPipeline;
+
   private double maxSpeed = 0.75;
   private double distance = 36.0;
 
@@ -178,4 +180,15 @@ public class Robot extends TimedRobot {
   private void disableEnableGyro(boolean gyroDisabled) {
     this.drive.gyroDisabled(gyroDisabled);
   }
+
+  @Config(name = "LimeLight Pipeline", defaultValueBoolean = true )
+    private void limeLightPipeline(boolean limelightPipeline){
+      this.limelightPipeline = limelightPipeline;
+      if(limelightPipeline){
+        limelight.setPipeline(1);
+      }
+      else{
+        limelight.setPipeline(0);
+      }
+    }
 }
