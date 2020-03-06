@@ -65,9 +65,7 @@ public class ShooterCommand extends CommandBase {
         //distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
         distance = 100;
         }
-
-        //System.out.println("Distance to target " + distance);
-
+        
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
