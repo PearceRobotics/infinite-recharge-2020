@@ -2,7 +2,7 @@
 /* Copyright (c) 2020 1745 JJ Pearce Robotics. All Rights Reserved.           */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.powerCellScoringCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperController;
@@ -21,7 +21,7 @@ public class ShooterCommand extends CommandBase {
     private Limelight limelight;
     private boolean shooterChoice;
     private DistanceSensorDetector distanceSensorDetector;
-    public final double TOP_GOAL_DEADBAND = 0.5;
+    public final double TOP_GOAL_DEADBAND = 2;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -31,15 +31,13 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-        IndexerController indexerController, Limelight limelight, DistanceSensorDetector distanceSensorDetector){
+        IndexerController indexerController, Limelight limelight) {
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
         this.limelight = limelight;
-        this.distanceSensorDetector = distanceSensorDetector;
 
         addRequirements(shooterSpeedController);
-        addRequirements(distanceSensorDetector);
     }
 
     public void setShooterChoice(boolean shooterChoice){
@@ -65,9 +63,7 @@ public class ShooterCommand extends CommandBase {
         //distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
         distance = 100;
         }
-
-        System.out.println("Distance to target " + distance);
-
+        
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 

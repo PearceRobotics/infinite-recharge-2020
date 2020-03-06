@@ -6,11 +6,12 @@ import frc.robot.subsystems.vision.Limelight;
 public class LightsController extends SubsystemBase {
     private Lights lights;
     private Limelight limelight;
-    boolean isIdle = false;
+    boolean isIdle = true;
 
     public LightsController(Lights lights, Limelight limelight) {
         this.lights = lights;
         this.limelight = limelight;
+        this.lights.idleAnimation(3);
     }
 
     public void checkTargetLock() {
