@@ -9,9 +9,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class Gearbox {
     private CANSparkMax[] controllers;
-   /* private CANSparkMax canSparkMaxFront;
-    private CANSparkMax canSparkMaxMiddle;
-    private CANSparkMax canSparkMaxBack;*/
 
     private SpeedControllerGroup speedControllerGroup;
 
@@ -20,11 +17,6 @@ public class Gearbox {
         this.speedControllerGroup = new SpeedControllerGroup(controller, controllers);
         this.controllers = Arrays.copyOf(controllers, controllers.length + 1);
         this.controllers[this.controllers.length-1] = controller;
-        /*this.canSparkMaxFront = canSparkMaxFront;
-        this.canSparkMaxMiddle = canSparkMaxMiddle;
-        this.canSparkMaxBack = canSparkMaxBack;*/
-        
-       // this.speedControllerGroup = new SpeedControllerGroup(this.canSparkMaxFront, this.canSparkMaxMiddle, this.canSparkMaxBack);
     }
 
     public void setSpeed(double rate) {
@@ -44,26 +36,17 @@ public class Gearbox {
         for(CANSparkMax controller: this.controllers) {
             controller.setOpenLoopRampRate(rate);
         }
-        /*canSparkMaxFront.setOpenLoopRampRate(rate);
-        canSparkMaxMiddle.setOpenLoopRampRate(rate);        
-        canSparkMaxMiddle.setOpenLoopRampRate(rate); */    
     }
 
     public void setBrakeMode() {
         for(CANSparkMax controller: this.controllers) {
             controller.setIdleMode(IdleMode.kBrake);
         }
-        /*canSparkMaxFront.setIdleMode(IdleMode.kBrake);
-        canSparkMaxMiddle.setIdleMode(IdleMode.kBrake);      
-        canSparkMaxMiddle.setIdleMode(IdleMode.kBrake);*/
     }
 
     public void setCoastMode() {
         for(CANSparkMax controller: this.controllers) {
             controller.setIdleMode(IdleMode.kCoast);
         }
-        /*canSparkMaxFront.setIdleMode(IdleMode.kCoast);
-        canSparkMaxMiddle.setIdleMode(IdleMode.kCoast);      
-        canSparkMaxMiddle.setIdleMode(IdleMode.kCoast);*/
     }
 }
