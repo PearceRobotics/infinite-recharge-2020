@@ -48,6 +48,8 @@ public class Climber extends SubsystemBase {
 
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
+private double elevatorSetPosition = 0.0;
+
     public Climber() {
         this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
         this.elevatorController = new CANSparkMax(ELEVATOR_CAN_ID, CLIMBING_MOTOR_TYPE);
@@ -72,11 +74,13 @@ public class Climber extends SubsystemBase {
     }
 
     public void gotoElevatorUppoint() {
-        setElevatorPIDSetpoint(UP_POSITION);
+        ++elevatorSetPosition;
+        setElevatorPIDSetpoint(elevatorSetPosition);
     }
 
     public void gotoElevatorDownpoint() {
-        setElevatorPIDSetpoint(DOWN_POSITION);
+        --elevatorSetPosition;
+        setElevatorPIDSetpoint(elevatorSetPosition);
     }
 
     @Override

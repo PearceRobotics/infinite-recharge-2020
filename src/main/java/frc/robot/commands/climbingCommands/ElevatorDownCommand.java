@@ -25,16 +25,24 @@ public class ElevatorDownCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        
+        this.climber.setElevatorSpeed(0.4);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        this.climber.gotoElevatorDownpoint();
     }
 
     @Override
     public boolean isFinished() {
         return this.climber.isElevatorAtSetPoint();
+    }
+    
+
+    @Override
+    public void end(final boolean interrupted) {
+    this.climber.setElevatorSpeed(0.0);
+
     }
 }

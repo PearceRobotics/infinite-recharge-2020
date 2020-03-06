@@ -28,7 +28,7 @@ public class ElevatorUpCommand extends CommandBase {
 
     @Override
     public void initialize() {        
-        this.climber.gotoElevatorUppoint();
+        this.climber.setElevatorSpeed(-0.4);
         startTime = Timer.getFPGATimestamp();
     }
 
@@ -41,5 +41,11 @@ public class ElevatorUpCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         return(this.climber.isElevatorAtSetPoint() && (Timer.getFPGATimestamp() - startTime) > delayTime);
+    }
+
+    @Override
+    public void end(final boolean interrupted) {
+    this.climber.setElevatorSpeed(0.0);
+
     }
 }
