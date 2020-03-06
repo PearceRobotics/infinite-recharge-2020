@@ -178,4 +178,9 @@ public class Robot extends TimedRobot {
   private void disableEnableGyro(boolean gyroDisabled) {
     this.drive.gyroDisabled(gyroDisabled);
   }
+
+  @Config(name = "DISABLE AIM", defaultValueBoolean = false)
+  private void disablShooterAimCommand(boolean disableShooterAim){
+    controls.disableShooterAimCommand() = disableShooterAim;
+  }
 }

@@ -10,6 +10,7 @@ import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.shooter.ShooterMath;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.operatorInputs.Controls;
 import frc.robot.subsystems.DistanceSensorDetector;
 import io.github.oblarg.oblog.annotations.Config;
 
@@ -20,7 +21,9 @@ public class ShooterCommand extends CommandBase {
     private IndexerController indexerController;
     private Limelight limelight;
     private boolean shooterChoice;
-    public final double TOP_GOAL_DEADBAND = 2;
+    private final double TOP_GOAL_DEADBAND = 2;
+
+    private boolean disableShooterAim = false;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
@@ -30,11 +33,12 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-        IndexerController indexerController, Limelight limelight) {
+        IndexerController indexerController, Limelight limelight, Controls controls) {
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
         this.limelight = limelight;
+        this.controls = controls;
 
         addRequirements(shooterSpeedController);
     }
@@ -53,7 +57,10 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
+
         double distance = this.distanceToGoal;
+
+        disableShooterAim = controls.
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
 
@@ -70,6 +77,7 @@ public class ShooterCommand extends CommandBase {
         // Make sure the shooter is at speed before loading a power cell
         if (shooterSpeedController.isAtSpeed() && Math.abs(offset) <= TOP_GOAL_DEADBAND) {
             // turn on the indexer and hopper
+            if()
             this.indexerController.intake();
             this.hopperController.start();
         }
