@@ -79,13 +79,9 @@ public class Drive extends SubsystemBase{
       this.setLeftSpeed(-(throttle - curvature));
       this.setRightSpeed(throttle + curvature);
     }
-    else if(throttle == 0.0 && curvature != 0.0){ // if robot is turning in place 
-      this.setLeftSpeed(-(throttle - curvature));
-      this.setRightSpeed(throttle + curvature);
-    }
     else { // when robot isn't driving straight
       this.desiredAngle = Integer.MAX_VALUE; //if turn is greater than 0 or if robot is still
-      differentialDrive.curvatureDrive(-throttle, curvature, false);
+      differentialDrive.curvatureDrive(-throttle, curvature, (Math.abs(throttle) < QUICK_TURN_THROTTLE_DEADZONE));
     }
   }
 
