@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
-    this.lights = new Lights(9, 60, 50);
+    this.lights = new Lights(9, 82, 50);
     this.limelight = new Limelight();
     this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
@@ -154,11 +154,6 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void teleopPeriodic() {
-    CommandScheduler.getInstance().run();
-    // if (controls.getYButton()) {
-    //   System.out.println("Y button pressed");
-    //   climber.gotoElevatorPosition(elevatorHeight);
-    // }
   }
 
   /**
@@ -166,8 +161,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    CommandScheduler.getInstance().run();
-    climber.getFlexSensorPosition();
   }
 
   public boolean isPowerCellLoaded(){

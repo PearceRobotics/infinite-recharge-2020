@@ -32,6 +32,6 @@ public class OperatorInputs {
     controls.getLeftStick().whenPressed(new ClimbingCommandGroup(climber));
     drive.setDefaultCommand(new RunCommand(() -> {
       drive.curvatureDrive(controls.getLeftY(JOYSTICK_DEADZONE), controls.getRightX(JOYSTICK_DEADZONE));
-    }));
+    }, drive));
   }
 }
