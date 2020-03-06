@@ -1,5 +1,5 @@
 area_max:100
-area_min:0
+area_min:0.065536
 area_similarity:0
 aspect_max:20
 aspect_min:0
@@ -7,12 +7,12 @@ black_level:19
 blue_balance:2482
 calibration_type:0
 contour_grouping:0
-contour_sort_final:1
+contour_sort_final:0
 convexity_max:77
 convexity_min:0
 corner_approx:2
 cross_a_a:1
-cross_a_x:0
+cross_a_x:0.18
 cross_a_y:0
 cross_b_a:1
 cross_b_x:0

@@ -68,7 +68,6 @@ public class ShooterCommand extends CommandBase {
 
         double offset = limelight.getHorizontalTargetOffset();
         // Make sure the shooter is at speed before loading a power cell
-        System.out.println(shooterSpeedController.isAtSpeed() && Math.abs(offset) <= TOP_GOAL_DEADBAND);
         if (shooterSpeedController.isAtSpeed() && Math.abs(offset) <= TOP_GOAL_DEADBAND) {
             // turn on the indexer and hopper
             this.indexerController.intake();
