@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
-import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.vision.DistanceCalculator;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -17,8 +16,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
+import frc.robot.subsystems.lights.Lights;
+import frc.robot.subsystems.lights.LightsController;
 import frc.robot.commands.AutonomousCommand;
-import frc.robot.commands.LightsCommand;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
   private Climber climber;
   private OperatorInputs operatorInputs;
   private AutonomousCommand autonomousCommand;
-  private LightsCommand lightsCommand;
+  private LightsController lightsController;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
@@ -89,15 +89,13 @@ public class Robot extends TimedRobot {
     this.controls = new Controls(new Joystick(JOYSTICK_PORT));
     this.lights = new Lights(9, 82, 50);
     this.limelight = new Limelight();
-    this.lightsCommand = new LightsCommand(lights);
     this.shooterSpeedController = new ShooterSpeedController();
     this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
+    this.lightsController = new LightsController(this.lights, this.limelight);
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber, distanceSensorDetector);
-    this.lightsCommand = new LightsCommand(this.lights);
-    this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, drive, pValue);
+        indexerController, limelight, climber, distanceSensorDetector, lightsController);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
   }
 
@@ -113,10 +111,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Logger.updateEntries();
-    isPowerCellLoaded();
-    isLimelightLockedOn();
     CommandScheduler.getInstance().run();
-    lightsCommand.schedule();
     System.out.println("dsitance to target "
         + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
     System.out.println("vertical angle " + limelight.getVerticalTargetOffset());

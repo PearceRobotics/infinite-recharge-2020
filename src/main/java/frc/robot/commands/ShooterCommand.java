@@ -26,6 +26,8 @@ public class ShooterCommand extends CommandBase {
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
+    private final double TOP_GOAL_DEADBAND = 0.5;
+
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
     private double distanceToGoal = 149.0; // TODO set back to 0 when distance is working
@@ -65,8 +67,9 @@ public class ShooterCommand extends CommandBase {
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
+        double offset = limelight.getHorizontalTargetOffset();
         // Make sure the shooter is at speed before loading a power cell
-        if (shooterSpeedController.isAtSpeed()) {
+        if (shooterSpeedController.isAtSpeed() && Math.abs(offset) <= TOP_GOAL_DEADBAND) {
             // turn on the indexer and hopper
             this.indexerController.intake();
             this.hopperController.start();
