@@ -27,12 +27,10 @@ public class Climber extends SubsystemBase {
     private CANSparkMax winchController;
     private CANSparkMax elevatorController;
     private Encoder elevatorEncoder;
-    private AnalogPotentiometer climbingFlexSensor;
     private PIDController elevatorPIDController;
 
     private final int WINCH_CAN_ID = 9;
     private final int ELEVATOR_CAN_ID = 15;
-    private final int CLIMBING_FLEX_SENSOR_PORT = 0;
     private final double Kp = 0.15;
     private final double Ki = 0.0;
     private final double Kd = 0.0;
@@ -57,16 +55,16 @@ public class Climber extends SubsystemBase {
         // 180, 90);
 
         elevatorController.setIdleMode(IdleMode.kBrake);
+        elevatorController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
+
         this.elevatorEncoder = new Encoder(4, 5);
         this.elevatorEncoder.setReverseDirection(true);
-
         this.elevatorEncoder.setDistancePerPulse((SPROCKET_DIAMETER * Math.PI) / 2048.0);
-
         this.elevatorEncoder.reset();
 
         elevatorPIDController = new PIDController(Kp, Ki, Kd);
-        elevatorController.setSmartCurrentLimit(SPARK_550_MAXAMPS);
         setElevatorPIDTolerance();
+        elevatorPIDController.disableContinuousInput();
     }
 
     public void gotoElevatorMidpoint() {
