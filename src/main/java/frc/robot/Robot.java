@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
-        indexerController, limelight, distance, maxSpeed);
+        indexerController, controls, limelight,  distance, maxSpeed);
 
   }
 
@@ -179,8 +179,8 @@ public class Robot extends TimedRobot {
     this.drive.gyroDisabled(gyroDisabled);
   }
 
-  @Config(name = "DISABLE AIM", defaultValueBoolean = false)
+  @Config(name = "DISABLE SHOOTER AIM DEPENDENCY", defaultValueBoolean = false)
   private void disablShooterAimCommand(boolean disableShooterAim){
-    controls.disableShooterAimCommand() = disableShooterAim;
+    controls.disableShooterAimCommand(disableShooterAim);
   }
 }

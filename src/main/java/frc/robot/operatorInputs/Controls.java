@@ -25,7 +25,7 @@ public class Controls {
     private final int LEFT_STICK_BUTTON_ID = 9;
     private final int RIGHT_STICK_BUTTON_ID = 10;
 
-    private boolean disableAimCommand;
+    private boolean disableAimCommand = false;
 
     private final JoystickButton aJoystickButton;
     private final JoystickButton bJoystickButton;
@@ -145,5 +145,9 @@ public class Controls {
 
     public void disableShooterAimCommand(boolean disableAimCommand){
         this.disableAimCommand = disableAimCommand;
+    }
+
+    public boolean disableShooterAimCommand(){
+        return this.disableAimCommand;
     }
 }

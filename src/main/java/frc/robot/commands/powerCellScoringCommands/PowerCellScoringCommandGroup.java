@@ -1,6 +1,7 @@
 package frc.robot.commands.powerCellScoringCommands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.operatorInputs.Controls;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.vision.Limelight;
@@ -14,9 +15,9 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 public class PowerCellScoringCommandGroup extends ParallelCommandGroup {
 
     public PowerCellScoringCommandGroup(Drive drive, Limelight limelight, ShooterSpeedController shooterSpeedController,
-            HopperController hopperController, IndexerController indexerController) {
+            HopperController hopperController, IndexerController indexerController, Controls controls) {
         addCommands(new AimCommand(drive, limelight),
-                new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
+                new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight, controls));
         addRequirements(drive);
     }
 }

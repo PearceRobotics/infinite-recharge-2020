@@ -19,6 +19,7 @@ public class ShooterCommand extends CommandBase {
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
     private IndexerController indexerController;
+    private Controls controls;
     private Limelight limelight;
     private boolean shooterChoice;
     private final double TOP_GOAL_DEADBAND = 2;
@@ -60,7 +61,7 @@ public class ShooterCommand extends CommandBase {
 
         double distance = this.distanceToGoal;
 
-        disableShooterAim = controls.
+        disableShooterAim = controls.disableShooterAimCommand();
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
 
@@ -75,11 +76,19 @@ public class ShooterCommand extends CommandBase {
 
         double offset = limelight.getHorizontalTargetOffset();
         // Make sure the shooter is at speed before loading a power cell
-        if (shooterSpeedController.isAtSpeed() && Math.abs(offset) <= TOP_GOAL_DEADBAND) {
+        if (shooterSpeedController.isAtSpeed()) {
             // turn on the indexer and hopper
-            if()
+            if(!disableShooterAim)
+            {
+                if(Math.abs(offset) <= TOP_GOAL_DEADBAND){
+                    this.indexerController.intake();
+                    this.hopperController.start();
+                }
+            }
+            else{
             this.indexerController.intake();
             this.hopperController.start();
+            }
         }
 
         // turn off the indexer and hopper
