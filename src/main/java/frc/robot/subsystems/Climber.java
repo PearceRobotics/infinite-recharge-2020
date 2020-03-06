@@ -41,14 +41,14 @@ public class Climber extends SubsystemBase {
     private final double SPROCKET_DIAMETER = 1.273;
 
     private final double MIDPOINT_POSITION = 12.0;
-    private final double UP_POSITION = 18.0;
-    private final double DOWN_POSITION = 3.0;
+    private final double UP_POSITION = 25.0;
+    private final double DOWN_POSITION = 1.0;
 
     private final int SPARK_550_MAXAMPS = 30;
 
     private MotorType CLIMBING_MOTOR_TYPE = MotorType.kBrushless;
 
-private double elevatorSetPosition = 0.0;
+    private double elevatorSetPosition = 0.0;
 
     public Climber() {
         this.winchController = new CANSparkMax(WINCH_CAN_ID, CLIMBING_MOTOR_TYPE);
@@ -74,13 +74,13 @@ private double elevatorSetPosition = 0.0;
     }
 
     public void gotoElevatorUppoint() {
-        ++elevatorSetPosition;
-        setElevatorPIDSetpoint(elevatorSetPosition);
+        // elevatorSetPosition += 2.0;
+        setElevatorPIDSetpoint(UP_POSITION);
     }
 
     public void gotoElevatorDownpoint() {
-        --elevatorSetPosition;
-        setElevatorPIDSetpoint(elevatorSetPosition);
+        // elevatorSetPosition -= 2.0;
+        setElevatorPIDSetpoint(DOWN_POSITION);
     }
 
     @Override

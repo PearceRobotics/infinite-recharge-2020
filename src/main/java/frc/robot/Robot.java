@@ -125,9 +125,9 @@ public class Robot extends TimedRobot {
     setLimelightPipeline();
     isPowerCellLoaded();
     CommandScheduler.getInstance().run();
-    System.out.println("dsitance to target "
-        + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
-    System.out.println("vertical angle " + limelight.getVerticalTargetOffset());
+    // System.out.println("dsitance to target "
+        // + DistanceCalculator.getDistanceFromTarget(Math.toRadians(limelight.getVerticalTargetOffset())));
+    // System.out.println("vertical angle " + limelight.getVerticalTargetOffset());
   }
 
   /**

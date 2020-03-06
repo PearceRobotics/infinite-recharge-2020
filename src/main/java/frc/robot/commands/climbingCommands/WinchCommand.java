@@ -21,7 +21,7 @@ public class WinchCommand extends CommandBase {
     private double currentTime;
 
     //constants
-    private final double WINCH_SPEED = 0.5;
+    private final double WINCH_SPEED = 0.75;
 
     public WinchCommand(Climber climber) {
         this.climber = climber;
@@ -30,7 +30,9 @@ public class WinchCommand extends CommandBase {
 
     @Override
     public void initialize() {
+
         this.startTime = Timer.getFPGATimestamp();  
+        System.out.println("winch commanded");
     }
 
     // Called repeatedly when this Command is scheduled to run

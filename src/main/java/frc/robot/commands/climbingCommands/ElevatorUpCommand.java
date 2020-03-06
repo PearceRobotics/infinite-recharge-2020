@@ -18,7 +18,7 @@ public class ElevatorUpCommand extends CommandBase {
 
     private Climber climber;
     private double startTime = 0.0;
-    private final double delayTime = 1.0;
+    private final double delayTime = 3.0;
 
     public ElevatorUpCommand(Climber climber) {
         this.climber = climber;
@@ -28,7 +28,7 @@ public class ElevatorUpCommand extends CommandBase {
 
     @Override
     public void initialize() {        
-        this.climber.setElevatorSpeed(-0.4);
+        this.climber.gotoElevatorUppoint();
         startTime = Timer.getFPGATimestamp();
     }
 
@@ -40,12 +40,9 @@ public class ElevatorUpCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return(this.climber.isElevatorAtSetPoint() && (Timer.getFPGATimestamp() - startTime) > delayTime);
-    }
+        // return true;
+        // return(this.climber.isElevatorAtSetPoint() && (Timer.getFPGATimestamp() - startTime) > delayTime);
 
-    @Override
-    public void end(final boolean interrupted) {
-    this.climber.setElevatorSpeed(0.0);
-
+        return((Timer.getFPGATimestamp() - startTime) > delayTime);
     }
 }

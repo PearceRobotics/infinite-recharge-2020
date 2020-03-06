@@ -35,6 +35,8 @@ public class ElevatorMidpointCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return this.climber.isElevatorAtSetPoint();
+        
+        return true;
+        //return this.climber.isElevatorAtSetPoint();
     }
 }
