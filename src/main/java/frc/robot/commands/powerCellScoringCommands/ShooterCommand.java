@@ -9,8 +9,8 @@ import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.shooter.ShooterMath;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
-import frc.robot.subsystems.vision.DistanceCalculator;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.DistanceSensorDetector;
 import io.github.oblarg.oblog.annotations.Config;
 
 public class ShooterCommand extends CommandBase {
@@ -19,18 +19,18 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
-    private boolean shooterChoice = true;
-    public final double TOP_GOAL_DEADBAND = 2.0;
+    private boolean shooterChoice;
+    public final double TOP_GOAL_DEADBAND = 2;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
-    private double fixedGoalDistance = 149.0;
+    private double distanceToGoal = 149.0; // TODO set back to 0 when distance is working
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-            IndexerController indexerController, Limelight limelight) {
+        IndexerController indexerController, Limelight limelight) {
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
@@ -39,9 +39,10 @@ public class ShooterCommand extends CommandBase {
         addRequirements(shooterSpeedController);
     }
 
-    public void setShooterChoice(boolean shooterChoice) {
+    public void setShooterChoice(boolean shooterChoice){
         this.shooterChoice = shooterChoice;
     }
+
 
     // Called just before this Command runs the first time
     @Override
@@ -52,12 +53,16 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        double distance = fixedGoalDistance;
-        if (shooterChoice) {
-            double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
-            distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
-        }
+        double distance = this.distanceToGoal;
+        // TODO Change distanceToGoal to be a call to the limelight.
+        // TODO Limelight might take inner distance into account, revisit this
 
+        if(shooterChoice == true){
+        double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
+        //distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
+        distance = 100;
+        }
+        
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
@@ -96,6 +101,6 @@ public class ShooterCommand extends CommandBase {
     // Use this for the speed finding algorithm
     @Config
     public void setDistanceToGoal(double distanceToGoal) {
-        this.fixedGoalDistance = distanceToGoal;
+        this.distanceToGoal = distanceToGoal;
     }
 }
