@@ -12,9 +12,9 @@ public class AimCommand extends CommandBase {
     private Limelight limelight;
 
     private final double DEADBAND_DEGREES = 2;
-    private final double MAX_SPEED = 1.0;
-    private final double MIN_SPEED = 0.05;
-    private final double KpAIM = 0.1;
+    private final double MAX_SPEED = .4;
+    private final double MIN_SPEED = 0.2;
+    private final double KpAIM = 0.09;
 
     public AimCommand(Drive drive, Limelight limelight) {
         this.drive = drive;

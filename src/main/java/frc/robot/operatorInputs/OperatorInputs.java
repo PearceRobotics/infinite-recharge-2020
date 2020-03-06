@@ -2,6 +2,7 @@ package frc.robot.operatorInputs;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.GyroTurnCommand;
+import frc.robot.commands.IndexerOutakeCommand;
 import frc.robot.commands.PowerCellScoringCommandGroup;
 import frc.robot.commands.ReorientToFieldCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
@@ -19,14 +20,14 @@ import frc.robot.subsystems.vision.Limelight;
 
 public class OperatorInputs {
 
-  private final double JOYSTICK_DEADZONE = 0.2;
+  private final double JOYSTICK_DEADZONE = 0.1;
   public OperatorInputs(Controls controls, Drive drive, Gyroscope gyro, ShooterSpeedController shooterSpeedController,
       HopperController hopperController, IndexerController indexerController, 
       Limelight limelight, Climber climber, DistanceSensorDetector distanceSensorDetector, LightsController lightsController) {
-    controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
-    controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
-    controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
-    controls.getJoystickBButton().whenPressed(new ReorientToFieldCommand(gyro, drive));
+    //controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
+    //controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
+    //controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
+    controls.getJoystickBButton().whenPressed(new IndexerOutakeCommand(indexerController, shooterSpeedController));
     controls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight, shooterSpeedController,
         hopperController, indexerController, distanceSensorDetector));
     controls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
