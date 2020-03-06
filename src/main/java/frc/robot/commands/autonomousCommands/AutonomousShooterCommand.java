@@ -14,8 +14,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.shooter.ShooterMath;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.DistanceSensorDetector;
-import frc.robot.commands.IndexerIntakeCommand;
 
 /**
  * Add your docs here.
@@ -61,30 +59,10 @@ public class AutonomousShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
-
-        // if(shooterSpeedController.isAtSpeed() && Timer.getFPGATimestamp() - startTime
-        // > LAUNCH_TIME ){// if the shooter is at speed and has given time for last
-        // ball to shoot
-        // indexerController.intake();
-        // hopperController.start();
-        // }
-        // if(distanceSensor.isPowerCellLoaded() && !ballinIndexer){
-        // hopperController.stop();
-        // ballinIndexer = true;
-        // }
-        // if(!distanceSensor.isPowerCellLoaded() && ballinIndexer){ //if ball is no
-        // longer visible first time
-        // startTime = Timer.getFPGATimestamp();
-        // ballsShot++;
-        // indexerController.stop();
-        // ballinIndexer = false;
-        // }
-        // System.out.println("speed " + shooterSpeedController.getCurrentSpeed());
         if (shooterSpeedController.isAtSpeed()) {// if the shooter is at speed and has given time for last ball to shoot
             indexerController.intake();
             hopperController.start();
         } else {
-
             indexerController.stop();
             hopperController.stop();
         }

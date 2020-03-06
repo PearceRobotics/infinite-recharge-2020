@@ -11,6 +11,7 @@ public class DriveForwardCommand extends CommandBase {
     private double maxSpeed;
     private double startTime;
     private final double DRIVE_TIME = 2.0;
+    private final double AUTO_TIME = 15;
 
     public DriveForwardCommand(double distance, double maxSpeed, Drive drive) {
         this.distance = distance;
@@ -47,6 +48,8 @@ public class DriveForwardCommand extends CommandBase {
     public boolean isFinished() {
         if (Timer.getFPGATimestamp() - startTime > DRIVE_TIME) {
             drive.arcadeDrive(0.0, 0.0);
+        } 
+        if (Timer.getFPGATimestamp() - startTime > (AUTO_TIME - DRIVE_TIME)) {
             return true;
         }
         return false;

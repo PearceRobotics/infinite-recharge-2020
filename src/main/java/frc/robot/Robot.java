@@ -11,7 +11,6 @@ import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.vision.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
@@ -21,13 +20,11 @@ import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DistanceSensorDetector;
 
 public class Robot extends TimedRobot {
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
   private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
 
   private Drive drive;
@@ -37,12 +34,10 @@ public class Robot extends TimedRobot {
   private Gyroscope gyro;
   private Climber climber;
   private OperatorInputs operatorInputs;
-  private AutonomousCommandGroup autonomousCommand;
   private LightsController lightsController;
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
-  private DistanceSensorDetector distanceSensorDetector;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
@@ -85,12 +80,11 @@ public class Robot extends TimedRobot {
     this.lights = new Lights(9, 82, 50);
     this.limelight = new Limelight();
     this.shooterSpeedController = new ShooterSpeedController();
-    this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber, distanceSensorDetector, lightsController);
+        indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
         indexerController, limelight, distance, maxSpeed);
 
@@ -124,24 +118,8 @@ public class Robot extends TimedRobot {
    * make sure to add them to the chooser code above as well.
    */
   @Override
-  public void autonomousInit() {
-    
+  public void autonomousInit() {  
     autonomousCommandGroup.schedule();
-    // m_autoSelected = m_autonChooser.getSelected();
-    // switch (m_autoSelected) {
-    //   case kCustomAuto:
-      
-    //   autonomousCommandGroup.schedule();
-    //     break;
-    //   case kDefaultAuto:
-      
-    //   autonomousCommandGroup.schedule();
-    //   default:
-    //     if (autonomousCommandGroup != null) {
-    //       autonomousCommandGroup.schedule();
-    //     }
-    //     break;
-    // }
   }
 
   @Override
@@ -168,11 +146,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-  }
-
-  public boolean isPowerCellLoaded() {
-    isPowerCellLoaded = distanceSensorDetector.isPowerCellLoaded();
-    return isPowerCellLoaded;
   }
 
   public boolean isLimelightLockedOn() {

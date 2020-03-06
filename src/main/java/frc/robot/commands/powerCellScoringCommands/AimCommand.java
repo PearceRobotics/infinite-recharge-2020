@@ -11,7 +11,6 @@ public class AimCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
 
-    private final double DEADBAND_DEGREES = 2;
     private final double MAX_SPEED = .4;
     private final double MIN_SPEED = 0.2;
     private final double KpAIM = 0.09;
