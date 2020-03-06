@@ -13,7 +13,7 @@ public class AimCommand extends CommandBase {
 
     private final double MAX_SPEED = 1.0;
     private final double MIN_SPEED = 0.05;
-    final double KpAIM = 0.025;
+    final double KpAIM = 0.09;
 
     public AimCommand(Drive drive, Limelight limelight) {
         this.drive = drive;

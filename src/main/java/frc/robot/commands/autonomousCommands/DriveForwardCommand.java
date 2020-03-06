@@ -1,5 +1,6 @@
 package frc.robot.commands.autonomousCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
 
@@ -8,6 +9,8 @@ public class DriveForwardCommand extends CommandBase {
     private Drive drive;
     private double distance;
     private double maxSpeed;
+    private double startTime;
+    private final double DRIVE_TIME = 2.0;
 
     public DriveForwardCommand(double distance, double maxSpeed, Drive drive) {
         this.distance = distance;
@@ -29,6 +32,7 @@ public class DriveForwardCommand extends CommandBase {
         System.out.println("driving forward");
         drive.setBrakeMode();
         drive.resetEncoders();
+        startTime = Timer.getFPGATimestamp();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -41,7 +45,7 @@ public class DriveForwardCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (drive.getLeftEncoderDistance() <= -distance && drive.getRightEncoderDistance() <= -distance) {
+        if (Timer.getFPGATimestamp() - startTime > DRIVE_TIME) {
             drive.arcadeDrive(0.0, 0.0);
             return true;
         }
@@ -51,6 +55,8 @@ public class DriveForwardCommand extends CommandBase {
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
+        
+        drive.arcadeDrive(0.0, 0.0);
         drive.setCoastMode();
     }
 }

@@ -20,29 +20,29 @@ import frc.robot.commands.IndexerIntakeCommand;
 /**
  * Add your docs here.
  */
-public class AutonomousShooterCommand extends CommandBase{
+public class AutonomousShooterCommand extends CommandBase {
 
     private Drive drive;
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
     private IndexerController indexerController;
-    private DistanceSensorDetector distanceSensor;
+    // private DistanceSensorDetector distanceSensor;
 
-    //variables
+    // variables
     private double ballsShot = 0;
     private double startTime = 0;
     private double commandStartTime;
     private boolean ballinIndexer = false;
-    private double distanceToGoal = 149.0; 
+    private double distanceToGoal = 165.0;
 
-    //constants
+    // constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
     private final double LAUNCH_TIME = 0.5;
     private final double AUTONOMOUS_SPEED = 0.6;
     private final double COMMAND_RUN_LIMIT = 8.0;
 
     public AutonomousShooterCommand(Drive drive, ShooterSpeedController shooterSpeedController,
-    HopperController hopperController, IndexerController indexerController){
+            HopperController hopperController, IndexerController indexerController) {
         this.drive = drive;
         this.indexerController = indexerController;
         this.shooterSpeedController = shooterSpeedController;
@@ -53,32 +53,46 @@ public class AutonomousShooterCommand extends CommandBase{
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
+        shooterSpeedController
+                .setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
+        commandStartTime = Timer.getFPGATimestamp();
     }
 
     @Override
-    public void execute(){
-        shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
+    public void execute() {
 
-        if(shooterSpeedController.isAtSpeed() && Timer.getFPGATimestamp() - startTime > LAUNCH_TIME ){// if the shooter is at speed and has given time for last ball to shoot
+        // if(shooterSpeedController.isAtSpeed() && Timer.getFPGATimestamp() - startTime
+        // > LAUNCH_TIME ){// if the shooter is at speed and has given time for last
+        // ball to shoot
+        // indexerController.intake();
+        // hopperController.start();
+        // }
+        // if(distanceSensor.isPowerCellLoaded() && !ballinIndexer){
+        // hopperController.stop();
+        // ballinIndexer = true;
+        // }
+        // if(!distanceSensor.isPowerCellLoaded() && ballinIndexer){ //if ball is no
+        // longer visible first time
+        // startTime = Timer.getFPGATimestamp();
+        // ballsShot++;
+        // indexerController.stop();
+        // ballinIndexer = false;
+        // }
+        // System.out.println("speed " + shooterSpeedController.getCurrentSpeed());
+        if (shooterSpeedController.isAtSpeed()) {// if the shooter is at speed and has given time for last ball to shoot
             indexerController.intake();
             hopperController.start();
+        } else {
+
+            indexerController.stop();
+            hopperController.stop();
         }
-            if(distanceSensor.isPowerCellLoaded() && !ballinIndexer){
-                hopperController.stop();
-                ballinIndexer = true;
-            }
-            if(!distanceSensor.isPowerCellLoaded() && ballinIndexer){ //if ball is no longer visible first time
-                startTime = Timer.getFPGATimestamp();
-                ballsShot++;
-                indexerController.stop();
-                ballinIndexer = false;
-            }
     }
 
     @Override
     public boolean isFinished() {
-        if(ballsShot >= 3 || Timer.getFPGATimestamp() - commandStartTime > COMMAND_RUN_LIMIT) {
+        if ((Timer.getFPGATimestamp() - commandStartTime) > COMMAND_RUN_LIMIT) {
             return true;
         }
         return false;

@@ -125,17 +125,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_autonChooser.getSelected();
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        break;
-      case kDefaultAuto:
-      default:
-        if (autonomousCommandGroup != null) {
-          autonomousCommandGroup.schedule();
-        }
-        break;
-    }
+    
+    autonomousCommandGroup.schedule();
+    // m_autoSelected = m_autonChooser.getSelected();
+    // switch (m_autoSelected) {
+    //   case kCustomAuto:
+      
+    //   autonomousCommandGroup.schedule();
+    //     break;
+    //   case kDefaultAuto:
+      
+    //   autonomousCommandGroup.schedule();
+    //   default:
+    //     if (autonomousCommandGroup != null) {
+    //       autonomousCommandGroup.schedule();
+    //     }
+    //     break;
+    // }
   }
 
   @Override
