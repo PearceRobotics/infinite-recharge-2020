@@ -73,6 +73,8 @@ public class Robot extends TimedRobot {
 
     Logger.configureLoggingAndConfig(this, false);
 
+    limelight.setHighGoalPipeline();
+
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);

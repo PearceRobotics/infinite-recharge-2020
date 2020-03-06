@@ -107,4 +107,11 @@ public class Limelight {
   public void setPipeline(Number pipeline) {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
   }
+
+  public void setHighGoalPipeline(){
+    setPipeline(1);
+  }
+  public void setLowGoalPipeline(){
+    setPipeline(0);
+  }
 }
