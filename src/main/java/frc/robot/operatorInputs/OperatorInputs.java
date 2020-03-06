@@ -1,6 +1,7 @@
 package frc.robot.operatorInputs;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.GyroLimelightPipeline;
 import frc.robot.commands.IndexerOutakeCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
@@ -20,7 +21,7 @@ public class OperatorInputs {
   private final double JOYSTICK_DEADZONE = 0.1;
   public OperatorInputs(Controls controls, Drive drive, Gyroscope gyro, ShooterSpeedController shooterSpeedController,
       HopperController hopperController, IndexerController indexerController, 
-      Limelight limelight, Climber climber, LightsController lightsController) {
+      Limelight limelight, Climber climber, LightsController lightsController, GyroLimelightPipeline gyroLimelightPipeline) {
     //controls.getJoystickXButton().whenPressed(new GyroTurnCommand(gyro, drive, 180));
     //controls.getRightJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, -90));
     //controls.getLeftJoystickBumper().whenPressed(new GyroTurnCommand(gyro, drive, 90));
@@ -33,5 +34,6 @@ public class OperatorInputs {
       drive.curvatureDrive(controls.getLeftY(JOYSTICK_DEADZONE), controls.getRightX(JOYSTICK_DEADZONE));
     }, drive));
     lightsController.setDefaultCommand(new RunCommand(() -> lightsController.checkTargetLock(), lightsController));
+    gyroLimelightPipeline.setDefaultCommand(new RunCommand(() -> gyroLimelightPipeline.gyroLimelightPipeline(), gyroLimelightPipeline));
   }
 }

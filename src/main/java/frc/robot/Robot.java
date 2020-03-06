@@ -16,6 +16,7 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.drive.Gyroscope;
 import frc.robot.subsystems.lights.Lights;
 import frc.robot.subsystems.lights.LightsController;
+import frc.robot.commands.GyroLimelightPipeline;
 import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+  private GyroLimelightPipeline gyroLimelightPipeline;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
@@ -88,7 +90,7 @@ public class Robot extends TimedRobot {
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
     this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber, lightsController);
+        indexerController, limelight, climber, lightsController,gyroLimelightPipeline);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
         indexerController, limelight, distance, maxSpeed);
 
