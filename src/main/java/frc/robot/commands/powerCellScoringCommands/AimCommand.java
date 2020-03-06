@@ -11,7 +11,7 @@ public class AimCommand extends CommandBase {
     private Drive drive;
     private Limelight limelight;
 
-    private final double MAX_SPEED = .4;
+    private final double MAX_SPEED = 0.4;
     private final double MIN_SPEED = 0.2;
     private final double KpAIM = 0.09;
 
@@ -21,7 +21,7 @@ public class AimCommand extends CommandBase {
         addRequirements(drive);
     }
 
-    // Called just before this Command runs the first time  
+    // Called just before this Command runs the first time
     @Override
     public void initialize() {
     }
@@ -30,16 +30,13 @@ public class AimCommand extends CommandBase {
     @Override
     public void execute() {
         if (limelight.hasValidTarget()) {
-                // record offset early because it gets used repeatedly
-                double offset = limelight.getHorizontalTargetOffset();
-                // Keep steering adjust between MIN and MAX. set to abs to determine magnitude,
-                // but reuse the sign
-                double steeringAdjust = Math
-                        .copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))), offset);
-                //if(Math.abs(limelight.getHorizontalTargetOffset()) > DEADBAND_DEGREES) {
-                    //double steeringAdjust = -KpAIM * limelight.getHorizontalTargetOffset();
-                    drive.arcadeDrive(0.0, steeringAdjust);
-                //}
+            // record offset early because it gets used repeatedly
+            double offset = limelight.getHorizontalTargetOffset();
+            // Keep steering adjust between MIN and MAX. set to abs to determine magnitude, but reuse the sign
+            double steeringAdjust = Math.copySign(Math.max(MIN_SPEED, Math.min(MAX_SPEED, KpAIM * Math.abs(offset))),
+                    offset);
+            drive.arcadeDrive(0.0, steeringAdjust);
+            // }
 
         }
     }
