@@ -86,12 +86,10 @@ public class Robot extends TimedRobot {
     this.distanceSensorDetector = new DistanceSensorDetector();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
-    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
-        indexerController, limelight, climber, distanceSensorDetector);
     this.lightsController = new LightsController(this.lights, this.limelight);
+    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
+        indexerController, limelight, climber, distanceSensorDetector, lightsController);
     this.autonomousCommand = new AutonomousCommand(distance, maxSpeed, this.drive, pValue);
-
-    new RunCommand(() -> lightsController.checkTargetLock(), lightsController);
   }
 
   /**
