@@ -25,9 +25,11 @@ public class Drive extends SubsystemBase{
   // left gear box CAN ids
   private final int LEFT_BACK_CAN_ID =11; 
   private final int LEFT_FRONT_CAN_ID = 12;
+  private final int LEFT_MIDDLE_CAN_ID = 13;
   // right gear box CAN ids
   private final int RIGHT_BACK_CAN_ID = 4;
   private final int RIGHT_FRONT_CAN_ID = 5;
+  private final int RIGHT_MIDDLE_CAN_ID = 6;
 
   private MotorType DRIVE_MOTOR_TYPE = MotorType.kBrushless;
 
@@ -35,10 +37,10 @@ public class Drive extends SubsystemBase{
 
   public Drive(Gyroscope gyroscope) {
     this.leftGearbox = new Gearbox(new CANSparkMax(LEFT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
-        new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
+        new CANSparkMax(LEFT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE), new CANSparkMax(LEFT_MIDDLE_CAN_ID, DRIVE_MOTOR_TYPE));
 
     this.rightGearbox = new Gearbox(new CANSparkMax(RIGHT_BACK_CAN_ID, DRIVE_MOTOR_TYPE),
-        new CANSparkMax(RIGHT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE));
+        new CANSparkMax(RIGHT_FRONT_CAN_ID, DRIVE_MOTOR_TYPE), new CANSparkMax(RIGHT_MIDDLE_CAN_ID, DRIVE_MOTOR_TYPE));
 
     this.leftGearbox.setRampRate(RAMP_RATE);
     this.rightGearbox.setRampRate(RAMP_RATE);
