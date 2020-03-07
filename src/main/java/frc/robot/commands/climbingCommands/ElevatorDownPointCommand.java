@@ -14,13 +14,13 @@ import frc.robot.subsystems.Climber;
 /**
  * Add your docs here.
  */
-public class ElevatorMidpointCommand extends CommandBase {
+public class ElevatorDownPointCommand extends CommandBase {
 
     private Climber climber;
     private double startTime;
     private final double ALLOWED_RUN_TIME = 3.0;
 
-    public ElevatorMidpointCommand(Climber climber) {
+    public ElevatorDownPointCommand(Climber climber) {
         this.climber = climber;
 
         addRequirements(climber);
@@ -29,7 +29,7 @@ public class ElevatorMidpointCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.climber.gotoElevatorMidpoint();
+        this.climber.gotoElevatorDownpoint();
     }
 
     // Called repeatedly when this Command is scheduled to run
