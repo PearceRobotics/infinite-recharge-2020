@@ -21,6 +21,7 @@ public class AimAndDriveBackCommand extends CommandBase {
 
         this.limelightAim = limelightAim;
         this.drive = drive;
+        addRequirements(drive);
     }
 
     public void setMaxSpeed(double maxSpeed) {
