@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
   }
 
   @Config(name = "Loading Zone Pipeline", defaultValueBoolean = false) 
-  private void enableHighGoalPipeline(boolean enable) {
+  private void enableLoadingZonePipeline(boolean enable) {
     if(enable) {
       limelight.setLowGoalPipeline();
     }
