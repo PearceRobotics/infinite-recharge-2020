@@ -109,9 +109,9 @@ public class Limelight {
   }
 
   public void setHighGoalPipeline(){
-    setPipeline(1);
+    setPipeline(0);
   }
   public void setLowGoalPipeline(){
-    setPipeline(0);
+    setPipeline(1);
   }
 }
