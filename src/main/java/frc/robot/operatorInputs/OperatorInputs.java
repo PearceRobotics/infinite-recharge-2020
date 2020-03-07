@@ -1,7 +1,7 @@
 package frc.robot.operatorInputs;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.IndexerOutakeCommand;
+import frc.robot.commands.powerCellScoringCommands.IndexerOutakeCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
 import frc.robot.commands.climbingCommands.ElevatorUpCommand;
@@ -26,7 +26,7 @@ public class OperatorInputs {
       IndexerController indexerController, Limelight limelight, Climber climber, LightsController lightsController) {
 
     // Driver commands
-    driverControls.getJoystickBButton()
+    driverControls.getRightJoystickBumper()
         .whenHeld(new IndexerOutakeCommand(indexerController));
     driverControls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight,
         shooterSpeedController, hopperController, indexerController));
