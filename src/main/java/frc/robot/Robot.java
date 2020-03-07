@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   private final int JOYSTICK_PORT_DRIVER = 1;
   private final int JOYSTICK_PORT_OPERATOR = 0;
 
-  private double maxSpeed = 0.75;
+  private double maxSpeed = 0.4;
   private double distance = 36.0;
 
   /**

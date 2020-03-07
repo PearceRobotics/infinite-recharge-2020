@@ -11,7 +11,7 @@ public class ShooterMath {
     private static final double MAX_TANGENTIAL_SPEED = (WHEEL_CIRCUMFERENCE * (MAX_RPM / 60.0)); // in/s
     private static final double INITIAL_UPPER_BOUND = 1.0; // 100% speed
     private static final double INITIAL_LOWER_BOUND = 0.0;// 0% speed
-    private static final double LAUNCHER_DEGREES = 32.0; // launcherDegrees, used for ease of measurement and
+    private static final double LAUNCHER_DEGREES = 38.0; // launcherDegrees, used for ease of measurement and
                                                          // understanding
     private static final double LAUNCHER_RADIANS = Math.toRadians(LAUNCHER_DEGREES); // radians
     private static final double GOAL_HEIGHT = 98.0; // inches above ground
