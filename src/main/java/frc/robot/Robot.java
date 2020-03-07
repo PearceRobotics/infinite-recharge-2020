@@ -19,6 +19,7 @@ import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 
 public class Robot extends TimedRobot {
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
   private HopperController hopperController;
   private IndexerController indexerController;
   private UsbCamera usbCamera;
-  private UsbCamera limelightCamera;
+  private VideoSource limelightCamera;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
@@ -53,7 +54,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     this.usbCamera = CameraServer.getInstance().startAutomaticCapture();
-    this.limelightCamera = (UsbCamera)CameraServer.getInstance().addServer("http://limelight.local:5800/stream.mjpg").getSource();
+    this.limelightCamera = CameraServer.getInstance().addServer("http://limelight.local:5800/stream.mjpg").getSource();
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot {
         hopperController, indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
         indexerController, limelight, distance, maxSpeed);
-    
+
     Logger.configureLoggingAndConfig(this, false);
   }
 
@@ -124,25 +125,25 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-  @Log.CameraStream(name = "CAMERA", width = 20, height = 20, showCrosshairs = false, showControls = false)
+  @Log.CameraStream(name = "CAMERA", width = 500, height = 500, showCrosshairs = false, showControls = false)
   private UsbCamera getCamera() {
     return usbCamera;
   }
 
-  @Log.CameraStream(name = "Limelight CAMERA", width = 20, height = 20, showCrosshairs = false, showControls = false)
-  private UsbCamera getLimelightCamera() {
-    return limelightCamera;
-  }
+  // @Log.CameraStream(name = "Limelight CAMERA", width = 100, height = 100, showCrosshairs = false, showControls = false)
+  // private VideoSource getLimelightCamera() {
+  //     return limelightCamera;
+  // }
 
 
-  @Log.BooleanBox(name = "Limelight LOCK", width = 16, height = 16)
+  @Log.BooleanBox(name = "Limelight LOCK", width = 100, height = 100)
   private boolean isLimelightLockedOn() {
     return limelight.hasValidTarget();
   }
 
-  @Log(name = "Current Limelight Pipeline", width = 32, height = 32)
-  private double currentLimelightPipeline() {
-    return limelight.getPipeline();
+  @Log(name = "Current Limelight Pipeline", width = 100, height = 100)
+  private String currentLimelightPipeline() {
+    return limelight.getPipeline() == 1 ? "Loading Zone" : "High Goal";
   }  
   
   @Config(name = "DISABLE GYRO", defaultValueBoolean = false)
