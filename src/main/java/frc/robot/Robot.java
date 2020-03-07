@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.vision.LimelightAim;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
@@ -35,6 +36,8 @@ public class Robot extends TimedRobot {
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+  private LimelightAim limelightAim;
+
   private UsbCamera usbCamera;
   private VideoSource limelightCamera;
 
@@ -66,10 +69,11 @@ public class Robot extends TimedRobot {
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
+    this.limelightAim = new LimelightAim(limelight);
     this.operatorInputs = new OperatorInputs(driverControls, operatorControls, drive, gyro, shooterSpeedController,
         hopperController, indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
-        indexerController, limelight, distance, maxSpeed);
+        indexerController, limelight, limelightAim, distance, maxSpeed);
 
     Logger.configureLoggingAndConfig(this, false);
   }
