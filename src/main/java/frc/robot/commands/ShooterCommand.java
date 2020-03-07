@@ -49,11 +49,7 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println("vertical offset degrees " + limelight.getVerticalTargetOffset());
-
         distanceToGoal = DistanceCalculator.getDistanceFromTarget(limelight.getVerticalTargetOffset());
-
-        System.out.println("Distance to target " + distanceToGoal);
 
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
@@ -92,6 +88,6 @@ public class ShooterCommand extends CommandBase {
     // Use this for the speed finding algorithm
     @Config
     public void setDistanceToGoal(double distanceToGoal) {
-        this.distanceToGoal = distanceToGoal;
+        // this.distanceToGoal = distanceToGoal;
     }
 }

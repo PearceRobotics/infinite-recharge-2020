@@ -102,9 +102,6 @@ public class Climber extends SubsystemBase {
         speed = Math.max(-1.0, speed);
 
         setElevatorSpeed(speed);
-
-        System.out.println("elevator position " + this.elevatorEncoder.getDistance());
-
     }
 
     public void setElevatorPIDSetpoint(double position) {

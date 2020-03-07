@@ -29,7 +29,7 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-        IndexerController indexerController, Limelight limelight) {
+            IndexerController indexerController, Limelight limelight) {
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
@@ -46,7 +46,7 @@ public class ShooterCommand extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     @Override
-    public void execute() {        
+    public void execute() {
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
@@ -83,7 +83,7 @@ public class ShooterCommand extends CommandBase {
     // Use this for the speed finding algorithm
     @Config
     public void setDistanceToGoal(double distanceToGoal) {
-        //TODO shoot from a fixed distance of 169.
-        //this.distanceToGoal = distanceToGoal;
+        // TODO shoot from a fixed distance of 169.
+        // this.distanceToGoal = distanceToGoal;
     }
 }
