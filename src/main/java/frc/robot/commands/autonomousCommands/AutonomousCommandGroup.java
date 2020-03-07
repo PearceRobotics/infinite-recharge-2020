@@ -8,6 +8,7 @@
 package frc.robot.commands.autonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.powerCellScoringCommands.AimCommand;
 import frc.robot.commands.powerCellScoringCommands.ShooterCommand;
 import frc.robot.subsystems.HopperController;
