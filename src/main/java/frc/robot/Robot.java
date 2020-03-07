@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 
   // Constants
   private final int JOYSTICK_PORT_DRIVER = 1;
-  private final int JOYSTICK_PORT_OPERATOR = 2;
+  private final int JOYSTICK_PORT_OPERATOR = 0;
 
   private double overrideSpeed = 1330.0;
   private double indexerSpeed = 0.3;
