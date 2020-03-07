@@ -153,7 +153,11 @@ public class Robot extends TimedRobot {
 
   @Log(name = "Current Gyro Angle", width = 100, height = 100)
   private double getGyroAngle() {
-    return gyro.getGyroAngle();
+    try {
+      return gyro.getGyroAngle();
+    } catch (Exception e) {
+      return -Integer.MAX_VALUE;
+    }
   }
 
   @Config(name = "High Goal Pipeline", defaultValueBoolean = false) 
