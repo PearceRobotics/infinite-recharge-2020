@@ -34,6 +34,8 @@ public class ShooterSpeedController extends SubsystemBase{
     public ShooterSpeedController() {
         this.leftController = new CANSparkMax(LEFT_SHOOTER_CAN_ID, DRIVE_MOTOR_TYPE);
         this.rightController = new CANSparkMax(RIGHT_SHOOTER_CAN_ID, DRIVE_MOTOR_TYPE);
+        this.leftController.setSmartCurrentLimit(60);
+        this.rightController.setSmartCurrentLimit(60);
         setLaunchSpeed = 0.0;
 
         // PID calls
