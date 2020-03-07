@@ -20,34 +20,24 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class AutonomousShooterCommand extends CommandBase {
 
-    private Drive drive;
     private ShooterSpeedController shooterSpeedController;
     private HopperController hopperController;
     private IndexerController indexerController;
-    // private DistanceSensorDetector distanceSensor;
 
     // variables
-    private double ballsShot = 0;
-    private double startTime = 0;
     private double commandStartTime;
-    private boolean ballinIndexer = false;
     private double distanceToGoal = 165.0;
 
     // constants
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
-    private final double LAUNCH_TIME = 0.5;
-    private final double AUTONOMOUS_SPEED = 0.6;
     private final double COMMAND_RUN_LIMIT = 8.0;
 
     public AutonomousShooterCommand(Drive drive, ShooterSpeedController shooterSpeedController,
             HopperController hopperController, IndexerController indexerController) {
-        this.drive = drive;
         this.indexerController = indexerController;
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.commandStartTime = Timer.getFPGATimestamp();
-
-        addRequirements(drive);
     }
 
     @Override
@@ -70,15 +60,13 @@ public class AutonomousShooterCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if ((Timer.getFPGATimestamp() - commandStartTime) > COMMAND_RUN_LIMIT) {
-            return true;
-        }
-        return false;
+        return ((Timer.getFPGATimestamp() - commandStartTime) > COMMAND_RUN_LIMIT);
     }
 
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
+        shooterSpeedController.setLaunchSpeed(0.0);
         indexerController.stop();
         hopperController.stop();
     }
