@@ -19,13 +19,13 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
-    public final double TOP_GOAL_DEADBAND = 2;
+    public final double TOP_GOAL_DEADBAND = 2.0;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
 
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
-    private double distanceToGoal = 169.0; // TODO set back to 0 when distance is working
+    private double distanceToGoal = 169.0;
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
@@ -47,8 +47,9 @@ public class ShooterCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        shooterSpeedController.setLaunchSpeed(ShooterMath
-                .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
+        shooterSpeedController.setLaunchSpeed(ShooterMath.determineLaunchSpeed(
+                distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER,
+                shooterSpeedController.getEnergyLost()));
 
         double offset = limelight.getHorizontalTargetOffset();
         // Make sure the shooter is at speed before loading a power cell

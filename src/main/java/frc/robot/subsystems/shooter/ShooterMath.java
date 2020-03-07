@@ -12,7 +12,7 @@ public class ShooterMath {
     private static final double MAX_TANGENTIAL_SPEED = (WHEEL_CIRCUMFERENCE * (MAX_RPM / 60.0)); // in/s
     private static final double INITIAL_UPPER_BOUND = 1.0; // 100% speed
     private static final double INITIAL_LOWER_BOUND = 0.0;// 0% speed
-    private static final double LAUNCHER_DEGREES = 32.0; // launcherDegrees, used for ease of measurement and
+    private static final double LAUNCHER_DEGREES = 38.0; // launcherDegrees, used for ease of measurement and
                                                          // understanding
     private static final double LAUNCHER_RADIANS = Math.toRadians(LAUNCHER_DEGREES); // radians
     private static final double BALL_DIAMETER = 7.0; // in
@@ -22,28 +22,18 @@ public class ShooterMath {
     private static final double BALL_MASS = 5.0 / 16.0; // lbm, AndyMark says balls are ~5 ounces
     private static final int ITERATIONS = 20; // number of iterations when searching for the solution
 
-    // not final so we can set with shuffleboard
-    private static double energyLostBase = 0.58; // Percent energy lost from full tangential speed to actual ball speed
-    private static double maxLaunchSpeed = MAX_TANGENTIAL_SPEED * (1.0 - energyLostBase); // in/s
-
     public ShooterMath() {
         // empty contructor
     }
 
-    @Config
-    public static void setEnergyLost(double energyLostBaseIn) {
-        energyLostBase = energyLostBaseIn;
-        maxLaunchSpeed = MAX_TANGENTIAL_SPEED * (1.0 - energyLostBase);
-    }
-
-    public static double determineLaunchSpeed(double distanceToTarget) {
+    public static double determineLaunchSpeed(double distanceToTarget, double energyLost) {
         // declaration of % bounds
         double range = INITIAL_UPPER_BOUND - INITIAL_LOWER_BOUND;
         double launchPower = INITIAL_UPPER_BOUND;
         double heightAtTargetDistance;
 
         // Determine height at target distance
-        heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget, launchPower);
+        heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget, launchPower, energyLost);
 
         if (heightAtTargetDistance < Constants.TARGET_CENTER_HEIGHT) {
             return -1.0;
@@ -62,14 +52,17 @@ public class ShooterMath {
                 } else {
                     break;
                 }
-                heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget, launchPower);
+                heightAtTargetDistance = getHeightAtTargetDistance(distanceToTarget, launchPower, energyLost);
             }
         }
         return launchPower * MAX_TANGENTIAL_SPEED;
 
     }
 
-    private static double getHeightAtTargetDistance(double distanceToTarget, double launchPower) {
+    private static double getHeightAtTargetDistance(double distanceToTarget, double launchPower, double energyLost) {
+
+        double maxLaunchSpeed = MAX_TANGENTIAL_SPEED * (1.0 - energyLost); // in/s
+
         // if you have a triangle, with the hypnotonuse being the angled velocity
         // vector, the adjacent being the horizontal velocity vector, and the opposite
         // side being the height

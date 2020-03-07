@@ -5,7 +5,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ShooterSpeedController extends SubsystemBase{
+public class ShooterSpeedController extends SubsystemBase {
 
     private final int LEFT_SHOOTER_CAN_ID = 14;
     private final int RIGHT_SHOOTER_CAN_ID = 7;
@@ -23,12 +23,14 @@ public class ShooterSpeedController extends SubsystemBase{
 
     // PID coefficients
     public double kP = 0.000050; // 5e-5;
-    public double kI = 0.0000004/2; // 4e-7;
-    public double kD = 0.0000004*2; // 0.0
+    public double kI = 0.0000004 / 2; // 4e-7;
+    public double kD = 0.0000004 * 2; // 0.0
     public double kIz = 0.0; // 0.0
     public double kFF = 0.0; // 0.0
     public double kMaxOutput = 1;
     public double kMinOutput = -1;
+
+    private double energyLost = 0.58; // Percent energy lost from full tangential speed to actual ball speed
 
     // Default Constructor. Set initial launch speed to 0 inches/second.
     public ShooterSpeedController() {
@@ -91,5 +93,13 @@ public class ShooterSpeedController extends SubsystemBase{
 
     public boolean isAtSpeed() {
         return (Math.abs(getCurrentSpeed() - setLaunchSpeed) < ACCEPTABLE_DIFFERENCE);
+    }
+
+    public double getEnergyLost() {
+        return this.energyLost;
+    }
+
+    public void setEnergyLost(double energyLost) {
+        this.energyLost = energyLost;
     }
 }

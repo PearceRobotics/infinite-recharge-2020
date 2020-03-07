@@ -164,4 +164,9 @@ public class Robot extends TimedRobot {
       limelight.setLowGoalPipeline();
     }
   }
+
+  @Config(name = "EnergyLost", defaultValueNumeric = 0.58)
+  private void setEnergyLost(double energyLost) {
+    shooterSpeedController.setEnergyLost(energyLost);
+  }
 }
