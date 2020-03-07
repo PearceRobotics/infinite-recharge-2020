@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * Add your docs here.
  */
-public class AutonomousShooterCommand extends CommandBase {
+public class AutonomousShooterCommandGroup extends CommandBase {
 
     private Drive drive;
     private ShooterSpeedController shooterSpeedController;
@@ -39,47 +39,10 @@ public class AutonomousShooterCommand extends CommandBase {
     private final double AUTONOMOUS_SPEED = 0.6;
     private final double COMMAND_RUN_LIMIT = 8.0;
 
-    public AutonomousShooterCommand(Drive drive, ShooterSpeedController shooterSpeedController,
+    public AutonomousShooterCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController,
             HopperController hopperController, IndexerController indexerController) {
-        this.drive = drive;
-        this.indexerController = indexerController;
-        this.shooterSpeedController = shooterSpeedController;
-        this.hopperController = hopperController;
-        this.commandStartTime = Timer.getFPGATimestamp();
 
         addRequirements(drive);
     }
 
-    @Override
-    public void initialize() {
-        shooterSpeedController
-                .setLaunchSpeed(ShooterMath.determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET));
-        commandStartTime = Timer.getFPGATimestamp();
-    }
-
-    @Override
-    public void execute() {
-        if (shooterSpeedController.isAtSpeed()) {// if the shooter is at speed and has given time for last ball to shoot
-            indexerController.intake();
-            hopperController.start();
-        } else {
-            indexerController.stop();
-            hopperController.stop();
-        }
-    }
-
-    @Override
-    public boolean isFinished() {
-        if ((Timer.getFPGATimestamp() - commandStartTime) > COMMAND_RUN_LIMIT) {
-            return true;
-        }
-        return false;
-    }
-
-    // Called once after isFinished returns true
-    @Override
-    public void end(boolean interrupted) {
-        indexerController.stop();
-        hopperController.stop();
-    }
 }

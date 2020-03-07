@@ -2,7 +2,7 @@
 /* Copyright (c) 2020 1745 JJ Pearce Robotics. All Rights Reserved.           */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.powerCellScoringCommands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperController;
@@ -11,7 +11,9 @@ import frc.robot.subsystems.shooter.ShooterMath;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 import frc.robot.subsystems.vision.DistanceCalculator;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.DistanceSensorDetector;
 import io.github.oblarg.oblog.annotations.Config;
+import frc.robot.Constants;
 
 public class ShooterCommand extends CommandBase {
 
@@ -19,9 +21,12 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
-    public final double TOP_GOAL_DEADBAND = 2;
+    private Constants.ShooterChoice shooterChoice;
+    private DistanceSensorDetector distanceSensorDetector;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
+
+    private final double TOP_GOAL_DEADBAND = 0.5;
 
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
@@ -29,13 +34,19 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-        IndexerController indexerController, Limelight limelight) {
+        IndexerController indexerController, Limelight limelight, DistanceSensorDetector distanceSensorDetector){
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
         this.limelight = limelight;
+        this.distanceSensorDetector = distanceSensorDetector;
 
         addRequirements(shooterSpeedController);
+        addRequirements(distanceSensorDetector);
+    }
+
+    public void setShooterChoice(Constants.ShooterChoice shooterChoice) {
+        this.shooterChoice = shooterChoice;
     }
 
     // Called just before this Command runs the first time
@@ -46,7 +57,11 @@ public class ShooterCommand extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     @Override
-    public void execute() {        
+    public void execute() {
+        //distanceToGoal = DistanceCalculator.getDistanceFromTarget(limelight.getVerticalTargetOffset());
+
+        distanceToGoal = 169.0;
+
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
@@ -69,6 +84,8 @@ public class ShooterCommand extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
+        // TODO this will need to test if a power cell has been launched.
+        // Need a power cell presence sensor of some type for that.
         return false;
     }
 
@@ -83,7 +100,6 @@ public class ShooterCommand extends CommandBase {
     // Use this for the speed finding algorithm
     @Config
     public void setDistanceToGoal(double distanceToGoal) {
-        //TODO shoot from a fixed distance of 169.
-        //this.distanceToGoal = distanceToGoal;
+        this.distanceToGoal = distanceToGoal;
     }
 }
