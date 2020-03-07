@@ -151,6 +151,11 @@ public class Robot extends TimedRobot {
     this.drive.gyroDisabled(gyroDisabled);
   }
 
+  @Log(name = "Current Gyro Angle", width = 100, height = 100)
+  private double getGyroAngle() {
+    return gyro.getGyroAngle();
+  }
+
   @Config(name = "High Goal Pipeline", defaultValueBoolean = false) 
   private void enableHighGoalPipeline(boolean enable) {
     if(enable) {
