@@ -3,19 +3,23 @@ package frc.robot.commands.autonomousCommands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.vision.LimelightAim;
 
-public class DriveForwardCommand extends CommandBase {
+public class AimAndDriveBackCommand extends CommandBase {
 
     private Drive drive;
+    private LimelightAim limelightAim;
+
     private double distance;
     private double maxSpeed;
     private double startTime;
     private final double DRIVE_TIME = 2.0;
-    private final double AUTO_TIME = 15;
 
-    public DriveForwardCommand(double distance, double maxSpeed, Drive drive) {
+    public AimAndDriveBackCommand(double distance, double maxSpeed, LimelightAim limelightAim, Drive drive) {
         this.distance = distance;
         this.maxSpeed = maxSpeed;
+
+        this.limelightAim = limelightAim;
         this.drive = drive;
     }
 
@@ -30,8 +34,6 @@ public class DriveForwardCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        //System.out.println("driving forward");
-        drive.setBrakeMode();
         drive.resetEncoders();
         startTime = Timer.getFPGATimestamp();
     }
@@ -40,26 +42,19 @@ public class DriveForwardCommand extends CommandBase {
     @Override
     public void execute() {
         double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
-        drive.arcadeDrive(-fowardSpeed, 0);
+        double turnSpeed = limelightAim.getSteeringAdjust();
+        drive.arcadeDrive(-fowardSpeed, turnSpeed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - startTime > DRIVE_TIME) {
-            drive.arcadeDrive(0.0, 0.0);
-        } 
-        if (Timer.getFPGATimestamp() - startTime > (AUTO_TIME - DRIVE_TIME)) {
-            return true;
-        }
-        return false;
+        return Timer.getFPGATimestamp() - startTime > DRIVE_TIME;
     }
 
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-        
         drive.arcadeDrive(0.0, 0.0);
-        drive.setCoastMode();
     }
 }
