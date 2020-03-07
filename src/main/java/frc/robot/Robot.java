@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   private HopperController hopperController;
   private IndexerController indexerController;
   private UsbCamera usbCamera;
+  private UsbCamera limelightCamera;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
@@ -52,6 +53,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     this.usbCamera = CameraServer.getInstance().startAutomaticCapture();
+    this.limelightCamera = CameraServer.getInstance().startAutomaticCapture(new HttpCamera("limelight", "http://limelight.local:5800/stream.mjpg"));
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
@@ -126,6 +128,12 @@ public class Robot extends TimedRobot {
   private UsbCamera getCamera() {
     return usbCamera;
   }
+
+  @Log.CameraStream(name = "Limelight CAMERA", width = 20, height = 20, showCrosshairs = false, showControls = false)
+  private UsbCamera getLimelightCamera() {
+    return limelightCamera;
+  }
+
 
   @Log.BooleanBox(name = "Limelight LOCK", width = 16, height = 16)
   private boolean isLimelightLockedOn() {
