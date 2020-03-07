@@ -5,8 +5,6 @@ import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.vision.Limelight;
@@ -21,16 +19,14 @@ import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 
 public class Robot extends TimedRobot {
-
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
-
   private Drive drive;
-  private Controls controls;
+  private Controls driverControls;
+  private Controls operatorControls;
   private Lights lights;
   private Limelight limelight;
   private Gyroscope gyro;
@@ -41,28 +37,17 @@ public class Robot extends TimedRobot {
   private HopperController hopperController;
   private IndexerController indexerController;
   private GyroLimelightPipeline gyroLimelightPipeline;
+  private UsbCamera usbCamera;
+  private VideoSource limelightCamera;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
   // Constants
-  private final int JOYSTICK_PORT = 1;
-
-  private double overrideSpeed = 1330.0;
-  private double indexerSpeed = 0.3;
-
-  private double pValue = 0.2;
-
-  @Log
-  private boolean isPowerCellLoaded;
-
-  @Log
-  private boolean isLimelightLockedOn;
+  private final int JOYSTICK_PORT_DRIVER = 1;
+  private final int JOYSTICK_PORT_OPERATOR = 0;
 
   private double maxSpeed = 0.75;
   private double distance = 36.0;
-
-  //
-  private double elevatorHeight = 19.0; // height for elevator to move to, in inches
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -70,30 +55,25 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
-    CameraServer.getInstance().startAutomaticCapture();
-
-    m_autonChooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_autonChooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_autonChooser);
-
-    Logger.configureLoggingAndConfig(this, false);
-
+    this.usbCamera = CameraServer.getInstance().startAutomaticCapture();
+    this.limelightCamera = CameraServer.getInstance().addServer("http://limelight.local:5800/stream.mjpg").getSource();
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
-    this.controls = new Controls(new Joystick(JOYSTICK_PORT));
+    this.driverControls = new Controls(new Joystick(JOYSTICK_PORT_DRIVER));
+    this.operatorControls = new Controls(new Joystick(JOYSTICK_PORT_OPERATOR));
     this.lights = new Lights(9, 82, 50);
     this.limelight = new Limelight();
     this.shooterSpeedController = new ShooterSpeedController();
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
-    this.operatorInputs = new OperatorInputs(controls, drive, gyro, shooterSpeedController, hopperController,
+    this.operatorInputs = new OperatorInputs(driverControls, drive, gyro, shooterSpeedController, hopperController,
         indexerController, limelight, climber, lightsController,gyroLimelightPipeline);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
         indexerController, limelight, distance, maxSpeed);
 
+    Logger.configureLoggingAndConfig(this, false);
   }
 
   /**
@@ -124,7 +104,7 @@ public class Robot extends TimedRobot {
    * make sure to add them to the chooser code above as well.
    */
   @Override
-  public void autonomousInit() {  
+  public void autonomousInit() {
     autonomousCommandGroup.schedule();
   }
 
@@ -134,13 +114,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-  }
-
-  // use this to override the algorithm and just use a speed
-  @Config(name = "Override Speed", defaultValueNumeric = 1330.0)
-  public void setOverrideSpeed(final double overrideSpeed) {
-    this.overrideSpeed = overrideSpeed;
-    shooterSpeedController.setLaunchSpeed(this.overrideSpeed);
   }
 
   @Override
@@ -154,34 +127,43 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-  public boolean isLimelightLockedOn() {
-    isLimelightLockedOn = limelight.hasValidTarget();
-    return isLimelightLockedOn;
+  @Log.CameraStream(name = "CAMERA", width = 500, height = 500, showCrosshairs = false, showControls = false)
+  private UsbCamera getCamera() {
+    return usbCamera;
   }
 
-  @Config(name = "Elevator Height", defaultValueNumeric = 19.0)
-  public void setElevatorHeightInches(double elevatorHeight) {
-    this.elevatorHeight = elevatorHeight;
+  // @Log.CameraStream(name = "Limelight CAMERA", width = 100, height = 100, showCrosshairs = false, showControls = false)
+  // private VideoSource getLimelightCamera() {
+  //     return limelightCamera;
+  // }
+
+
+  @Log.BooleanBox(name = "Limelight LOCK", width = 100, height = 100)
+  private boolean isLimelightLockedOn() {
+    return limelight.hasValidTarget();
   }
 
-  @Config(name = "Indexer Speed", defaultValueNumeric = 0.3)
-  public void setIndexerSpeed(final double indexerSpeed) {
-    this.indexerSpeed = indexerSpeed;
-    this.indexerController.setSpeed(this.indexerSpeed);
-  }
-
-  @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
-  public void setAutonStraightDistance(final double distance) {
-    this.distance = distance;
-  }
-
-  @Config(tabName = "Autonomous", name = "Maximum Speed", defaultValueNumeric = .75)
-  public void setAutonMaxSpeedForDriveStraight(final double maxSpeed) {
-    this.maxSpeed = maxSpeed;
-  }
-
+  @Log(name = "Current Limelight Pipeline", width = 100, height = 100)
+  private String currentLimelightPipeline() {
+    return limelight.getPipeline() == 1 ? "Loading Zone" : "High Goal";
+  }  
+  
   @Config(name = "DISABLE GYRO", defaultValueBoolean = false)
   private void disableEnableGyro(boolean gyroDisabled) {
     this.drive.gyroDisabled(gyroDisabled);
+  }
+
+  @Config(name = "High Goal Pipeline", defaultValueBoolean = false) 
+  private void enableHighGoalPipeline(boolean enable) {
+    if(enable) {
+      limelight.setHighGoalPipeline();
+    }
+  }
+
+  @Config(name = "Loading Zone Pipeline", defaultValueBoolean = false) 
+  private void enableLoadingZonePipeline(boolean enable) {
+    if(enable) {
+      limelight.setLowGoalPipeline();
+    }
   }
 }

@@ -7,13 +7,14 @@ import frc.robot.subsystems.Climber;
 /**
  * Add your docs here.
  */
-public class ElevatorDownCommand extends CommandBase {
+public class ElevatorUpPointCommand extends CommandBase {
 
     private Climber climber;
     private double startTime = 0.0;
-    private final double ALLOWED_RUN_TIME = 0.5;
+    private final double delayTime = 1.0;
+    private final double ALLOWED_RUN_TIME = 3.0;
 
-    public ElevatorDownCommand(Climber climber) {
+    public ElevatorUpPointCommand(Climber climber) {
         this.climber = climber;
 
         addRequirements(climber);
@@ -21,7 +22,7 @@ public class ElevatorDownCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.climber.moveElevatorDown();
+        this.climber.gotoElevatorUppoint();
         startTime = Timer.getFPGATimestamp();
     }
 
@@ -33,6 +34,7 @@ public class ElevatorDownCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (this.climber.isElevatorAtSetPoint() || ((Timer.getFPGATimestamp() - startTime) > ALLOWED_RUN_TIME));
+        return ((this.climber.isElevatorAtSetPoint() && (Timer.getFPGATimestamp() - startTime) > delayTime)
+                || ((Timer.getFPGATimestamp() - startTime) > ALLOWED_RUN_TIME));
     }
 }
