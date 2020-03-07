@@ -23,7 +23,7 @@ public class ShooterMath {
     private static final int ITERATIONS = 20; // number of iterations when searching for the solution
 
     // not final so we can set with shuffleboard
-    private static double energyLostBase = 0.58; // Percent energy lost from full tangential speed to actual ball speed
+    private static double energyLostBase = 0.59; // Percent energy lost from full tangential speed to actual ball speed
     private static double maxLaunchSpeed = MAX_TANGENTIAL_SPEED * (1.0 - energyLostBase); // in/s
 
     public ShooterMath() {
