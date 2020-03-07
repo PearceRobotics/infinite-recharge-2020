@@ -12,7 +12,7 @@ public class Gearbox {
 
     private SpeedControllerGroup speedControllerGroup;
 
-    public Gearbox(CANSparkMax controller, CANSparkMax... controllers /*CANSparkMax canSparkMaxFront,  CANSparkMax canSparkMaxMiddle, CANSparkMax canSparkMaxBack*/) {
+    public Gearbox(CANSparkMax controller, CANSparkMax... controllers) {
         this.controllers = controllers;
         this.speedControllerGroup = new SpeedControllerGroup(controller, controllers);
         this.controllers = Arrays.copyOf(controllers, controllers.length + 1);
