@@ -8,6 +8,7 @@
 package frc.robot.commands.autonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.powerCellScoringCommands.AimCommand;
 import frc.robot.commands.powerCellScoringCommands.ShooterCommand;
 import frc.robot.subsystems.HopperController;
@@ -19,7 +20,7 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 /**
  * Add your docs here.
  */
-public class AutonomousCommandGroup extends ParallelCommandGroup {
+public class AutonomousCommandGroup extends SequentialCommandGroup {
 
     public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, 
                                     IndexerController indexerController, Limelight limelight, double distance, double maxSpeed){
