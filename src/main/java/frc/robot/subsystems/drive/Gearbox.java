@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class Gearbox {
     private CANSparkMax[] controllers;
+
     private SpeedControllerGroup speedControllerGroup;
 
     public Gearbox(CANSparkMax controller, CANSparkMax... controllers) {
