@@ -25,12 +25,12 @@ public class GyroLimelightPipeline extends SubsystemBase {
     }
 
     public void gyroLimelightPipeline(){
-        double side = gyro.getGyroAngle()%360;
+        double side = gyro.getGyroAngle() % 360;
         if(side <= 180){
-            limelight.highGoalPipeline();
+            limelight.setHighGoalPipeline();
         }
         else{
-            limelight.lowGoalPipeline();
+            limelight.setLowGoalPipeline();
         }
     }
 }
