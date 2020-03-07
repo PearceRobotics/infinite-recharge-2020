@@ -17,11 +17,11 @@ import frc.robot.subsystems.Climber;
 public class WinchCommand extends CommandBase {
 
     private Climber climber;
-    private double startTime; 
-    private double currentTime;
+    private double startTime;
+    private final double CLIMB_TIME = 3.0;
 
-    //constants
-    private final double WINCH_SPEED = 0.5;
+    // constants
+    private final double WINCH_SPEED = -0.75;
 
     public WinchCommand(Climber climber) {
         this.climber = climber;
@@ -30,23 +30,24 @@ public class WinchCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.startTime = Timer.getFPGATimestamp();  
+        this.startTime = Timer.getFPGATimestamp();
+
+        climber.setWinchSpeed(WINCH_SPEED);
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        currentTime = Timer.getFPGATimestamp() - startTime;
-        climber.setWinchSpeed(WINCH_SPEED);
     }
 
     @Override
     public boolean isFinished() {
-        if(currentTime >= 2){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (Timer.getFPGATimestamp() - startTime) >= CLIMB_TIME;
+    }
+
+    // Called once after isFinished returns true
+    @Override
+    public void end(boolean interrupted) {
+        climber.setWinchSpeed(0.0);
     }
 }
