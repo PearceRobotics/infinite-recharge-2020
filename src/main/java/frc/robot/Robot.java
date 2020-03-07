@@ -133,10 +133,24 @@ public class Robot extends TimedRobot {
   private double currentLimelightPipeline() {
     return limelight.getPipeline();
   }  
-
+  
   @Config(name = "DISABLE GYRO", defaultValueBoolean = false)
   private void disableEnableGyro(boolean gyroDisabled) {
     this.drive.gyroDisabled(gyroDisabled);
+  }
+
+  @Config(name = "High Goal Pipeline", defaultValueBoolean = false) 
+  private void enableHighGoalPipeline(boolean enable) {
+    if(enable) {
+      limelight.setHighGoalPipeline();
+    }
+  }
+
+  @Config(name = "Loading Zone Pipeline", defaultValueBoolean = false) 
+  private void enableHighGoalPipeline(boolean enable) {
+    if(enable) {
+      limelight.setLowGoalPipeline();
+    }
   }
 
   @Config(tabName = "Autonomous", name = "Distance", defaultValueNumeric = 36)
