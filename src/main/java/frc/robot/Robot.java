@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     this.usbCamera = CameraServer.getInstance().startAutomaticCapture();
-    this.limelightCamera = CameraServer.getInstance().startAutomaticCapture(new HttpCamera("limelight", "http://limelight.local:5800/stream.mjpg"));
+    this.limelightCamera = (UsbCamera)CameraServer.getInstance().addServer("http://limelight.local:5800/stream.mjpg").getSource();
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);

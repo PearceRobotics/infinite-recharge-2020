@@ -19,7 +19,7 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 /**
  * Add your docs here.
  */
-public class AutonomousCommandGroup extends ParallelCommandGroup {
+public class AutonomousCommandGroup extends SequentialCommandGroup {
 
     public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, 
                                     IndexerController indexerController, Limelight limelight, double distance, double maxSpeed){
