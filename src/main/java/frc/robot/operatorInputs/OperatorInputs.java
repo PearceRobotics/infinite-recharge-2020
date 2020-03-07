@@ -1,6 +1,7 @@
 package frc.robot.operatorInputs;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.GyroLimelightPipeline;
 import frc.robot.commands.IndexerOutakeCommand;
 import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
@@ -23,7 +24,7 @@ public class OperatorInputs {
 
   public OperatorInputs(Controls driverControls, Controls operatorControls, Drive drive, Gyroscope gyro,
       ShooterSpeedController shooterSpeedController, HopperController hopperController,
-      IndexerController indexerController, Limelight limelight, Climber climber, LightsController lightsController) {
+      IndexerController indexerController, Limelight limelight, Climber climber, LightsController lightsController, GyroLimelightPipeline gyroLimelightPipeline) {
 
     // Driver commands
     driverControls.getJoystickBButton()
@@ -43,5 +44,6 @@ public class OperatorInputs {
       drive.curvatureDrive(driverControls.getLeftY(JOYSTICK_DEADZONE), driverControls.getRightX(JOYSTICK_DEADZONE));
     }, drive));
     lightsController.setDefaultCommand(new RunCommand(() -> lightsController.checkTargetLock(), lightsController));
+    gyroLimelightPipeline.setDefaultCommand(new RunCommand(() -> gyroLimelightPipeline.gyroLimelightPipeline(), gyroLimelightPipeline));
   }
 }
