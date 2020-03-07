@@ -38,7 +38,7 @@ public class HopperController {
     }
 
     public void start() {
-        this.leftController.set(speed);
+        this.leftController.set(-speed);
     }
 
     public void stop() {
