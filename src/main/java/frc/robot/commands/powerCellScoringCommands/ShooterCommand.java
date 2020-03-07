@@ -26,7 +26,7 @@ public class ShooterCommand extends CommandBase {
 
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
-    private double distanceToGoal = 149.0; // TODO set back to 0 when distance is working
+    private double distanceToGoal = 169.0; // TODO set back to 0 when distance is working
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
@@ -56,12 +56,6 @@ public class ShooterCommand extends CommandBase {
         double distance = this.distanceToGoal;
         // TODO Change distanceToGoal to be a call to the limelight.
         // TODO Limelight might take inner distance into account, revisit this
-
-        if(shooterChoice == true){
-        double targetAngleRadians = Math.toRadians(limelight.getVerticalTargetOffset());
-        //distance = DistanceCalculator.getDistanceFromTarget(targetAngleRadians);
-        distance = 100;
-        }
         
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
