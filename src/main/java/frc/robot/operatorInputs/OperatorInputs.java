@@ -27,7 +27,7 @@ public class OperatorInputs {
 
     // Driver commands
     driverControls.getJoystickBButton()
-        .whenPressed(new IndexerOutakeCommand(indexerController, shooterSpeedController));
+        .whileHeld(new IndexerOutakeCommand(indexerController));
     driverControls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight,
         shooterSpeedController, hopperController, indexerController));
 
