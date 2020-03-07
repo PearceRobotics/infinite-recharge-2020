@@ -164,33 +164,4 @@ public class Robot extends TimedRobot {
       limelight.setLowGoalPipeline();
     }
   }
-
-  public void setLimelightPipeline() {
-  //   boolean isHighGoal =true; //default value
-  //   m_pipelineSelected = m_pipelineChooser.getSelected();
-  //   switch (m_pipelineSelected) {
-  //   case kHighGoal:
-  //     if(!(isHighGoal)){
-  //       limelight.setPipeline(1);
-  //     }
-  //     else{
-  //       //do nothing
-  //     }
-  //     isHighGoal = true;
-  //       break;
-  //   case kLowGoal:
-  //   if(isHighGoal){
-  //     limelight.setPipeline(0);
-  //   }
-  //   else{
-  //     //do nothing
-  //   }
-  //   isHighGoal = false;
-  //     break;
-  //   default:
-  //   limelight.setPipeline(0);
-  //    //do nothing
-  //     break;
-  //   }
-   }
 }

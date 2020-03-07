@@ -72,12 +72,10 @@ public class Climber extends SubsystemBase {
     }
 
     public void gotoElevatorUppoint() {
-        // elevatorSetPosition += 2.0;
         setElevatorPIDSetpoint(UP_POSITION);
     }
 
     public void gotoElevatorDownpoint() {
-        // elevatorSetPosition -= 2.0;
         setElevatorPIDSetpoint(DOWN_POSITION);
     }
 
