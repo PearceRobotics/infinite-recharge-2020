@@ -20,10 +20,10 @@ public class Drive extends SubsystemBase{
 
   //constants
   private final double P_VALUE = .0025;
-  private final double RAMP_RATE = 0.5;
-  private final double QUICK_TURN_THROTTLE_DEADZONE = 0.2;
+  private final double RAMP_RATE = 1;
+  private final double QUICK_TURN_THROTTLE_DEADZONE = 0.1;
   // left gear box CAN ids
-  private final int LEFT_BACK_CAN_ID =11; 
+  private final int LEFT_BACK_CAN_ID = 11; 
   private final int LEFT_FRONT_CAN_ID = 12;
   private final int LEFT_MIDDLE_CAN_ID = 13;
   // right gear box CAN ids
@@ -71,7 +71,7 @@ public class Drive extends SubsystemBase{
   }
 
   public void curvatureDrive(double throttle, double curvature) {
-    if(throttle != 0.0 && curvature == 0.0 && !gyroDisabled) { //says if straight is zero and turn is not zero
+    if(throttle != 0.0 && curvature == 0.0 && !gyroDisabled) { //driving straight and no turn
       if(this.desiredAngle == Integer.MAX_VALUE) { //means robot just started driving straight
         this.desiredAngle = gyroscope.getGyroAngle(); 
       }
@@ -79,9 +79,9 @@ public class Drive extends SubsystemBase{
       this.setLeftSpeed(-(throttle - curvature));
       this.setRightSpeed(throttle + curvature);
     }
-    else {
+    else { // when robot isn't driving straight
       this.desiredAngle = Integer.MAX_VALUE; //if turn is greater than 0 or if robot is still
-      differentialDrive.curvatureDrive(throttle, curvature, Math.abs(throttle) < QUICK_TURN_THROTTLE_DEADZONE);
+      differentialDrive.curvatureDrive(-throttle, curvature, (Math.abs(throttle) < QUICK_TURN_THROTTLE_DEADZONE));
     }
   }
 

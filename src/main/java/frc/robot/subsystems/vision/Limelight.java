@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public class Limelight {
 
+
   /*
    * Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
    */
@@ -105,5 +106,12 @@ public class Limelight {
    */
   public void setPipeline(Number pipeline) {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipeline);
+  }
+
+  public void setHighGoalPipeline(){
+    setPipeline(0);
+  }
+  public void setLowGoalPipeline(){
+    setPipeline(1);
   }
 }

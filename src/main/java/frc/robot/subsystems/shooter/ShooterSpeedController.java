@@ -16,15 +16,15 @@ public class ShooterSpeedController extends SubsystemBase{
     private final double RATIO = (22.0 / 16.0); // gear ratio
     private final double WHEEL_DIAMETER = 4.0; // inches
     private final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI; // inches
-    private final double ACCEPTABLE_DIFFERENCE = 5.0; // inches per second allowable difference for shot to be made
+    private final double ACCEPTABLE_DIFFERENCE = 50.0; // inches per second allowable difference for shot to be made
     private final double SECONDS_PER_MINUTE = 60.0;
 
     private double setLaunchSpeed; // in inches/second
 
     // PID coefficients
     public double kP = 0.000050; // 5e-5;
-    public double kI = 0.0000004; // 4e-7;
-    public double kD = 0.0; // 0.0
+    public double kI = 0.0000004/2; // 4e-7;
+    public double kD = 0.0000004*2; // 0.0
     public double kIz = 0.0; // 0.0
     public double kFF = 0.0; // 0.0
     public double kMaxOutput = 1;

@@ -15,13 +15,10 @@ public class LightsController extends SubsystemBase {
     }
 
     public void checkTargetLock() {
-        // System.out.println(limelight.hasValidTarget());
         if (limelight.hasValidTarget() && !isIdle) {
-            System.out.println("has target");
             lights.allLimeGreen();
             isIdle = true;
         } else if(!limelight.hasValidTarget() && isIdle){
-            System.out.println("no target");
             lights.idleAnimation(3);
             isIdle = false;
         }

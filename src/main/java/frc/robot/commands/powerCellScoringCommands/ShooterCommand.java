@@ -2,7 +2,7 @@
 /* Copyright (c) 2020 1745 JJ Pearce Robotics. All Rights Reserved.           */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.powerCellScoringCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HopperController;
@@ -21,12 +21,10 @@ public class ShooterCommand extends CommandBase {
     private HopperController hopperController;
     private IndexerController indexerController;
     private Limelight limelight;
-    private Constants.ShooterChoice shooterChoice;
-    private DistanceSensorDetector distanceSensorDetector;
+    private boolean shooterChoice;
+    public final double TOP_GOAL_DEADBAND = 2;
 
     private final double INNER_DISTANCE_FROM_TARGET = 29.0;
-
-    private final double TOP_GOAL_DEADBAND = 0.5;
 
     private static final double CAMERA_DISTANCE_FROM_LAUNCHER = 8.0;
 
@@ -34,19 +32,13 @@ public class ShooterCommand extends CommandBase {
 
     // Constructor.
     public ShooterCommand(ShooterSpeedController shooterSpeedController, HopperController hopperController,
-        IndexerController indexerController, Limelight limelight, DistanceSensorDetector distanceSensorDetector){
+        IndexerController indexerController, Limelight limelight) {
         this.shooterSpeedController = shooterSpeedController;
         this.hopperController = hopperController;
         this.indexerController = indexerController;
         this.limelight = limelight;
-        this.distanceSensorDetector = distanceSensorDetector;
 
         addRequirements(shooterSpeedController);
-        addRequirements(distanceSensorDetector);
-    }
-
-    public void setShooterChoice(Constants.ShooterChoice shooterChoice) {
-        this.shooterChoice = shooterChoice;
     }
 
     // Called just before this Command runs the first time
@@ -57,13 +49,7 @@ public class ShooterCommand extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     @Override
-    public void execute() {
-        System.out.println("vertical offset degrees " + limelight.getVerticalTargetOffset());
-
-        distanceToGoal = DistanceCalculator.getDistanceFromTarget(limelight.getVerticalTargetOffset());
-
-        //System.out.println("Distance to target " + distance);
-
+    public void execute() {        
         shooterSpeedController.setLaunchSpeed(ShooterMath
                 .determineLaunchSpeed(distanceToGoal + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
 
