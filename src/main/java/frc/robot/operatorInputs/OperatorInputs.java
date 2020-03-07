@@ -8,6 +8,7 @@ import frc.robot.commands.climbingCommands.ElevatorUpCommand;
 import frc.robot.commands.climbingCommands.WinchCommand;
 import frc.robot.commands.climbingCommands.ElevatorDownCommand;
 import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
+import frc.robot.commands.powerCellScoringCommands.ShooterCommandNoAim;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
@@ -26,10 +27,12 @@ public class OperatorInputs {
       IndexerController indexerController, Limelight limelight, Climber climber, LightsController lightsController) {
 
     // Driver commands
-    driverControls.getJoystickBButton()
-        .whileHeld(new IndexerOutakeCommand(indexerController));
+    driverControls.getJoystickBButton().whileHeld(new IndexerOutakeCommand(indexerController));
     driverControls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight,
         shooterSpeedController, hopperController, indexerController));
+
+    driverControls.getJoystickYButton()
+        .whileHeld(new ShooterCommandNoAim(shooterSpeedController, hopperController, indexerController, limelight));
 
     // operator commands
     operatorControls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
