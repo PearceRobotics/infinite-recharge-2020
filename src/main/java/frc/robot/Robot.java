@@ -69,11 +69,10 @@ public class Robot extends TimedRobot {
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
-    this.limelightAim = new LimelightAim(limelight);
     this.operatorInputs = new OperatorInputs(driverControls, operatorControls, drive, gyro, shooterSpeedController,
         hopperController, indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
-        indexerController, limelight, limelightAim, distance, maxSpeed);
+        indexerController, limelight, distance, maxSpeed);
 
     Logger.configureLoggingAndConfig(this, false);
   }
@@ -138,7 +137,6 @@ public class Robot extends TimedRobot {
   // private VideoSource getLimelightCamera() {
   //     return limelightCamera;
   // }
-
 
   @Log.BooleanBox(name = "Limelight LOCK", width = 100, height = 100)
   private boolean isLimelightLockedOn() {
