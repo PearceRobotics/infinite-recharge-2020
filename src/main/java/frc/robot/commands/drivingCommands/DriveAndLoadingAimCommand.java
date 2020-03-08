@@ -8,16 +8,14 @@ import frc.robot.subsystems.vision.LimelightAim;
 
 public class DriveAndLoadingAimCommand extends CommandBase {
 
-    private LimelightAim limelightAim;
     private Drive drive;
     private Limelight limelight;
     private Controls driverControls;
 
-    //private final double CONTROLS_
+    // private final double CONTROLS_
 
-    public DriveAndLoadingAimCommand(LimelightAim limelightAim, Drive drive, Limelight limelight, Controls driverControls) {
-        this.limelightAim = limelightAim;
-        this.drive = drive; 
+    public DriveAndLoadingAimCommand(Drive drive, Limelight limelight, Controls driverControls) {
+        this.drive = drive;
         this.limelight = limelight;
         this.driverControls = driverControls;
         addRequirements(drive);
@@ -32,13 +30,17 @@ public class DriveAndLoadingAimCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(limelight.hasValidTarget()) {
-            double steeringAssist = limelightAim.getSteeringAdjust();
+        if (limelight.hasValidTarget()) {
+            double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
             drive.arcadeDrive(driverControls.getLeftY(0.2), steeringAssist);
         } else {
             drive.curvatureDrive(driverControls.getLeftY(0.2), driverControls.getRightX(0.2));
         }
     }
-    
+
+    @Override
+    public void end(boolean interupted) {
+        limelight.setHighGoalPipeline();
+    }
 
 }

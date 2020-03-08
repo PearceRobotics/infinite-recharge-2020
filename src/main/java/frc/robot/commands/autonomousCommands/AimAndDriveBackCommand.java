@@ -3,23 +3,24 @@ package frc.robot.commands.autonomousCommands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.vision.LimelightAim;
 
 public class AimAndDriveBackCommand extends CommandBase {
 
     private Drive drive;
-    private LimelightAim limelightAim;
+    private Limelight limelight;
 
     private double distance;
     private double maxSpeed;
     private double startTime;
     private final double DRIVE_TIME = 2.0;
 
-    public AimAndDriveBackCommand(double distance, double maxSpeed, LimelightAim limelightAim, Drive drive) {
+    public AimAndDriveBackCommand(double distance, double maxSpeed, Limelight limelight, Drive drive) {
         this.distance = distance;
         this.maxSpeed = maxSpeed;
 
-        this.limelightAim = limelightAim;
+        this.limelight = limelight;
         this.drive = drive;
         addRequirements(drive);
     }
@@ -43,7 +44,7 @@ public class AimAndDriveBackCommand extends CommandBase {
     @Override
     public void execute() {
         double fowardSpeed = maxSpeed - ((drive.getLeftEncoderDistance() / distance) * maxSpeed);
-        double turnSpeed = limelightAim.getSteeringAdjust();
+        double turnSpeed = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
         drive.arcadeDrive(-fowardSpeed, turnSpeed);
     }
 

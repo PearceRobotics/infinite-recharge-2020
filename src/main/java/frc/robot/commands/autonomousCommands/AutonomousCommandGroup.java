@@ -22,9 +22,9 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
 public class AutonomousCommandGroup extends SequentialCommandGroup {
 
     public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, 
-                                    IndexerController indexerController, Limelight limelight, LimelightAim limelightAim, double distance, double maxSpeed){
+                                    IndexerController indexerController, Limelight limelight, double distance, double maxSpeed){
         addCommands(
-            new AimAndDriveBackCommand(distance, maxSpeed, limelightAim, drive),
+            new AimAndDriveBackCommand(distance, maxSpeed, limelight, drive),
             new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
     }
 }

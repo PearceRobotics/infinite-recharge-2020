@@ -69,11 +69,10 @@ public class Robot extends TimedRobot {
     this.hopperController = new HopperController();
     this.indexerController = new IndexerController();
     this.lightsController = new LightsController(this.lights, this.limelight);
-    this.limelightAim = new LimelightAim(limelight);
     this.operatorInputs = new OperatorInputs(driverControls, operatorControls, drive, gyro, shooterSpeedController,
         hopperController, indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
-        indexerController, limelight, limelightAim, distance, maxSpeed);
+        indexerController, limelight, distance, maxSpeed);
 
     Logger.configureLoggingAndConfig(this, false);
   }
