@@ -35,7 +35,7 @@ public class OperatorInputs {
     driverControls.getJoystickYButton().whileHeld(new PowerCellScoringCommandGroupFar(drive, limelight,
         shooterSpeedController, hopperController, indexerController));
 
-    driverControls.getRightJoystickBumper().whileHeld(new DriveAndLoadingAimCommand(drive, limelight, driverControls));
+    driverControls.getRightJoystickBumper().whenHeld(new DriveAndLoadingAimCommand(drive, limelight, driverControls));
 
     driverControls.getJoystickXButton()
         .whileHeld(new ShooterCommandNoAim(shooterSpeedController, hopperController, indexerController, limelight));

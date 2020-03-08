@@ -23,8 +23,6 @@ public class DriveAndLoadingAimCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        // TODO Auto-generated method stub
-        super.initialize();
         limelight.setLowGoalPipeline();
     }
 
@@ -32,7 +30,7 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     public void execute() {
         if (limelight.hasValidTarget()) {
             double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
-            drive.arcadeDrive(driverControls.getLeftY(0.2), steeringAssist);
+            drive.arcadeDrive(-driverControls.getLeftY(0.2), steeringAssist);
         } else {
             drive.curvatureDrive(driverControls.getLeftY(0.2), driverControls.getRightX(0.2));
         }
