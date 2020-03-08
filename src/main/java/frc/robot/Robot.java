@@ -139,7 +139,6 @@ public class Robot extends TimedRobot {
   //     return limelightCamera;
   // }
 
-
   @Log.BooleanBox(name = "Limelight LOCK", width = 100, height = 100)
   private boolean isLimelightLockedOn() {
     return limelight.hasValidTarget();
