@@ -47,6 +47,10 @@ public class OperatorInputs {
     operatorControls.getRightJoystickBumper().whenPressed(new ElevatorUpCommand(climber));
     operatorControls.getLeftStick().whenPressed(new WinchCommand(climber));
 
+    driverControls.getLeftJoystickBumper().whileHeld(new RunCommand(() -> {
+      drive.curvatureDrive(driverControls.getLeftY(JOYSTICK_DEADZONE) * 0.2, driverControls.getRightX(JOYSTICK_DEADZONE) * 0.2);
+    }, drive));
+
     // Always running commands
     drive.setDefaultCommand(new RunCommand(() -> {
       drive.curvatureDrive(driverControls.getLeftY(JOYSTICK_DEADZONE), driverControls.getRightX(JOYSTICK_DEADZONE));
