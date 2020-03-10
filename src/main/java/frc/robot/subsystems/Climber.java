@@ -90,7 +90,7 @@ public class Climber extends SubsystemBase {
     @Override
     public void periodic() {
         double speed = SLOWING_CONSTANT * elevatorPIDController.calculate(elevatorEncoder.getDistance());
-
+ 
         if (speed < 0.0 && speed > -0.3) {
             speed *= 5.0;
         }
@@ -102,6 +102,7 @@ public class Climber extends SubsystemBase {
         speed = Math.max(-1.0, speed);
 
         setElevatorSpeed(speed);
+        
     }
 
     public void setElevatorPIDSetpoint(double position) {
