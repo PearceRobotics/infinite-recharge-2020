@@ -58,7 +58,7 @@ public class ShooterCommandNoAim extends CommandBase {
         // TODO Limelight might take inner distance into account, revisit this
         
         shooterSpeedController.setLaunchSpeed(ShooterMath
-                .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER));
+                .determineLaunchSpeed(distance + INNER_DISTANCE_FROM_TARGET - CAMERA_DISTANCE_FROM_LAUNCHER, shooterSpeedController.getEnergyLost()));
 
         // Make sure the shooter is at speed before loading a power cell
         if (shooterSpeedController.isAtSpeed()) {

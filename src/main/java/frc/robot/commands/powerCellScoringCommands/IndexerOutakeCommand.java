@@ -1,13 +1,11 @@
-package frc.robot.commands;
+package frc.robot.commands.powerCellScoringCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IndexerController;
-import frc.robot.subsystems.shooter.ShooterSpeedController;
 
 public class IndexerOutakeCommand extends CommandBase {
 
     private IndexerController indexerController;
-    private ShooterSpeedController shooterSpeedController;
 
     public IndexerOutakeCommand(IndexerController indexerController){
         this.indexerController = indexerController;

@@ -1,0 +1,9 @@
+DEVICE	      ID    AMPS  	AMPS	  ID  	DEVICE
+					
+[SPARE]                         30        10	RIGHT HOPPER
+LEFT HOPPER   16    30          30        9     WINCH
+ELEVATOR      15    20          30        8     INDEXER
+LEFT SHOOTER  14    40          40        7     RIGHT SHOOTER
+LEFT MIDDLE   13    40          40        6     RIGHT MIDDLE
+LEFT FRONT    12    40          40        5     RIGHT FRONT
+LEFT BACK     11    40          40        4     RIGHT BACK
