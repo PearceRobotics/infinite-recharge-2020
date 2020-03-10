@@ -8,11 +8,12 @@
 package frc.robot.commands.autonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
+import frc.robot.commands.powerCellScoringCommands.ShooterCommand;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.vision.LimelightAim;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
 
 /**
@@ -20,10 +21,10 @@ import frc.robot.subsystems.shooter.ShooterSpeedController;
  */
 public class AutonomousCommandGroup extends SequentialCommandGroup {
 
-    public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController,
-            HopperController hopperController, IndexerController indexerController, Limelight limelight,
-            double distance, double maxSpeed) {
-        super(new DriveForwardCommand(distance, maxSpeed, drive), new PowerCellScoringCommandGroup(drive, limelight,
-                shooterSpeedController, hopperController, indexerController));
+    public AutonomousCommandGroup(Drive drive, ShooterSpeedController shooterSpeedController, HopperController hopperController, 
+                                    IndexerController indexerController, Limelight limelight, double distance, double maxSpeed){
+        addCommands(
+            new AimAndDriveBackCommand(distance, maxSpeed, limelight, drive),
+            new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
     }
 }

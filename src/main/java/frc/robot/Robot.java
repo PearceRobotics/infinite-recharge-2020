@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.vision.Limelight;
+import frc.robot.subsystems.vision.LimelightAim;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.shooter.ShooterSpeedController;
@@ -35,6 +36,8 @@ public class Robot extends TimedRobot {
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
+  private LimelightAim limelightAim;
+
   private UsbCamera usbCamera;
   private VideoSource limelightCamera;
 
@@ -44,7 +47,7 @@ public class Robot extends TimedRobot {
   private final int JOYSTICK_PORT_DRIVER = 1;
   private final int JOYSTICK_PORT_OPERATOR = 0;
 
-  private double maxSpeed = 0.75;
+  private double maxSpeed = 0.4;
   private double distance = 36.0;
 
   /**
@@ -135,7 +138,6 @@ public class Robot extends TimedRobot {
   //     return limelightCamera;
   // }
 
-
   @Log.BooleanBox(name = "Limelight LOCK", width = 100, height = 100)
   private boolean isLimelightLockedOn() {
     return limelight.hasValidTarget();
@@ -149,6 +151,15 @@ public class Robot extends TimedRobot {
   @Config(name = "DISABLE GYRO", defaultValueBoolean = false)
   private void disableEnableGyro(boolean gyroDisabled) {
     this.drive.gyroDisabled(gyroDisabled);
+  }
+
+  @Log(name = "Current Gyro Angle", width = 100, height = 100)
+  private double getGyroAngle() {
+    try {
+      return gyro.getGyroAngle();
+    } catch (Exception e) {
+      return -Integer.MAX_VALUE;
+    }
   }
 
   @Config(name = "High Goal Pipeline", defaultValueBoolean = false) 

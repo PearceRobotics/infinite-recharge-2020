@@ -6,8 +6,11 @@ import frc.robot.commands.climbingCommands.ClimbingCommandGroup;
 import frc.robot.commands.climbingCommands.ElevatorMidpointCommand;
 import frc.robot.commands.climbingCommands.ElevatorUpCommand;
 import frc.robot.commands.climbingCommands.WinchCommand;
+import frc.robot.commands.drivingCommands.DriveAndLoadingAimCommand;
 import frc.robot.commands.climbingCommands.ElevatorDownCommand;
 import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
+import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroupFar;
+import frc.robot.commands.powerCellScoringCommands.ShooterCommandNoAim;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
@@ -26,10 +29,16 @@ public class OperatorInputs {
       IndexerController indexerController, Limelight limelight, Climber climber, LightsController lightsController) {
 
     // Driver commands
-    driverControls.getRightJoystickBumper()
-        .whenHeld(new IndexerOutakeCommand(indexerController));
+    driverControls.getJoystickBButton().whileHeld(new IndexerOutakeCommand(indexerController));
     driverControls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight,
         shooterSpeedController, hopperController, indexerController));
+    driverControls.getJoystickYButton().whileHeld(new PowerCellScoringCommandGroupFar(drive, limelight,
+        shooterSpeedController, hopperController, indexerController));
+
+    driverControls.getRightJoystickBumper().whenHeld(new DriveAndLoadingAimCommand(drive, limelight, driverControls));
+
+    driverControls.getJoystickXButton()
+        .whileHeld(new ShooterCommandNoAim(shooterSpeedController, hopperController, indexerController, limelight));
 
     // operator commands
     operatorControls.getJoystickYButton().whenPressed(new ElevatorMidpointCommand(climber));
@@ -37,6 +46,10 @@ public class OperatorInputs {
     operatorControls.getLeftJoystickBumper().whenPressed(new ElevatorDownCommand(climber));
     operatorControls.getRightJoystickBumper().whenPressed(new ElevatorUpCommand(climber));
     operatorControls.getLeftStick().whenPressed(new WinchCommand(climber));
+
+    driverControls.getLeftJoystickBumper().whileHeld(new RunCommand(() -> {
+      drive.curvatureDrive(driverControls.getLeftY(JOYSTICK_DEADZONE) * 0.2, driverControls.getRightX(JOYSTICK_DEADZONE) * 0.2);
+    }, drive));
 
     // Always running commands
     drive.setDefaultCommand(new RunCommand(() -> {

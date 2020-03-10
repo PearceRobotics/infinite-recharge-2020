@@ -30,6 +30,5 @@ public class IndexerOutakeCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         indexerController.stop();
-
     }
 }
