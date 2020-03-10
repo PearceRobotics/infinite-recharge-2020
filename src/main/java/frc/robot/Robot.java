@@ -19,6 +19,7 @@ import frc.robot.commands.autonomousCommands.AutonomousCommandGroup;
 import frc.robot.operatorInputs.Controls;
 import frc.robot.operatorInputs.OperatorInputs;
 import frc.robot.subsystems.Climber;
+import edu.wpi.cscore.HttpCamera;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -36,10 +37,9 @@ public class Robot extends TimedRobot {
   private ShooterSpeedController shooterSpeedController;
   private HopperController hopperController;
   private IndexerController indexerController;
-  private LimelightAim limelightAim;
 
   private UsbCamera usbCamera;
-  private VideoSource limelightCamera;
+  private HttpCamera limelightHttpCamera;
 
   private AutonomousCommandGroup autonomousCommandGroup;
 
@@ -57,7 +57,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     this.usbCamera = CameraServer.getInstance().startAutomaticCapture();
-    this.limelightCamera = CameraServer.getInstance().addServer("http://limelight.local:5800/stream.mjpg").getSource();
+    /*limelight stream*/
+    limelightHttpCamera = new HttpCamera("Limelight Stream", "http://limelight.local:5800/stream.mjpg");
+    CameraServer.getInstance().addCamera(limelightHttpCamera);
+
     this.gyro = new Gyroscope();
     this.climber = new Climber();
     this.drive = new Drive(this.gyro);
@@ -133,10 +136,10 @@ public class Robot extends TimedRobot {
     return usbCamera;
   }
 
-  // @Log.CameraStream(name = "Limelight CAMERA", width = 100, height = 100, showCrosshairs = false, showControls = false)
-  // private VideoSource getLimelightCamera() {
-  //     return limelightCamera;
-  // }
+  @Log.CameraStream(name = "Limelight CAMERA", width = 100, height = 100, showCrosshairs = false, showControls = false)
+  private VideoSource getLimelightCamera() {
+      return limelightHttpCamera;
+  }
 
   @Log.BooleanBox(name = "Limelight LOCK", width = 100, height = 100)
   private boolean isLimelightLockedOn() {
