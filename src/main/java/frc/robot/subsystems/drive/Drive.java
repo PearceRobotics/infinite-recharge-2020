@@ -4,9 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drive extends SubsystemBase{
+public class Drive extends SubsystemBase {
 
   private Encoder leftEncoder;
   private Encoder rightEncoder;
@@ -22,6 +25,23 @@ public class Drive extends SubsystemBase{
   private final double P_VALUE = .0025;
   private final double RAMP_RATE = 1;
   private final double QUICK_TURN_THROTTLE_DEADZONE = 0.1;
+
+  /*Kinematics start*/
+  private final double ksVolts = 0.22;
+  private final double kvVoltSecondsPerMeter = 1.98;
+  private final double kaVoltSecondsSquaredPerMeter = 0.2;
+  private final double kPDriveVel = 8.5;
+  private final double kTrackwidthMeters = 0.667385;
+  private final double kMaxSpeedMetersPerSecond = 3;
+  private final double kMaxAccelerationMetersPerSecondSquared = 3;
+  // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+  private final double kRamseteB = 2;
+  private final double kRamseteZeta = 0.7;
+
+  private final DifferentialDriveKinematics kDriveKinematics;
+  private final DifferentialDriveOdometry m_odometry;
+  /* Kinematics End */
+
   // left gear box CAN ids
   private final int LEFT_BACK_CAN_ID = 11; 
   private final int LEFT_FRONT_CAN_ID = 12;
@@ -45,7 +65,7 @@ public class Drive extends SubsystemBase{
     this.leftGearbox.setRampRate(RAMP_RATE);
     this.rightGearbox.setRampRate(RAMP_RATE);
     
-    differentialDrive = new DifferentialDrive(this.leftGearbox.getSpeedControllerGroup(), 
+    this.differentialDrive = new DifferentialDrive(this.leftGearbox.getSpeedControllerGroup(), 
                                               this.rightGearbox.getSpeedControllerGroup());
 
     this.gyroscope = gyroscope;
@@ -53,10 +73,30 @@ public class Drive extends SubsystemBase{
     this.leftEncoder = new Encoder(0, 1);
     this.rightEncoder = new Encoder(2, 3);
 
-    leftEncoder.setDistancePerPulse((6.0 * Math.PI) / 2048.0);
-    leftEncoder.setReverseDirection(true);
-    rightEncoder.setDistancePerPulse((6.0 * Math.PI) / 2048.0);
+    this.leftEncoder.setDistancePerPulse((6.0 * Math.PI) / 2048.0);
+    this.leftEncoder.setReverseDirection(true);
+    this.rightEncoder.setDistancePerPulse((6.0 * Math.PI) / 2048.0);
+
+    this.kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+    this.m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
   }
+
+  @Override
+  public void periodic() {
+    // Update the odometry in the periodic block
+    m_odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoder.getDistance(),
+                      rightEncoder.getDistance());
+  }
+
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return Math.IEEEremainder(gyroscope.getGyroAngle(), 360);
+  }
+
 
   private void setLeftSpeed(double speed) {
     this.leftGearbox.setSpeed(speed);
