@@ -9,7 +9,6 @@ import frc.robot.commands.climbingCommands.WinchCommand;
 import frc.robot.commands.drivingCommands.DriveAndLoadingAimCommand;
 import frc.robot.commands.climbingCommands.ElevatorDownCommand;
 import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroup;
-import frc.robot.commands.powerCellScoringCommands.PowerCellScoringCommandGroupFar;
 import frc.robot.commands.powerCellScoringCommands.ShooterCommandNoAim;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.HopperController;
@@ -31,8 +30,6 @@ public class OperatorInputs {
     // Driver commands
     driverControls.getJoystickBButton().whileHeld(new IndexerOutakeCommand(indexerController));
     driverControls.getJoystickAButton().whileHeld(new PowerCellScoringCommandGroup(drive, limelight,
-        shooterSpeedController, hopperController, indexerController));
-    driverControls.getJoystickYButton().whileHeld(new PowerCellScoringCommandGroupFar(drive, limelight,
         shooterSpeedController, hopperController, indexerController));
 
     driverControls.getRightJoystickBumper().whenHeld(new DriveAndLoadingAimCommand(drive, limelight, driverControls));
