@@ -5,6 +5,7 @@ import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.HopperController;
 import frc.robot.subsystems.IndexerController;
 import frc.robot.subsystems.vision.Limelight;
@@ -126,6 +127,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  /*WARNING: The FMS does not send an official match time to the robots,
+   * but does send an approximate match time. */
+  @Log(name =  "Match time", width = 500, height = 500)
+  private double getMatchTime() {
+    return Timer.getMatchTime();
   }
 
   @Log.CameraStream(name = "CAMERA", width = 500, height = 500, showCrosshairs = false, showControls = false)
