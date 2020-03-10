@@ -12,7 +12,7 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     private Limelight limelight;
     private Controls driverControls;
 
-    private final double SLOW_SPEED_CONSTANT = 0.5;
+    private double slowSpeed = 0;
 
     // private final double CONTROLS_
 
@@ -31,10 +31,11 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     @Override
     public void execute() {
         if (limelight.hasValidTarget()) {
+            slowSpeed = limelight.getTargetArea()/100;
             double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
-            drive.arcadeDrive(-driverControls.getLeftY(0.2) * SLOW_SPEED_CONSTANT, steeringAssist);
+            drive.arcadeDrive(-(driverControls.getLeftY(0.2)-slowSpeed), steeringAssist);
         } else {
-            drive.curvatureDrive(driverControls.getLeftY(0.2) * SLOW_SPEED_CONSTANT, driverControls.getRightX(0.2));
+            drive.curvatureDrive(driverControls.getLeftY(0.2)-slowSpeed, driverControls.getRightX(0.2));
         }
     }
 
