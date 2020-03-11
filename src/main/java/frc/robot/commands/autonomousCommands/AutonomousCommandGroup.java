@@ -26,7 +26,6 @@ public class AutonomousCommandGroup extends SequentialCommandGroup {
                                     IndexerController indexerController, Limelight limelight, double distance, double maxSpeed, Lights lights){
         addCommands(
             new AimAndDriveBackCommand(distance, maxSpeed, limelight, drive, lights),
-            new AutonomousShooterLightsCommand(lights),
             new ShooterCommand(shooterSpeedController, hopperController, indexerController, limelight));
     }
 }

@@ -115,6 +115,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    lights.setIsAutonOn(false);
   }
 
   @Override

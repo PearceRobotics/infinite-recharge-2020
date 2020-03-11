@@ -39,7 +39,7 @@ public class AimAndDriveBackCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        lights.idleAutonDriveAnimation(3);
+        lights.setIsAutonOn(true);
         drive.resetEncoders();
         startTime = Timer.getFPGATimestamp();
     }

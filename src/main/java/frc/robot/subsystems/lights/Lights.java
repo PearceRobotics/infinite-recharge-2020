@@ -12,6 +12,8 @@ public class Lights {
     private AddressableLEDBuffer ledBuffer;
     private long delay;
 
+    private boolean isAutonOn = false;
+
     private final Color8Bit PURPLE = new Color8Bit(255, 0, 255);
     private final Color8Bit ORANGE = new Color8Bit(255, 165, 0);
     private final Color8Bit CYAN = new Color8Bit(13, 240, 203);
@@ -30,6 +32,14 @@ public class Lights {
         ledStrip.setData(ledBuffer);
         ledStrip.start();
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
+    }
+
+    public void setIsAutonOn(boolean isAutonOn){
+        this.isAutonOn = isAutonOn;
+    }
+
+    public boolean isAutonOn(){
+        return isAutonOn;
     }
 
     public void allBlue() {
