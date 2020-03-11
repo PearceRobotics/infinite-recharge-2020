@@ -38,11 +38,10 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     public void execute() {
         if (limelight.hasValidTarget()) {
             slowSpeed = limelight.getTargetArea()/SlOW_SPEED_DIVISOR;
-            System.out.println("slowSpeed" + limelight.getTargetArea());
             double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
             drive.arcadeDrive(-(driverControls.getLeftY(DEADZONE)-slowSpeed), steeringAssist);
         } else {
-            drive.curvatureDrive(driverControls.getLeftY(DEADZONE)-slowSpeed, driverControls.getRightX(0.2));
+            drive.curvatureDrive(driverControls.getLeftY(DEADZONE)-slowSpeed, driverControls.getRightX(DEADZONE));
         }
     }
 
