@@ -116,12 +116,12 @@ public class Lights {
                     while(true) {
                         for (int x = ledBuffer.getLength() - length; x > 1; x--) {
                             for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, YELLOW);
+                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, LIME_GREEN);
                                 ledBuffer.setLED(x + y, RED);
                             }
                             ledStrip.setData(ledBuffer);
                             for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, LIME_GREEN);
+                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, YELLOW);
                                 ledBuffer.setLED(x + y, BLUE);
                             }
                             Thread.sleep(delay);
