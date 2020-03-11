@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     this.operatorInputs = new OperatorInputs(driverControls, operatorControls, drive, gyro, shooterSpeedController,
         hopperController, indexerController, limelight, climber, lightsController);
     this.autonomousCommandGroup = new AutonomousCommandGroup(drive, shooterSpeedController, hopperController,
-        indexerController, limelight, distance, maxSpeed);
+        indexerController, limelight, distance, maxSpeed, lights);
 
     Logger.configureLoggingAndConfig(this, false);
   }

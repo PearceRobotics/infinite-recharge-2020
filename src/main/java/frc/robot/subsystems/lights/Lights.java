@@ -107,5 +107,32 @@ public class Lights {
             });
         }
     }
+
+    public void idleAutonDriveAnimation(int length) {
+        shutdownAndRestartThreadPool();
+        if(executor.getPoolSize() == 0) {
+            executor.submit(() -> {
+                try {
+                    while(true) {
+                        for (int x = ledBuffer.getLength() - length; x > 1; x--) {
+                            for(int y = 0; y < length; y++) {
+                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, YELLOW);
+                                ledBuffer.setLED(x + y, RED);
+                            }
+                            ledStrip.setData(ledBuffer);
+                            for(int y = 0; y < length; y++) {
+                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, LIME_GREEN);
+                                ledBuffer.setLED(x + y, BLUE);
+                            }
+                            Thread.sleep(delay);
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    //e.printStackTrace();
+                }
+            });
+        }
+    }
 }
 
