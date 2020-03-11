@@ -32,6 +32,7 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     public void execute() {
         if (limelight.hasValidTarget()) {
             slowSpeed = limelight.getTargetArea()/100;
+            System.out.println("slowSpeed" + limelight.getTargetArea());
             double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
             drive.arcadeDrive(-(driverControls.getLeftY(0.2)-slowSpeed), steeringAssist);
         } else {
