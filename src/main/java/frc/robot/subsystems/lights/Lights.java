@@ -34,6 +34,22 @@ public class Lights {
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
     }
 
+    public Color8Bit getBlue(){
+        return BLUE;
+    }
+
+    public Color8Bit getRed(){
+        return RED;
+    }
+
+    public Color8Bit getGreen(){
+        return LIME_GREEN;
+    }
+
+    public Color8Bit getYellow(){
+        return YELLOW;
+    }
+
     public void setIsAutonOn(boolean isAutonOn){
         this.isAutonOn = isAutonOn;
     }
@@ -91,7 +107,7 @@ public class Lights {
         } 
     }
 
-    public void idleAnimation(int length) {
+    public void idleAnimation(int length, Color8Bit stripColor, Color8Bit animColor) {
         shutdownAndRestartThreadPool();
         if(executor.getPoolSize() == 0) {
             executor.submit(() -> {
@@ -99,40 +115,13 @@ public class Lights {
                     while(true) {
                         for (int x = ledBuffer.getLength() - length; x > 1; x--) {
                             for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, RED);
-                                ledBuffer.setLED(x + y, RED);
+                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, animColor);
+                                ledBuffer.setLED(x + y, animColor);
                             }
                             ledStrip.setData(ledBuffer);
                             for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, BLUE);
-                                ledBuffer.setLED(x + y, BLUE);
-                            }
-                            Thread.sleep(delay);
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    //e.printStackTrace();
-                }
-            });
-        }
-    }
-
-    public void idleAutonDriveAnimation(int length) {
-        shutdownAndRestartThreadPool();
-        if(executor.getPoolSize() == 0) {
-            executor.submit(() -> {
-                try {
-                    while(true) {
-                        for (int x = ledBuffer.getLength() - length; x > 1; x--) {
-                            for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, LIME_GREEN);
-                                ledBuffer.setLED(x + y, RED);
-                            }
-                            ledStrip.setData(ledBuffer);
-                            for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, YELLOW);
-                                ledBuffer.setLED(x + y, BLUE);
+                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, stripColor);
+                                ledBuffer.setLED(x + y, stripColor);
                             }
                             Thread.sleep(delay);
                         }

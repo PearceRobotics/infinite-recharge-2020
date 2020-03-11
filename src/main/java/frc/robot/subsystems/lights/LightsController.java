@@ -11,7 +11,6 @@ public class LightsController extends SubsystemBase {
     public LightsController(Lights lights, Limelight limelight) {
         this.lights = lights;
         this.limelight = limelight;
-        this.lights.idleAnimation(3);
     }
 
     public void checkTargetLock() {
@@ -19,11 +18,11 @@ public class LightsController extends SubsystemBase {
             lights.allLimeGreen();
             isIdle = true;
         } else if(!limelight.hasValidTarget() && isIdle && !(isAutonOn())){
-            lights.idleAnimation(3);
+            lights.idleAnimation(3, lights.getBlue(), lights.getRed());
             isIdle = false;
         }
         else if(isAutonOn()){
-            lights.idleAutonDriveAnimation(3);
+            lights.idleAnimation(3, lights.getGreen(), lights.getYellow());
         }
     }
 
