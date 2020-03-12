@@ -62,6 +62,7 @@ public class AimAndDriveBackCommand extends CommandBase {
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
+        drive.arcadeDrive(0.0,0.0);
         lights.allLimeGreen();
     }
 }
