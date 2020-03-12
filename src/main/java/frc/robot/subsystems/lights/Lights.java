@@ -6,8 +6,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Lights {
+public class Lights extends SubsystemBase {
     private AddressableLED ledStrip;
     private AddressableLEDBuffer ledBuffer;
     private long delay;
@@ -30,6 +31,22 @@ public class Lights {
         ledStrip.setData(ledBuffer);
         ledStrip.start();
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
+    }
+
+    public Color8Bit getBlue(){
+        return BLUE;
+    }
+
+    public Color8Bit getRed(){
+        return RED;
+    }
+
+    public Color8Bit getGreen(){
+        return LIME_GREEN;
+    }
+
+    public Color8Bit getYellow(){
+        return YELLOW;
     }
 
     public void allBlue() {
@@ -81,7 +98,7 @@ public class Lights {
         } 
     }
 
-    public void idleAnimation(int length) {
+    public void idleAnimation(int length, Color8Bit stripColor, Color8Bit animColor) {
         shutdownAndRestartThreadPool();
         if(executor.getPoolSize() == 0) {
             executor.submit(() -> {
@@ -89,13 +106,13 @@ public class Lights {
                     while(true) {
                         for (int x = ledBuffer.getLength() - length; x > 1; x--) {
                             for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, RED);
-                                ledBuffer.setLED(x + y, RED);
+                                ledBuffer.setLED((ledBuffer.getLength() - length) - x + y, animColor);
+                                ledBuffer.setLED(x + y, animColor);
                             }
                             ledStrip.setData(ledBuffer);
                             for(int y = 0; y < length; y++) {
-                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, BLUE);
-                                ledBuffer.setLED(x + y, BLUE);
+                                ledBuffer.setLED((ledBuffer.getLength()-length) - x + y, stripColor);
+                                ledBuffer.setLED(x + y, stripColor);
                             }
                             Thread.sleep(delay);
                         }

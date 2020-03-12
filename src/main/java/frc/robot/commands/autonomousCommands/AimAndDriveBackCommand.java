@@ -3,6 +3,7 @@ package frc.robot.commands.autonomousCommands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.lights.Lights;
 import frc.robot.subsystems.vision.Limelight;
 import frc.robot.subsystems.vision.LimelightAim;
 
@@ -10,19 +11,22 @@ public class AimAndDriveBackCommand extends CommandBase {
 
     private Drive drive;
     private Limelight limelight;
+    private Lights lights;
 
     private double distance;
     private double maxSpeed;
     private double startTime;
     private final double DRIVE_TIME = 2.0;
 
-    public AimAndDriveBackCommand(double distance, double maxSpeed, Limelight limelight, Drive drive) {
+    public AimAndDriveBackCommand(double distance, double maxSpeed, Limelight limelight, Drive drive, Lights lights) {
         this.distance = distance;
         this.maxSpeed = maxSpeed;
+        this.lights = lights;
 
         this.limelight = limelight;
         this.drive = drive;
         addRequirements(drive);
+        addRequirements(lights);
     }
 
     public void setMaxSpeed(double maxSpeed) {
@@ -36,6 +40,7 @@ public class AimAndDriveBackCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
+        lights.idleAnimation(3, lights.getGreen(), lights.getYellow());
         drive.resetEncoders();
         startTime = Timer.getFPGATimestamp();
     }
@@ -57,6 +62,7 @@ public class AimAndDriveBackCommand extends CommandBase {
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-        drive.arcadeDrive(0.0, 0.0);
+        drive.arcadeDrive(0.0,0.0);
+        lights.allLimeGreen();
     }
 }
