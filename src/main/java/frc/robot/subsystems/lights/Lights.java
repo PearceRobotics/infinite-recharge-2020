@@ -6,8 +6,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Lights {
+public class Lights extends SubsystemBase {
     private AddressableLED ledStrip;
     private AddressableLEDBuffer ledBuffer;
     private long delay;

@@ -26,6 +26,7 @@ public class AimAndDriveBackCommand extends CommandBase {
         this.limelight = limelight;
         this.drive = drive;
         addRequirements(drive);
+        addRequirements(lights);
     }
 
     public void setMaxSpeed(double maxSpeed) {
@@ -39,7 +40,7 @@ public class AimAndDriveBackCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        lights.setIsAutonOn(true);
+        lights.idleAnimation(3, lights.getGreen(), lights.getYellow());
         drive.resetEncoders();
         startTime = Timer.getFPGATimestamp();
     }
@@ -61,6 +62,6 @@ public class AimAndDriveBackCommand extends CommandBase {
     // Called once after isFinished returns true
     @Override
     public void end(boolean interrupted) {
-        drive.arcadeDrive(0.0, 0.0);
+        lights.allLimeGreen();
     }
 }

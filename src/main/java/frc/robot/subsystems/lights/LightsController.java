@@ -14,19 +14,12 @@ public class LightsController extends SubsystemBase {
     }
 
     public void checkTargetLock() {
-        if (limelight.hasValidTarget() && !isIdle && !(isAutonOn()) ) {
+        if (limelight.hasValidTarget() && !isIdle) {
             lights.allLimeGreen();
             isIdle = true;
-        } else if(!limelight.hasValidTarget() && isIdle && !(isAutonOn())){
+        } else if(!limelight.hasValidTarget() && isIdle){
             lights.idleAnimation(3, lights.getBlue(), lights.getRed());
             isIdle = false;
         }
-        else if(isAutonOn()){
-            lights.idleAnimation(3, lights.getGreen(), lights.getYellow());
-        }
-    }
-
-    public boolean isAutonOn(){
-    return lights.isAutonOn();
     }
 }
