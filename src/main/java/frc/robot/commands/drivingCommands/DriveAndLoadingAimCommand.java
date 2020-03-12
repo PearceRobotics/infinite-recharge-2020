@@ -13,9 +13,6 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     private Limelight limelight;
     private Controls driverControls;
 
-    //variables
-    private double slowSpeed = 0;
-    
     //constants
     private final double SlOW_SPEED_DIVISOR = 100.0;
     private final double DEADZONE = 0.2;
@@ -27,6 +24,9 @@ public class DriveAndLoadingAimCommand extends CommandBase {
         this.drive = drive;
         this.limelight = limelight;
         this.driverControls = driverControls;
+
+        private double slowSpeed = 0;
+
         addRequirements(drive);
     }
 
