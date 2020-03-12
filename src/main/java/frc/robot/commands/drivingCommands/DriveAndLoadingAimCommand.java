@@ -8,9 +8,15 @@ import frc.robot.subsystems.vision.LimelightAim;
 
 public class DriveAndLoadingAimCommand extends CommandBase {
 
+    //classes
     private Drive drive;
     private Limelight limelight;
     private Controls driverControls;
+
+    //constants
+    private final double SlOW_SPEED_DIVISOR = 100.0;
+    private final double DEADZONE = 0.2;
+    private final double MIN_SPEED = 0.5;
 
     // private final double CONTROLS_
 
@@ -18,6 +24,9 @@ public class DriveAndLoadingAimCommand extends CommandBase {
         this.drive = drive;
         this.limelight = limelight;
         this.driverControls = driverControls;
+
+        private double slowSpeed = 0;
+
         addRequirements(drive);
     }
 
@@ -29,10 +38,16 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     @Override
     public void execute() {
         if (limelight.hasValidTarget()) {
+            slowSpeed = limelight.getTargetArea()/SlOW_SPEED_DIVISOR;
+            if(slowSpeed < MIN_SPEED){
+                slowSpeed = MIN_SPEED;
+            }
+            else{
             double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
-            drive.arcadeDrive(-driverControls.getLeftY(0.2), steeringAssist);
+            drive.arcadeDrive(-(driverControls.getLeftY(DEADZONE)-slowSpeed), steeringAssist);
+            }
         } else {
-            drive.curvatureDrive(driverControls.getLeftY(0.2), driverControls.getRightX(0.2));
+            drive.curvatureDrive(driverControls.getLeftY(DEADZONE)-slowSpeed, driverControls.getRightX(DEADZONE));
         }
     }
 
