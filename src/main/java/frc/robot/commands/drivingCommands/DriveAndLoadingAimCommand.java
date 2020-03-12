@@ -18,7 +18,8 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     
     //constants
     private final double SlOW_SPEED_DIVISOR = 100.0;
-    private final double DEADZONE = .2;
+    private final double DEADZONE = 0.2;
+    private final double MIN_SPEED = 0.5;
 
     // private final double CONTROLS_
 
@@ -38,8 +39,13 @@ public class DriveAndLoadingAimCommand extends CommandBase {
     public void execute() {
         if (limelight.hasValidTarget()) {
             slowSpeed = limelight.getTargetArea()/SlOW_SPEED_DIVISOR;
+            if(slowSpeed < MIN_SPEED){
+                slowSpeed = MIN_SPEED;
+            }
+            else{
             double steeringAssist = LimelightAim.getSteeringAdjust(limelight.getHorizontalTargetOffset());
             drive.arcadeDrive(-(driverControls.getLeftY(DEADZONE)-slowSpeed), steeringAssist);
+            }
         } else {
             drive.curvatureDrive(driverControls.getLeftY(DEADZONE)-slowSpeed, driverControls.getRightX(DEADZONE));
         }
